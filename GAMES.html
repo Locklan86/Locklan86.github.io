@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMES</title>
+    <style>
+        /* Removes default browser margins so the bar goes completely edge-to-edge */
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container that forces items into a single row across the top */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between; /* Spreads the links evenly from edge to edge */
+            align-items: center; /* Vertically centers the content */
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 20px; /* Optional padding so items aren't crammed against the very edge */
+            background-color: #f5f5f5; /* Optional background color for the navbar bar */
+        }
+
+        /* Box styling for each game link */
+        .game-card {
+            flex: 1; /* Makes each link box take up an equal amount of available space */
+            text-decoration: none; 
+            color: black; 
+            font-family: sans-serif;
+            text-align: center;
+            border: 2px solid transparent; 
+            padding: 10px;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease; 
+        }
+
+        /* Keeps the image centered and text neatly stacked below it */
+        .game-card img {
+            display: block;
+            margin: 0 auto 8px auto; /* Centers the image horizontally within its slot */
+            max-width: 100%; /* Prevents large images from breaking the layout */
+            height: auto;
+        }
+
+        /* Changes the outline to orange on hover */
+        .game-card:hover {
+            border-color: orange;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- New container that distributes the game links evenly at the top -->
+    <nav class="top-navbar">
+        <a href="game1.html" class="game-card">
+            <img src="download.png" alt="Game 1 Link">
+            <span>BARTRIS</span>
+        </a>
+        <a href="game2.html" class="game-card">
+            <img src="download.png" alt="Game 2 Link">
+            <span>CLICK THE BART</span>
+        </a>
+        <a href="game3" class="game-card">
+            <img src="download.png" alt="Game 3 Link">
+            <span>coming soon</span>
+        </a>
+        <a href="game4" class="game-card">
+            <img src="download.png" alt="Game 4 Link">
+            <span>coming soon</span>
+        </a>
+        <a href="game5" class="game-card">
+            <img src="download.png" alt="Game 5 Link">
+            <span>coming soon</span>
+        </a>
+        <a href="game6" class="game-card">
+            <img src="download.png" alt="Game 6 Link">
+            <span>coming soon</span>
+        </a>
+        <a href="game7" class="game-card">
+            <img src="download.png" alt="Game 7 Link">
+            <span>coming soon</span>
+        </a>
+    </nav>
+
+</body>
+</html>
+
+

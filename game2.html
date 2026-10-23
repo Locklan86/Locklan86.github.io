@@ -1,0 +1,4580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CLICK THE BART</title>
+
+    <style>
+        .currencyGreen {
+    color: #20c968 !important;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000;
+    color: #fff;
+    overflow: auto;
+}
+
+.page.active {
+    display: block;
+}
+
+
+/* ========================================
+   MAIN MENU
+   ======================================== */
+
+#menuPage {
+    text-align: center;
+    padding: 8vh 20px 30px;
+}
+
+#menuPage h1 {
+    font-size: clamp(36px, 6vw, 68px);
+    margin: 0 0 12px;
+}
+
+#menuPage p {
+    color: #bbb;
+    font-size: 18px;
+    margin-bottom: 38px;
+}
+
+#hardModeButton {
+    margin-top: 28px;
+    padding: 14px 28px;
+    background: #9d1717;
+    color: #fff;
+    border: 2px solid #ff5555;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#hardModeButton[hidden] {
+    display: none;
+}
+
+
+/* ========================================
+   HARD MODE STARTER PAGE
+   ======================================== */
+
+#hardStarterPage {
+    padding: 8px 16px 90px;
+    text-align: center;
+}
+
+#hardStarterPage h1 {
+    margin: -4px 0 6px;
+    font-size: clamp(30px, 5vw, 52px);
+}
+
+#hardStarterPage > p {
+    margin: 4px 0 10px;
+    color: #bbb;
+}
+
+#ismaelStage {
+    position: relative;
+    width: min(1500px, 99vw);
+    height: min(78vh, 850px);
+    min-height: 600px;
+    margin: 0 auto;
+}
+
+
+#ismaelImage {
+    position: absolute;
+    left: -25%;
+    top: -25%;
+    display: block;
+    width: 150%;
+    height: 150%;
+    object-fit: contain;
+    margin: 0 auto;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.starterOptions {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.starterOption {
+    position: absolute;
+    z-index: 10;
+    pointer-events: auto;
+}
+
+.starterStatsOverlay {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    left: calc(100% + 8px);
+    top: 0;
+    width: 230px;
+    padding: 12px;
+    background: #202020;
+    border: 2px solid #eebc27;
+    border-radius: 9px;
+    box-shadow: 0 8px 24px #000b;
+    color: #fff;
+    text-align: left;
+    font-size: 13px;
+    font-weight: normal;
+    pointer-events: none;
+}
+
+#starterMilhouseOptions .starterStatsOverlay {
+    left: auto;
+    right: calc(100% + 8px);
+    top: 0;
+    transform: none;
+}
+
+.starterOption:hover .starterStatsOverlay,
+.starterOption:focus-visible .starterStatsOverlay {
+    display: block;
+}
+
+
+/* ========================================
+   STARTER CHARACTER CARDS
+   ======================================== */
+
+.starterOption {
+    position: absolute;
+    width: clamp(105px, 12vw, 155px);
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 8px;
+    background: #111;
+    border: 2px solid #555;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    z-index: auto;
+    text-align: center;
+}
+
+.starterOption:hover,
+.starterOption:focus-visible {
+    z-index: auto;
+    border-color: #eebc27;
+    outline: none;
+}
+
+.starterOption.selected {
+    border-color: #ffc52e;
+    background: #302507f2;
+    box-shadow: 0 0 0 3px #ffc52e66;
+}
+
+.starterOption img {
+    display: block;
+    width: 62px;
+    height: 62px;
+    object-fit: contain;
+    image-rendering: auto;
+    pointer-events: none;
+}
+
+.starterOption strong {
+    display: block;
+    margin-top: 7px;
+    font-size: clamp(11px, 1.2vw, 14px);
+    overflow-wrap: anywhere;
+}
+
+.starterOption .starterCharacterPrice {
+    width: 100%;
+    margin-top: 7px;
+    padding: 6px 3px 2px;
+    border-top: 1px solid #555;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.25;
+    color: #ddd;
+}
+
+
+/* ========================================
+   STARTER CARD POSITIONS
+   ======================================== */
+
+/* Bart cards on the left */
+
+#starterBartOptions .starterOption:nth-child(1) {
+    left: 17%;
+    top: -22%;
+}
+
+#starterBartOptions .starterOption:nth-child(2) {
+    left: 7%;
+    top: 30%;
+}
+
+#starterBartOptions .starterOption:nth-child(3) {
+    left: 17%;
+    top: 64%;
+}
+
+/* Milhouse cards on the right */
+
+#starterMilhouseOptions .starterOption:nth-child(1) {
+    right: 17%;
+    top: -22%;
+}
+
+#starterMilhouseOptions .starterOption:nth-child(2) {
+    right: 7%;
+    top: 30%;
+}
+
+#starterMilhouseOptions .starterOption:nth-child(3) {
+    right: 17%;
+    top: 64%;
+}
+
+
+/* ========================================
+   STARTER CHARACTER STAT OVERLAYS
+   ======================================== */
+
+.starterStatsOverlay {
+    display: none;
+    position: absolute;
+    z-index: 150;
+    left: calc(100% + 8px);
+    top: 0;
+    width: 230px;
+    padding: 12px;
+    background: #202020;
+    border: 2px solid #eebc27;
+    border-radius: 9px;
+    box-shadow: 0 8px 24px #000b;
+    color: #fff;
+    text-align: left;
+    font-size: 13px;
+    font-weight: normal;
+    pointer-events: none;
+}
+
+#starterMilhouseOptions .starterStatsOverlay {
+    left: auto;
+    right: calc(100% + 8px);
+    top: 0;
+    transform: none;
+}
+
+.starterStatsOverlay h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.starterStatsOverlay p {
+    margin: 5px 0;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+}
+
+.starterOption:hover .starterStatsOverlay,
+.starterOption:focus-visible .starterStatsOverlay {
+    display: block;
+}
+
+
+/* ========================================
+   STARTER PAGE: MOBILE
+   ======================================== */
+
+@media (max-width: 700px) {
+    #ismaelStage {
+        width: 100%;
+        height: 700px;
+        min-height: 700px;
+    }
+
+    #ismaelImage {
+        opacity: 0.82;
+    }
+
+    .starterOption {
+        width: 31%;
+        min-height: 138px;
+        padding: 8px 5px;
+    }
+
+    .starterOption img {
+        width: 48px;
+        height: 48px;
+    }
+
+    #starterBartOptions .starterOption:nth-child(1) {
+        left: 12%;
+        top: -18%;
+    }
+
+    #starterBartOptions .starterOption:nth-child(2) {
+        left: 3%;
+        top: 29%;
+    }
+
+    #starterBartOptions .starterOption:nth-child(3) {
+        left: 12%;
+        top: 64%;
+    }
+
+    #starterMilhouseOptions .starterOption:nth-child(1) {
+        right: 12%;
+        top: -18%;
+    }
+
+    #starterMilhouseOptions .starterOption:nth-child(2) {
+        right: 3%;
+        top: 29%;
+    }
+
+    #starterMilhouseOptions .starterOption:nth-child(3) {
+        right: 12%;
+        top: 64%;
+    }
+
+    .starterStatsOverlay {
+        left: 50%;
+        top: calc(100% + 6px);
+        width: min(230px, 80vw);
+        transform: translateX(-50%);
+    }
+
+    #starterMilhouseOptions .starterStatsOverlay {
+        left: auto;
+        right: calc(100% + 6px);
+        top: 0;
+        transform: none;
+        width: min(230px, 80vw);
+    }
+}
+
+
+/* ========================================
+   START ROUND BUTTON
+   ======================================== */
+
+#goToRoundButton {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    padding: 14px 22px;
+    background: #ffc52e;
+    color: #111;
+    border: 0;
+    border-radius: 9px;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+#goToRoundButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+
+/* ========================================
+   ROUND SELECTION
+   ======================================== */
+
+.roundChoices {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.roundChoice {
+    width: min(260px, 90vw);
+    min-height: 180px;
+    border: 2px solid #777;
+    border-radius: 14px;
+    background: #171717;
+    color: white;
+    padding: 24px 18px;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+}
+
+.roundChoice span {
+    display: block;
+    font-size: 15px;
+    color: #bbb;
+    font-weight: normal;
+    margin-top: 0;
+}
+
+.roundChoice.currentRound {
+    border-color: #ffc52e;
+}
+
+.roundChoice.lockedRound {
+    opacity: 0.35;
+    filter: grayscale(1);
+    pointer-events: none;
+    user-select: none;
+}
+
+.startRoundButton {
+    margin-top: auto;
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 20px;
+    background: #ffc52e;
+    color: #111;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.startRoundButton:hover {
+    background: #ffda68;
+}
+
+
+/* ========================================
+   GAMEPLAY PAGE
+   ======================================== */
+
+#gameplayPage {
+    overflow: hidden;
+}
+
+.bart,
+.milhouse {
+    position: fixed;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+    z-index: 1000;
+}
+
+.milhouse {
+    outline: none;
+}
+
+
+/* ========================================
+   GAMEPLAY HUD
+   ======================================== */
+
+#scoreBox,
+#roundBox,
+#timerBox,
+#bartcoinBox {
+    position: fixed;
+    left: 10px;
+    z-index: 2000;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+#scoreBox {
+    top: 10px;
+    color: white;
+    font-size: 24px;
+}
+
+#roundBox {
+    top: 45px;
+    color: white;
+    font-size: 20px;
+}
+
+#timerBox {
+    top: 75px;
+    color: white;
+    font-size: 20px;
+}
+
+#bartcoinBox {
+    top: 105px;
+    color: #20c968;
+    font-size: 20px;
+}
+
+#shopToggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 4000;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+/* ========================================
+   SHOP PAGE HEADER
+   ======================================== */
+
+#shopPage {
+    padding: 24px;
+    overflow: auto;
+}
+
+.shopHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.shopHeader h1 {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 42px);
+}
+
+.shopStats {
+    color: #20c968;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+/* ========================================
+   OWNED BARTS AND MILHOUSES
+   ======================================== */
+
+#ownedPanel {
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 22px;
+}
+
+#ownedPanel h2 {
+    margin: 0 0 12px;
+    text-align: center;
+}
+
+#ownedList {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.ownedChip {
+    background: #191919;
+    border: 1px solid #777;
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.ownedChip .sellButton {
+    position: relative;
+    width: 100%;
+    background: #7d1717;
+    color: #fff;
+    border: 1px solid #ff7777;
+    border-radius: 5px;
+}
+
+.ownedCharacterCard {
+    position: relative;
+    padding-bottom: 44px;
+}
+
+.ownedCharacterCard .sellButton {
+    position: absolute !important;
+    left: 8px !important;
+    right: 8px !important;
+    bottom: 7px !important;
+    width: calc(100% - 16px) !important;
+    margin: 0 !important;
+    z-index: 1000 !important;
+    pointer-events: auto !important;
+}
+
+
+/* ========================================
+   SHOP LAYOUT AND REROLL
+   ======================================== */
+
+.shopLayout {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr) minmax(220px, 300px);
+    gap: 18px;
+    align-items: start;
+}
+
+#rerollButton {
+    min-height: 180px;
+    background: #20152e;
+    border: 2px solid #a96bff;
+    color: white;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#rerollButton:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(1);
+}
+
+
+/* ========================================
+   SHOP CATEGORY TABS
+   ======================================== */
+
+#shopCategoryTabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+#shopCategoryTabs button {
+    padding: 9px 12px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #777;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+#shopCategoryTabs button.active {
+    border-color: #ffc52e;
+    background: #3a2b08;
+}
+
+
+/* ========================================
+   SHOP ITEMS
+   ======================================== */
+
+#shopItems {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.shopItem {
+    border: 2px solid #eebc27;
+    padding: 14px;
+    border-radius: 10px;
+    background: #151515;
+    min-width: 0;
+}
+
+.shopItem button {
+    padding: 9px 12px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+.shopItem strong {
+    font-size: 18px;
+}
+
+.shopItem p {
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.shopItem button:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+
+/* ========================================
+   SHOP CHARACTER CARDS
+   ======================================== */
+
+#shopItems {
+    overflow: visible;
+}
+
+.shopCharacterCard {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 150px;
+    padding: 10px 8px;
+    background: #111;
+    border: 2px solid #555;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.shopCharacterCard:hover,
+.shopCharacterCard:focus-within {
+    z-index: 100;
+    border-color: #eebc27;
+}
+
+.shopCharacterImage {
+    display: block;
+    width: 62px;
+    height: 62px;
+    object-fit: contain;
+    image-rendering: auto;
+    pointer-events: none;
+}
+
+.shopCharacterPrice {
+    width: 100%;
+    margin-top: 7px;
+    padding: 6px 3px 2px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-top: 1px solid #555;
+}
+
+.shopCharacterBuy {
+    margin-top: 7px;
+}
+
+.ownedCharacterCard {
+    min-width: 110px;
+    max-width: 150px;
+    flex: 0 0 125px;
+}
+
+.ownedCharacterCard .ownedCharacterLabel {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.shopCharacterCard .shopCharacterBuy {
+    cursor: pointer;
+}
+
+
+/* ========================================
+   SHOP CHARACTER STAT OVERLAYS
+   ======================================== */
+
+.shopStatsOverlay {
+    display: none;
+    /* Keep hover popups non-interactive so leaving the card closes them immediately. */
+    pointer-events: none;
+    position: absolute;
+    left: calc(100% + 8px);
+    top: 0;
+    width: 220px;
+    padding: 12px;
+    background: #202020;
+    border: 2px solid #eebc27;
+    border-radius: 9px;
+    box-shadow: 0 8px 24px #000b;
+    color: #fff;
+    text-align: left;
+    z-index: 120;
+    cursor: default;
+}
+
+.shopCharacterCard:hover > .shopStatsOverlay,
+.shopCharacterCard:focus-within > .shopStatsOverlay {
+    display: block;
+}
+
+.shopStatsOverlay h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+}
+
+.shopStatsOverlay p {
+    margin: 5px 0;
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+
+/* ========================================
+   SHOP CHARACTER ATTRIBUTES
+   ======================================== */
+
+.shopAttributeWrap {
+    position: relative;
+    z-index: 125;
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #666;
+}
+
+.shopCharacterCard > .shopAttributeWrap,
+.shopGenericCard > .shopAttributeWrap,
+.ownedCharacterCard > .shopAttributeWrap {
+    margin-top: 4px;
+    padding-top: 0;
+    border-top: 0;
+    max-width: 100%;
+    text-align: center;
+}
+
+.shopAttributeLabel {
+    display: inline-block;
+    padding: 4px 6px;
+    background: #383838;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: help;
+}
+
+.shopAttributeOverlay {
+    display: none;
+    position: absolute;
+    left: calc(100% + 8px);
+    bottom: 0;
+    width: 190px;
+    padding: 10px;
+    background: #30243a;
+    border: 2px solid #b98aff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px #000b;
+    font-size: 12px;
+    line-height: 1.35;
+    z-index: 130;
+    pointer-events: none;
+}
+
+.shopAttributeWrap:hover .shopAttributeOverlay,
+.shopAttributeWrap:focus-within .shopAttributeOverlay {
+    display: block;
+}
+
+
+/* ========================================
+   SHOP OVERLAYS: MOBILE
+   ======================================== */
+
+@media (max-width: 700px) {
+    .shopStatsOverlay {
+        left: calc(100% + 4px);
+        width: min(210px, 52vw);
+    }
+
+    .shopAttributeOverlay {
+        width: min(180px, 45vw);
+    }
+}
+
+
+/* ========================================
+   SHOP SECTION HEADINGS AND GRIDS
+   ======================================== */
+
+.shopSectionTitle {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.milhouseTitle {
+    margin-top: 24px;
+}
+
+.shopOfferGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.extraOfferGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+
+.extraOfferGrid .shopItem {
+    padding: 10px;
+}
+
+.extraOfferGrid .shopItem button {
+    margin-top: 8px;
+}
+
+
+/* ========================================
+   TRINKET SHOP
+   ======================================== */
+
+.trinketOfferGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.trinketOfferGrid .shopItem {
+    aspect-ratio: 1;
+    border: 2px solid #a96bff;
+    border-radius: 50%;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: visible;
+    background: #101010;
+}
+
+.trinketOfferGrid .shopItem strong {
+    font-size: 12px;
+}
+
+.trinketOfferGrid .shopItem p {
+    font-size: 11px;
+    margin: 5px 0;
+}
+
+.trinketOfferGrid .shopItem button {
+    padding: 5px 2px;
+    font-size: 11px;
+}
+
+
+/* ========================================
+   GENERIC SHOP CARDS
+   ======================================== */
+
+.shopGenericCard {
+    position: relative;
+}
+
+.shopGenericCard .shopStatsOverlay {
+    display: none;
+}
+
+.shopGenericCard:hover > .shopStatsOverlay,
+.shopGenericCard:focus-within > .shopStatsOverlay {
+    display: block;
+}
+
+.shopGenericCard .shopGenericPrice {
+    color: #20c968;
+    font-weight: bold;
+}
+
+
+/* ========================================
+   SHOP EXTRAS AND CONSUMABLES
+   ======================================== */
+
+#shopExtras h2 {
+    text-align: center;
+    margin: 0 0 10px;
+}
+
+.extraPack {
+    display: block;
+    width: 100%;
+    padding: 12px 8px;
+    margin-bottom: 9px;
+    background: #101010;
+    color: #fff;
+    border: 2px solid #239d63;
+    border-radius: 8px;
+}
+
+#trinketPlaceholder {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.trinketSlot {
+    aspect-ratio: 1;
+    border: 2px solid #a96bff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: 12px;
+    padding: 4px;
+}
+
+
+/* ========================================
+   NEXT ROUND BUTTON
+   ======================================== */
+
+#nextRoundButton {
+    margin-top: 20px;
+    width: 100%;
+    padding: 18px 12px;
+    background: #145c37;
+    color: white;
+    border: 2px solid #28b66b;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+/* PACK / CONSUMABLE SELECTION OVERLAY */
+#choiceOverlay{display:none;position:fixed;inset:0;z-index:9000;align-items:center;justify-content:center;padding:18px;background:rgba(0,0,0,.88)}
+#choiceOverlayCard{width:min(900px,100%);max-height:90vh;overflow:auto;padding:22px;background:#151515;border:2px solid #eebc27;border-radius:14px;box-shadow:0 10px 40px #000b}
+#choiceOverlayTitle{margin:0 0 8px}#choiceOverlayInstructions{color:#ddd;line-height:1.4}
+#choiceOverlayOptions{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin:18px 0}
+.choiceOption{min-width:0;padding:12px;background:#222;color:white;border:2px solid #666;border-radius:9px;cursor:pointer;overflow-wrap:anywhere}
+.choiceOption img{display:block;width:68px;height:68px;object-fit:contain;margin:0 auto 8px;pointer-events:none}
+.choiceOption:disabled{opacity:.35;cursor:not-allowed}.choiceOption.selected{border-color:#20c968;background:#123322}
+#choiceOverlayFooter{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}#choiceOverlayFooter button{padding:11px 16px;border:1px solid #aaa;border-radius:7px;cursor:pointer;font-weight:bold}
+#choiceDoneButton{background:#145c37;color:white}#choiceSkipButton{background:#333;color:white}
+
+/* ========================================
+   DEATH SCREEN
+   ======================================== */
+
+#deathScreen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 5000;
+    color: white;
+    text-align: center;
+    padding: 20vh 20px 0;
+}
+
+#deathScreen h1 {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+#deathScreen button {
+    padding: 12px 25px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+/* ========================================
+   ROUND SUMMARY OVERLAY
+   ======================================== */
+
+#roundSummaryOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 6000;
+    background: rgba(0, 0, 0, 0.86);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+#roundSummaryCard {
+    width: min(560px, 100%);
+    border: 2px solid #eebc27;
+    border-radius: 16px;
+    background: #151515;
+    padding: 26px;
+    box-shadow: 0 0 28px rgba(238, 188, 39, 0.18);
+}
+
+#roundSummaryCard h2 {
+    margin: 0 0 8px;
+    font-size: 30px;
+}
+
+#roundSummaryCard p {
+    color: #ddd;
+    line-height: 1.45;
+}
+
+#roundRewardLines {
+    border-top: 1px solid #555;
+    border-bottom: 1px solid #555;
+    margin: 18px 0;
+    padding: 12px 0;
+}
+
+.rewardLine {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 10px 0;
+}
+
+#roundSummaryTotal {
+    color: #20c968;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#continueToShopButton {
+    width: 100%;
+    padding: 14px;
+    background: #145c37;
+    color: white;
+    border: 2px solid #28b66b;
+    border-radius: 9px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+/* ========================================
+   SHOP LAYOUT: TABLET
+   ======================================== */
+
+@media (max-width: 900px) {
+    #shopPage {
+        padding: 14px;
+    }
+
+    .shopLayout {
+        grid-template-columns: 100px minmax(0, 1fr);
+    }
+
+    #shopExtras {
+        grid-column: 2;
+    }
+
+    #shopItems,
+    #milhouseShopItems {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ========================================
+   SHOP LAYOUT: MOBILE
+   ======================================== */
+
+@media (max-width: 560px) {
+    .shopLayout {
+        grid-template-columns: 1fr;
+    }
+
+    #rerollButton {
+        min-height: auto;
+        padding: 14px;
+    }
+
+    #shopItems,
+    #milhouseShopItems {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #shopExtras {
+        grid-column: auto;
+    }
+}      </style>
+<script>
+// Prevent Bart images from being dragged with the mouse.
+document.addEventListener("dragstart", function(event) {
+    if (event.target && event.target.tagName === "IMG") {
+        event.preventDefault();
+    }
+});
+</script>
+<style id="abilityVisualFixes">
+.polinosiaAfterimage {
+  position: fixed; pointer-events: auto; cursor: pointer; user-select: none;
+  opacity: .42; filter: drop-shadow(0 0 5px #a7e9ff);
+  transition: opacity .85s linear, transform .85s linear;
+}
+.polinosiaAfterimage:hover { opacity: .8; filter: drop-shadow(0 0 10px #fff08a); }
+.greedyMilhouseAura {
+  position: fixed; pointer-events: none; border-radius: 50%; z-index: 900;
+  background: radial-gradient(circle, rgba(255,205,35,.05) 35%, rgba(255,190,0,.16) 62%, rgba(255,224,90,.5) 68%, rgba(255,165,0,.08) 73%, transparent 76%);
+  border: 2px solid rgba(255,211,60,.55); box-shadow: 0 0 18px 5px rgba(255,190,0,.25);
+  box-sizing: border-box;
+}
+</style>
+</head>
+
+<body>
+
+    <main id="menuPage" class="page active">
+        <h1>CLICK THE BART</h1>
+        <p>Complete each round in order. Beat the boss to advance to the next Bart Round.</p>
+        <div class="roundChoices">
+            <div class="roundChoice" data-phase="0">SMALL ROUND<span>First phase of the current Bart Round</span><button class="startRoundButton" onclick="selectRound(0)" hidden>START ROUND</button></div>
+            <div class="roundChoice" data-phase="1">BIG ROUND<span>Unlocks after the Small Round</span><button class="startRoundButton" onclick="selectRound(1)" hidden>START ROUND</button></div>
+            <div class="roundChoice" data-phase="2">BOSS ROUND<span>Unlocks after the Big Round</span><button class="startRoundButton" onclick="selectRound(2)" hidden>START ROUND</button></div>
+        </div>
+        <button id="hardModeButton" onclick="openHardModeSetup()">HARD MODE</button>
+    </main>
+
+    <main id="hardStarterPage" class="page">
+        <h1>HARD MODE</h1>
+        <p>Choose one Bart and one Milhouse from Ismael's six hands.</p>
+        <div id="ismaelStage">
+            <img id="ismaelImage" src="ismael.png" alt="Ismael holding six starter characters">
+            <div id="starterBartOptions" class="starterOptions" aria-label="Choose one starter Bart"></div>
+            <div id="starterMilhouseOptions" class="starterOptions" aria-label="Choose one starter Milhouse"></div>
+        </div>
+        <button id="goToRoundButton" onclick="confirmHardModeStarters()" disabled>GO TO ROUND →</button>
+    </main>
+
+    <main id="gameplayPage" class="page">
+        <img id="NormalBart" src="bart.png" class="bart" width="125" draggable="false">
+        <div id="scoreBox">SCORE:0/100</div>
+        <div id="roundBox">ROUND:1</div>
+        <div id="timerBox">TIME:30</div>
+        <div id="bartcoinBox">BARTCOINS:0</div>
+    </main>
+
+    <main id="shopPage" class="page">
+        <div class="shopHeader"><h1>SHOP</h1><div class="shopStats"><span id="shopBartcoin">BARTCOINS:0</span><span id="bartLimitDisplay">BART LIMIT: 2 / 5</span></div></div>
+        <section id="ownedPanel"><h2>YOUR BARTS &amp; MILHOUSES</h2><div id="ownedList"></div></section>
+        <div class="shopLayout">
+            <button id="rerollButton" onclick="rerollShop()">⟳<br>REROLL<br><small>usable in shop before boss round</small></button>
+            <section><h2 class="shopSectionTitle">BARTS</h2><div id="shopItems" class="shopOfferGrid"></div><h2 class="shopSectionTitle milhouseTitle">MILHOUSES</h2><div id="milhouseShopItems" class="shopOfferGrid"></div></section>
+            <aside id="shopExtras">
+                <h2>CONSUMABLES</h2>
+                <div id="consumableShopItems" class="extraOfferGrid"></div>
+                <h2 style="margin-top:22px">TRINKETS</h2>
+                <div id="trinketPlaceholder" class="trinketOfferGrid"></div>
+                <button id="nextRoundButton" onclick="goToNextRound()">NEXT ROUND →</button>
+            </aside>
+        </div>
+    </main>
+
+    <div id="choiceOverlay" role="dialog" aria-modal="true" aria-labelledby="choiceOverlayTitle"><section id="choiceOverlayCard"><h2 id="choiceOverlayTitle">OPENING PACK</h2><p id="choiceOverlayInstructions"></p><div id="choiceOverlayOptions"></div><div id="choiceOverlayFooter"><button id="choiceSkipButton" type="button">SKIP / CLOSE</button><button id="choiceDoneButton" type="button">DONE</button></div></section></div>
+    <div id="deathScreen"><h1>YOU DIED</h1><p id="deathText"></p><button onclick="location.reload()">RETURN TO MENU</button></div>
+    <div id="roundSummaryOverlay" role="dialog" aria-modal="true" aria-labelledby="roundSummaryTitle">
+        <section id="roundSummaryCard">
+            <h2 id="roundSummaryTitle">ROUND SUMMARY</h2>
+            <p id="roundSummaryIntro"></p>
+            <div id="roundRewardLines"></div>
+            <div class="rewardLine"><strong>TOTAL BARTCOINS EARNED</strong><span id="roundSummaryTotal">+0</span></div>
+            <button id="continueToShopButton" onclick="continueToShop()">CONTINUE TO SHOP →</button>
+        </section>
+    </div>
+
+
+<script>
+
+/* =========================================================
+   1. BART TEMPLATE AND BARTS
+   ========================================================= */
+
+class Bart {
+
+    constructor({
+        name,
+        image = "bart.png",
+        price,
+        bartbaseclick,
+        bartmultiplier,
+        minSpeed,
+        maxSpeed,
+        minDirectionTime,
+        maxDirectionTime,
+        specialEffects = "None",
+        rarity = "common",
+        attributes = [],
+        quality = [],
+    }) {
+
+        this.name = name;
+        this.image = image;
+        this.price = price;
+
+        this.bartbaseclick = bartbaseclick;
+        this.bartmultiplier = bartmultiplier;
+
+        this.minSpeed = minSpeed;
+        this.maxSpeed = maxSpeed;
+
+        this.minDirectionTime = minDirectionTime;
+        this.maxDirectionTime = maxDirectionTime;
+
+        this.specialEffects = specialEffects;
+
+        this.Rarity = rarity;
+        this.attributes = attributes;
+        this.quality = quality;
+
+        // Each purchased Bart is its own instance. The shop definitions in
+        // bartPool stay reusable so multiple copies can be owned at once.
+        this.owned = false;
+        this.element = null;
+        this.onfire = 0;
+        this.fireOverlay = null;
+    }
+}
+
+
+const EFFECT_RADIUS = 200;
+const EVIL_BART_RANGE = EFFECT_RADIUS * 2;
+
+function getBartDistance(a, b) {
+    if (!a || !b || !a.element || !b.element) return Infinity;
+
+    const ar = a.element.getBoundingClientRect();
+    const br = b.element.getBoundingClientRect();
+
+    const ax = ar.left + ar.width / 2;
+    const ay = ar.top + ar.height / 2;
+    const bx = br.left + br.width / 2;
+    const by = br.top + br.height / 2;
+
+    return Math.hypot(ax - bx, ay - by);
+}
+
+
+/* =========================================================
+   NORMAL BART
+   ========================================================= */
+
+const normalBart = new Bart({
+
+    name: "Normal Bart",
+
+    image: "bart.png",
+
+    price: 0,
+
+    bartbaseclick: 2,
+
+    bartmultiplier: 1,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 3000,
+
+    specialEffects: "None",
+
+    rarity: "common",
+
+    attributes: [],
+    quality: [],
+
+});
+
+normalBart.owned = true;
+
+
+/* =========================================================
+   PLACEHOLDER BART
+   ========================================================= */
+
+const placeholderBart = new Bart({
+
+    name: "Placeholder Bart",
+
+    image: "download.png",
+
+    price: 10,
+
+    bartbaseclick: 10,
+
+    bartmultiplier: 4,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2500,
+
+    specialEffects: "This is a placeholder, does not go in shop pool",
+
+    rarity: "common",
+
+    attributes: [],
+    quality: [],
+
+});
+/*MAKE TINY BART TINY*/
+const TinyBart = new Bart({
+
+    name: "TinyBart",
+
+    image: "tinybart.png" ,
+
+    price: 8,
+
+    bartbaseclick: 5,
+
+    bartmultiplier: 2,
+
+    minSpeed: 8,
+    maxSpeed: 10,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 1500,
+
+    specialEffects: "Is very fast, but gives lots of score",
+
+    rarity: "common",
+
+    attributes: [],
+    quality: [],
+
+});
+const EvilBart = new Bart({
+
+    name: "EvilBart",
+
+    image: "EvilBart.png",
+
+    price: 12,
+
+    bartbaseclick: 3,
+
+    bartmultiplier: 1,
+
+    minSpeed: 5,
+    maxSpeed: 9,
+
+    minDirectionTime: 1500,
+    maxDirectionTime: 2500,
+
+    specialEffects: "When other Barts get close, they light on fire and get +1 multiplier",
+
+    rarity: "uncommon",
+
+    attributes: [],
+    quality: [],
+});
+const SadBart = new Bart({
+
+    name: "SadBart",
+
+    image: "SadBart.png",
+
+    price: 12,
+
+    bartbaseclick: 8,
+
+    bartmultiplier: 1,
+
+    minSpeed: 4,
+    maxSpeed: 5,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2500,
+
+    specialEffects: "leaves a trail of tears that when barts are on top of gives +10 baseclick",
+
+    rarity: "uncommon",
+
+    attributes: [],
+    quality: [],
+
+});
+const HolyBart = new Bart({
+
+    name: "HolyBart",
+
+    image: "HolyBart.png",
+
+    price: 12,
+
+    bartbaseclick: 1,
+
+    bartmultiplier: 2,
+
+    minSpeed: 5,
+    maxSpeed: 7,
+
+    minDirectionTime: 1200,
+    maxDirectionTime: 2500,
+
+    specialEffects: "The first time you fail to reach a round goal, destroys this bart and gives 10 bartcoins and the rest of the round's requirements",
+
+    rarity: "uncommon",
+
+    attributes: [],
+    quality: [],
+});
+const ScaryBart = new Bart({
+
+    name: "ScaryBart",
+
+    image: "ScaryBart.png",
+
+    price: 12,
+
+    bartbaseclick: 1,
+
+    bartmultiplier: 2,
+
+    minSpeed: 6,
+    maxSpeed: 6,
+
+    minDirectionTime: 900,
+    maxDirectionTime: 2300,
+
+    specialEffects: "Barts around this Bart get scared and change direction immediately",
+
+    rarity: "uncommon",
+
+    attributes: [],
+    quality: [],
+
+});
+const Bartling = new Bart({
+
+    name: "Bartling",
+
+    image: "Bartling.png",
+
+    price: 20,
+
+    bartbaseclick: 4,
+
+    bartmultiplier: 2,
+
+    minSpeed: 5,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2500,
+
+    specialEffects: "15% chance each click to birth more mini Bartlings with half the stats, each minibartling spawned decreasses this chance by 3%, Mini bartlings have the spectral attribute",
+    
+    rarity: "rare",
+
+    attributes: [],
+    quality: [],
+
+});
+
+const MiniBartling = new Bart({
+
+    name: "MiniBartling",
+
+    image: "Bartling.png",
+
+    price: 10,
+
+    bartbaseclick: 2,
+
+    bartmultiplier: 1,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2500,
+
+    specialEffects: "Spectral: can score the Bart directly beneath it when clicked",
+
+    rarity: "common",
+
+    attributes: ["spectral"],
+    quality: [],
+
+});
+MiniBartling.attributes = ["spectral"];
+
+
+const AlienBart = new Bart({
+
+    name: "AlienBart",
+
+    image: "alienbart.png",
+
+    price: 18,
+
+    bartbaseclick: 5,
+
+    bartmultiplier: 1,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2500,
+
+    specialEffects: "every 5 seconds or as a 1% chance on click, spawns a flying alien saucer that sends a beam down, the first bart to be trapped in the beam cannot move for 3 seconds.",
+
+    rarity: "rare",
+
+    attributes: [],
+    quality: [],
+
+});
+
+
+const PolinospiaBart = new Bart({
+
+    name: "Polinospia Bart",
+
+    image: "bart.png",
+
+    price: 18,
+
+    bartbaseclick: 4,
+
+    bartmultiplier: 2,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2500,
+
+    specialEffects: "Allows owned barts and milhouses to be in shop pool and when this bart moves around, leaves an after image trail that can be clicked for 1.25x this bart's value",
+
+    rarity: "Rare",
+
+    attributes: [],
+    quality: [],
+
+});
+
+
+const GhostBart = new Bart({
+
+    name: "Ghost Bart",
+
+    image: "ghostbart.png",
+
+    price: 10,
+
+    bartbaseclick: 4,
+
+    bartmultiplier: 1,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2500,
+
+    specialEffects: "This bart starts with spectral",
+
+    rarity: "common",
+
+    attributes: ["spectral"],
+    quality: [],
+
+});
+
+
+/*MILHOUSES*/
+
+const placeholderMilhouse = new Bart({
+
+    name: "Placeholder Milhouse",
+
+    image: "milhouse.jpg",
+
+    price: 0,
+
+    bartbaseclick: 5,
+
+    bartmultiplier: -2,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 3000,
+
+    specialEffects: "None",
+
+    rarity: "common",
+
+    attributes: [],
+    quality: [],
+
+});
+const LuckyMilhouse = new Bart({
+
+    name: "Lucky Milhouse",
+
+    image: "luckymilhouse.jpg",
+
+    price: 15,
+
+    bartbaseclick: 5,
+
+    bartmultiplier: -4,
+
+    minSpeed: 5,
+    maxSpeed: 8,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 2000,
+
+    specialEffects: "Increases chances for anything that has a % chance by 5%",
+
+    rarity: "rare",
+
+    attributes: [],
+    quality: [],
+
+});
+const GreedyMilhouse = new Bart({
+
+    name: "GreedyMilhouse",
+
+    image: "Greedymilhouse.jpg",
+
+    price: 10,
+
+    bartbaseclick: 4,
+
+    bartmultiplier: -2,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 3000,
+
+    specialEffects: "Clicking this milhouse has a 50% chance to steal 1 bartcoin, emits a golden aura that gives +2 baseclick for every time this has been clicked this round.",
+
+    rarity: "uncommon",
+
+    attributes: [],
+    quality: [],
+
+});
+const  RoboMilhouse = new Bart({
+
+    name: "RoboMilhouse",
+
+    image: "robomilhouse.jpg",
+
+    price: 12,
+
+    bartbaseclick: 5,
+
+    bartmultiplier: -2,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 3000,
+
+    specialEffects: "Fires a laser every second, barts who get hit with a laser get + 1 baseclick",
+
+    rarity: "uncommon",
+
+    attributes: [],
+    quality: [],
+
+});
+const ChillyMilhouse = new Bart({
+
+    name: "ChillyMilhouse",
+
+    image: "ChillyMilhouse.jpg",
+
+    price: 15,
+
+    bartbaseclick: 5,
+
+    bartmultiplier: -2,
+
+    minSpeed: 3,
+    maxSpeed: 6,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 4000,
+
+    specialEffects: "Leaves an Icy trail that slows down barts and milhouses",
+
+    rarity: "uncommon",
+
+    attributes: [],
+    quality: [],
+
+});
+const Milhouse = new Bart({
+
+    name: "Placeholder Milhouse",
+
+    image: "milhouse.jpg",
+
+    price: 0,
+
+    bartbaseclick: 5,
+
+    bartmultiplier: -2,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 3000,
+
+    specialEffects: "None",
+
+    rarity: "common",
+
+    attributes: [],
+    quality: [],
+
+});
+const Meimei = new Bart({
+
+    name: "Julien cat",
+
+    image: "meimei.jpg",
+
+    price: 0,
+
+    bartbaseclick: 4,
+
+    bartmultiplier: 5,
+
+    minSpeed: 4,
+    maxSpeed: 7,
+
+    minDirectionTime: 1000,
+    maxDirectionTime: 3000,
+
+    specialEffects: "None",
+
+    rarity: "common",
+
+    attributes: [],
+    quality: [],
+
+});
+
+
+
+class trinket {
+
+    constructor({
+        name,
+        image = "trinket.png",
+        price,
+        specialEffects = "None",
+        rarity = "common",
+        description,
+        attributes = [],
+        grantsAttributes = [],
+         quality = [],
+        grantsquality = []
+
+    }) {
+
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.specialEffects = specialEffects;
+
+        this.Rarity = rarity;
+        this.description = description;
+        // `attributes` describes attributes associated with the trinket;
+        // `grantsAttributes` explicitly records attributes it grants to characters.
+        this.attributes = Array.isArray(attributes) ? [...attributes] : [];
+        this.grantsAttributes = Array.isArray(grantsAttributes) ? [...grantsAttributes] : [];
+
+        this.quality = Array.isArray(quality) ? [...quality] : [];
+        this.grantsquality = Array.isArray(grantsquality) ? [...grantsquality] : [];
+
+        this.owned = false;
+        this.element = null;
+    }
+}
+
+/* TRINKETS*/
+const placeholderTrinket = new trinket ({
+    name: "Placeholder Trinket",
+
+    image: "trinket.png",
+
+    price: 5,
+
+    specialEffects: "None",
+
+    rarity: "common",
+
+    description: "A test trinket."
+});
+
+/* CONSUMABLES*/
+class ConsumablePack{
+
+    constructor({
+        name,
+        price,
+        rarity = "common",
+        description,
+        contents
+    }) {
+
+        this.name = name;
+        this.price = price;
+        this.Rarity = rarity;
+        this.description = description;
+        this.contents = contents;
+        this.owned = false;
+        this.element = null;
+    }
+}
+class Consumable {
+
+    constructor({
+        name,
+        image = "consumable.png",
+        description
+    }) {
+
+        this.name = name;
+        this.image = image;
+        this.description = description;
+
+        this.owned = false;
+        this.element = null;
+    }
+}
+
+const SacrificialAlter = new Consumable ({
+    name: "Sacrificial Alter",
+    image: "SacAlter.png",
+    description: "destroys 1-2 random barts and or milhouses and rewards 2-4 things which include; 7 bartcoins, a random bart, a random milhouse, a random trinket, or an angry fly that does nothing",
+});
+
+
+const gluestick = new Consumable({
+    name: "gluestick",
+    image: "glue.png",
+    description: "Grants the sticky attribute to a selected bart"
+});
+
+const Bartticket = new Consumable({
+    name: "Bart ticket",
+    image: "bartticket.png",
+    description: "Gives + 2 baseclick to a selected bart"
+});
+
+
+const Hammer = new Consumable({
+    name: "Hammer",
+    image: "Hammer.png",
+    description: "Select a bart to kill, this grants half their stats to a random bart"
+});
+
+const Goldenbartticket = new Consumable({
+    name: "Goldenbartticket",
+    image: "Goldticket.png",
+    description: "Earns 3 bartcoins for every bart and milhouse you own"
+});
+
+const BlessingOfIsmael = new Consumable({
+    name: "Ismael's Blessing",
+    image: "Blessing.png",
+    description: "Grants Holy Quality to a selected bart, Holy Quality Grants +1 baseclick and mult and adds a halo to the bart's head"
+});
+const SmallPack = new ConsumablePack ({
+    name: "Small Pack",
+
+    price: 8,
+
+    rarity: "common",
+
+    description: "A pack with a choice for 1 of 2 consumables",
+
+    contents: [SacrificialAlter, gluestick, Bartticket, Hammer, Goldenbartticket ],
+
+});
+
+const LargePack = new ConsumablePack ({
+    name: "Large Pack",
+
+    price: 15,
+
+    rarity: "common",
+
+    description: "A pack with a choice for 2 of 5 consumables ",
+
+    contents: [SacrificialAlter, gluestick, Bartticket, Hammer, Goldenbartticket, BlessingOfIsmael, ],
+
+});
+
+
+
+/* =========================================================
+   BART POOL
+   =========================================================
+
+   Every Bart in here has FIXED stats.
+
+   Add more Barts here later.
+
+   ========================================================= */
+
+const bartPool = [
+    TinyBart,
+    EvilBart,
+    SadBart,
+    HolyBart,
+    ScaryBart,
+    Bartling,
+    AlienBart,
+    GhostBart,
+    PolinospiaBart,
+    
+];
+
+// Each shop category has its own independent pool. These Milhouses, trinkets,
+// and consumables are starter entries that can be expanded later.
+/* =========================================================
+   2. MILHOUSE TEMPLATE AND MILHOUSES
+   Each entry has its own image path and uses the shared movement engine.
+   ========================================================= */
+// Attribute descriptions live with the Milhouse templates so they are easy to edit.
+const spectraldescription = "Clicking this Bart also clicks the Bart directly beneath it.";
+const attributeDescriptions = {
+    spectral: spectraldescription,
+    sticky: "When this character hits a wall, it has a 25% chance to stick there without moving for 2 seconds."
+};
+
+const milhousePool = [
+placeholderMilhouse,
+GreedyMilhouse,
+LuckyMilhouse,
+RoboMilhouse,
+ChillyMilhouse,
+];
+const CrackedDie = new trinket({
+    name: "Cracked die",
+    image: "die.png",
+    price: 12,
+    specialEffects: "sets all chances to 25%",
+    rarity: "Rare",
+    description: "Sets all chances, including ones higher than 25% to 25%"
+});
+
+const trinketPool = [
+    placeholderTrinket,
+    CrackedDie,
+];
+
+const consumablePackPool = [
+SmallPack,
+LargePack
+];
+
+
+
+/* =========================================================
+   SHOP SETTINGS
+   ========================================================= */
+
+const SHOP_BART_COUNT = 2;
+let polinospiabartowned = false; // Set true to allow shop offers for Bart types already owned.
+
+
+/* =========================================================
+   GAME VARIABLES + NUMERIC SAFETY
+   ========================================================= */
+
+// Prevent undefined, invalid strings, Infinity, or NaN from poisoning game state.
+function finiteNumber(value, fallback = 0) {
+    const number = typeof value === "number" ? value : Number(value);
+    return Number.isFinite(number) ? number : fallback;
+}
+
+function sanitizeGameNumbers() {
+    score = Math.max(0, finiteNumber(score));
+    roundScore = Math.max(0, finiteNumber(roundScore));
+    bartcoin = Math.max(0, finiteNumber(bartcoin));
+    roundClicks = Math.max(0, finiteNumber(roundClicks));
+    bartClicks = Math.max(0, finiteNumber(bartClicks));
+    backgroundClicks = Math.max(0, finiteNumber(backgroundClicks));
+    accuracy = Math.max(0, Math.min(100, finiteNumber(accuracy, 100)));
+    roundTime = Math.max(0, finiteNumber(roundTime));
+    bartround = Math.max(1, Math.floor(finiteNumber(bartround, 1)));
+    phaseIndex = Math.max(0, Math.min(2, Math.floor(finiteNumber(phaseIndex))));
+}
+
+let score = 0;
+let roundScore = 0;
+let bartcoin = 0;
+
+let bartround = 1; // Increases only after a Boss Round is cleared
+let phaseIndex = 0; // 0 = Small, 1 = Big, 2 = Boss
+let runStarted = false;
+let hardMode = false;
+let hardModeSetupUsed = false;
+let selectedStarterBart = null;
+let selectedStarterMilhouse = null;
+let hardModeStartersAdded = false;
+let roundClicks = 0; // All character clicks, including Milhouses.
+let bartClicks = 0; // Bart-only clicks, used for accuracy.
+let backgroundClicks = 0;
+let accuracy = 100;
+let roundTime = 30;
+
+let roundActive = false;
+let shopActive = false;
+
+let shopStock = [];
+// During one shop visit, a rerolled-away character is not offered again until
+// that category has cycled through every eligible item. These reset next shop.
+let seenBartNames = [];
+let seenMilhouseNames = [];
+let seenTrinketNames = [];
+let freereroll = 0; // Set this to 1 or more to grant free rerolls.
+let paidRerollsUsed = 0;
+let shopCategory = "barts";
+let milhouseStock = [];
+let trinketStock = [];
+let consumableStock = [];
+let ownedMilhouses = [];
+let ownedTrinkets = [];
+let ownedConsumables = []; // Kept for backwards compatibility; new consumables are used immediately.
+const bartSymphony = new Audio("bart_orchestral.mp3");
+bartSymphony.loop = true;
+bartSymphony.preload = "auto";
+let bartSymphonyStarted = false;
+let activeChoiceState = null;
+
+// Round-only ability effects.
+let abilityIntervalIds = [];
+let icePatches = [];
+let chillyTrails = [];
+let minibartlingSpawnChance = 15;
+let bartlimit = 2; // Base permanent-Bart limit; Milhouses can raise it to 5.
+const MAX_BARTLIMIT = 5;
+const MAX_MILHOUSES = 5;
+
+function updateBartLimit() {
+    // Each owned Milhouse adds one slot, but the total limit can never exceed 5.
+    bartlimit = Math.min(MAX_BARTLIMIT, 2 + Math.min(ownedMilhouses.length, 3));
+    const limitDisplay = document.getElementById("bartLimitDisplay");
+    if (limitDisplay) limitDisplay.textContent = "BART LIMIT: " + bartlimit + " / " + MAX_BARTLIMIT;
+}
+
+let activeBarts = [
+    normalBart
+];
+
+// Secret code: typing bart1234567890 gives 1000 score.
+let cheatInput = "";
+const CHEAT_CODE = "bart1234567890";
+
+document.addEventListener("keydown", function(event) {
+    if (event.key.length !== 1) {
+        return;
+    }
+
+    cheatInput += event.key.toLowerCase();
+
+    if (cheatInput.length > CHEAT_CODE.length) {
+        cheatInput = cheatInput.slice(-CHEAT_CODE.length);
+    }
+
+    if (cheatInput === CHEAT_CODE) {
+        score = Math.max(0, finiteNumber(score) + 1000);
+        roundScore = Math.max(0, finiteNumber(roundScore) + 1000);
+        updateScoreDisplay();
+        cheatInput = "";
+    } else if (cheatInput === "givejulien123") {
+    const template = Meimei;
+
+    const newBart = {
+        ...template,
+        owned: true,
+        destroyed: false
+    };
+
+    activeBarts.push(newBart);
+
+    cheatInput = "";
+    alert("julienbart");
+}
+});
+
+
+
+function updateAccuracy() {
+    // Milhouse clicks count toward total clicks, but are not misses or Bart hits.
+    const total = bartClicks + backgroundClicks;
+    accuracy = total === 0 ? 100 : Math.round((bartClicks / total) * 100);
+}
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const scoreBox =
+    document.getElementById("scoreBox");
+
+const roundBox =
+    document.getElementById("roundBox");
+
+const timerBox =
+    document.getElementById("timerBox");
+
+const bartcoinBox =
+    document.getElementById("bartcoinBox");
+
+const shopItems =
+    document.getElementById("shopItems");
+
+const deathScreen =
+    document.getElementById("deathScreen");
+
+const deathText =
+    document.getElementById("deathText");
+
+const normalBartElement =
+    document.getElementById("NormalBart");
+
+
+/* =========================================================
+   SHARED CHANCE + ROUND ABILITY EFFECTS
+   ========================================================= */
+
+function getChancePercent(baseChance) {
+    // Cracked Die overrides every gameplay percent chance, even chances above 25%.
+    if (ownedTrinkets.some(function(t) { return String(t.name || "").toLowerCase() === "cracked die"; })) return 25;
+    const hasLuckyMilhouse = ownedMilhouses.some(function(m) { return m.name === "Lucky Milhouse"; });
+    return Math.max(0, Math.min(100, finiteNumber(baseChance) + (hasLuckyMilhouse ? 10 : 0)));
+}
+
+function allCharactersOnScreen() {
+    return [...activeBarts, ...ownedMilhouses].filter(function(c) {
+        return c && !c.destroyed && c.element && c.element.style.display !== "none";
+    });
+}
+
+function clearAbilityEffects() {
+    abilityIntervalIds.forEach(function(id) { clearInterval(id); clearTimeout(id); });
+    abilityIntervalIds = [];
+    icePatches.forEach(function(patch) { if (patch.element) patch.element.remove(); });
+    icePatches = [];
+    chillyTrails.forEach(function(trail) { if (trail.element) trail.element.remove(); });
+    chillyTrails = [];
+    document.querySelectorAll(".alienBeam, .alienSaucer, .roboLaser, .polinosiaAfterimage, .greedyMilhouseAura").forEach(function(el) { el.remove(); });
+}
+
+function addIcePatch(milhouse) {
+    if (!roundActive || !milhouse.element || milhouse.destroyed) return;
+    const rect = milhouse.element.getBoundingClientRect();
+    const size = 80;
+    const x = rect.left + rect.width / 2 - size / 2;
+    const y = rect.top + rect.height / 2 - size / 2;
+    const patchEl = document.createElement("div");
+    patchEl.className = "chillyTear";
+    patchEl.style.cssText = "position:fixed;width:80px;height:80px;border-radius:50%;background:#a9edff;border:2px solid #d8f7ff;opacity:.88;pointer-events:none;z-index:1;transform:scale(1);transform-origin:center center;";
+    patchEl.style.left = x + "px";
+    patchEl.style.top = y + "px";
+    document.getElementById("gameplayPage").appendChild(patchEl);
+    const trail = { element: patchEl, x: x, y: y, width: size, height: size, expires: Date.now() + 900 };
+    chillyTrails.push(trail);
+
+    // Chilly patches fade quickly so frequent patches form a denser moving trail.
+    const shrinkId = setTimeout(function() {
+        patchEl.style.transition = "transform 250ms linear, opacity 250ms linear";
+        patchEl.style.transform = "scale(0.15)";
+        patchEl.style.opacity = "0";
+    }, 400);
+    const removeId = setTimeout(function() {
+        patchEl.remove();
+        chillyTrails = chillyTrails.filter(function(t) { return t !== trail; });
+    }, 700);
+    abilityIntervalIds.push(shrinkId, removeId);
+}
+
+function fireRoboLaser(milhouse) {
+    if (!roundActive || !milhouse.element || milhouse.destroyed) return;
+
+    const source = milhouse.element.getBoundingClientRect();
+    const sx = source.left + source.width / 2;
+    const sy = source.top + source.height / 2;
+    const angle = Math.random() * Math.PI * 2;
+    const length = Math.hypot(window.innerWidth, window.innerHeight) * 1.15;
+    const ex = sx + Math.cos(angle) * length;
+    const ey = sy + Math.sin(angle) * length;
+    const dx = ex - sx;
+    const dy = ey - sy;
+    const lenSq = dx * dx + dy * dy;
+    const beamThickness = 10;
+
+    // Check whether the randomly aimed ray crosses each Bart's rectangle.
+    activeBarts.filter(function(b) {
+        return b && !b.destroyed && b.element && b.element.style.display !== "none";
+    }).forEach(function(target) {
+        const r = target.element.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const t = Math.max(0, Math.min(1, ((cx - sx) * dx + (cy - sy) * dy) / lenSq));
+        const nearestX = sx + t * dx;
+        const nearestY = sy + t * dy;
+        const radius = Math.hypot(r.width, r.height) / 2 + beamThickness / 2;
+        if (Math.hypot(cx - nearestX, cy - nearestY) <= radius) {
+            target.roboRoundBaseBonus = (target.roboRoundBaseBonus || 0) + 1;
+        }
+    });
+
+    const laser = document.createElement("div");
+    laser.className = "roboLaser";
+    laser.style.cssText = "position:fixed;height:10px;transform-origin:0 50%;transform:rotate(" + angle + "rad);background:#4ffcff;box-shadow:0 0 12px #4ffcff;pointer-events:none;z-index:1500;";
+    laser.style.left = sx + "px";
+    laser.style.top = (sy - beamThickness / 2) + "px";
+    laser.style.width = length + "px";
+    document.getElementById("gameplayPage").appendChild(laser);
+    // Very short flash; gameplay hit detection happens immediately above.
+    const laserId = setTimeout(function() { laser.remove(); }, 65);
+    abilityIntervalIds.push(laserId);
+}
+
+function fireAlienSaucer() {
+    if (!roundActive) return;
+    const targets = activeBarts.filter(function(b) {
+        return b && b.name !== "MiniBartling" && !b.destroyed && b.element && b.element.style.display !== "none" && (!b.frozenUntil || b.frozenUntil <= Date.now());
+    });
+    if (!targets.length) return;
+    const target = targets[Math.floor(Math.random() * targets.length)];
+    const rect = target.element.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const saucer = document.createElement("img");
+    saucer.className = "alienSaucer";
+    saucer.src = "ufo.png";
+    saucer.alt = "Alien UFO";
+    saucer.style.cssText = "position:fixed;width:260px;height:160px;object-fit:contain;left:" + (cx - 32) + "px;top:4px;z-index:1600;pointer-events:none;";
+    const beam = document.createElement("div");
+    beam.className = "alienBeam";
+    beam.style.cssText = "position:fixed;width:70px;background:rgba(90,255,150,.32);border-left:2px solid #7cffad;border-right:2px solid #7cffad;left:" + (cx - 35) + "px;top:42px;height:" + Math.max(0, rect.top - 42) + "px;z-index:1500;pointer-events:none;";
+    document.getElementById("gameplayPage").appendChild(beam);
+    document.getElementById("gameplayPage").appendChild(saucer);
+    // The first Bart caught by this beam is frozen for three seconds.
+    target.frozenUntil = Date.now() + 3000;
+    setTimeout(function() { beam.remove(); saucer.remove(); }, 3000);
+}
+
+function spawnPolinosiaAfterimage(bart) {
+    if (!roundActive || !bart || bart.name !== "Polinospia Bart" || !bart.element || bart.destroyed) return;
+    const rect = bart.element.getBoundingClientRect();
+    const ghost = document.createElement("img");
+    ghost.className = "polinosiaAfterimage";
+    ghost.src = bart.image;
+    ghost.alt = "Polinospia Bart afterimage — click for double score";
+    ghost.draggable = false;
+    ghost.style.left = rect.left + "px";
+    ghost.style.top = rect.top + "px";
+    ghost.style.width = rect.width + "px";
+    ghost.style.height = rect.height + "px";
+    ghost.style.zIndex = "999";
+    ghost.onclick = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!roundActive || bart.destroyed) return;
+        const points = finiteNumber(bart.bartbaseclick) * finiteNumber(bart.bartmultiplier) * 2;
+        score = Math.max(0, finiteNumber(score) + points);
+        roundScore = Math.max(0, finiteNumber(roundScore) + points);
+        roundClicks++;
+        bartClicks++;
+        updateAccuracy();
+        updateScoreDisplay();
+        ghost.remove();
+        if (roundScore >= getRoundRequirement()) endRound();
+    };
+    document.getElementById("gameplayPage").appendChild(ghost);
+    requestAnimationFrame(function() {
+        ghost.style.opacity = "0";
+        ghost.style.transform = "scale(.82)";
+    });
+    const removeId = setTimeout(function() { ghost.remove(); }, 900);
+    abilityIntervalIds.push(removeId);
+}
+
+function positionGreedyAura(milhouse) {
+    if (!milhouse || !milhouse.element || milhouse.destroyed || !milhouse.greedyAuraElement) return;
+    const rect = milhouse.element.getBoundingClientRect();
+    const diameter = Math.max(rect.width, rect.height) + EFFECT_RADIUS * 2;
+    milhouse.greedyAuraElement.style.width = diameter + "px";
+    milhouse.greedyAuraElement.style.height = diameter + "px";
+    milhouse.greedyAuraElement.style.left = (rect.left + rect.width / 2 - diameter / 2) + "px";
+    milhouse.greedyAuraElement.style.top = (rect.top + rect.height / 2 - diameter / 2) + "px";
+}
+
+function createGreedyAura(milhouse) {
+    if (!milhouse || !milhouse.element || milhouse.destroyed) return;
+    if (!milhouse.greedyAuraElement || !milhouse.greedyAuraElement.isConnected) {
+        const aura = document.createElement("div");
+        aura.className = "greedyMilhouseAura";
+        aura.setAttribute("aria-hidden", "true");
+        document.getElementById("gameplayPage").appendChild(aura);
+        milhouse.greedyAuraElement = aura;
+    }
+    positionGreedyAura(milhouse);
+}
+
+function startCharacterAbilities() {
+    clearAbilityEffects();
+    const greedyMilhouses = ownedMilhouses.filter(function(m) { return m.name === "GreedyMilhouse"; });
+    greedyMilhouses.forEach(function(m) { m.greedyClicksThisRound = 0; });
+    greedyMilhouses.forEach(function(m) {
+        createGreedyAura(m);
+        const auraId = setInterval(function() {
+            if (roundActive && !shopActive) {
+                createGreedyAura(m);
+                positionGreedyAura(m);
+            }
+        }, 50);
+        abilityIntervalIds.push(auraId);
+    });
+    activeBarts.filter(function(b) { return b.name === "Polinospia Bart" && !b.destroyed; }).forEach(function(b) {
+        const trailId = setInterval(function() { if (roundActive && !shopActive) spawnPolinosiaAfterimage(b); }, 220);
+        abilityIntervalIds.push(trailId);
+    });
+
+    ownedMilhouses.filter(function(m) { return m.name === "ChillyMilhouse"; }).forEach(function(m) {
+        const id = setInterval(function() { if (roundActive) addIcePatch(m); }, 140);
+        abilityIntervalIds.push(id);
+    });
+    ownedMilhouses.filter(function(m) { return m.name === "RoboMilhouse"; }).forEach(function(m) {
+        const id = setInterval(function() { if (roundActive) fireRoboLaser(m); }, 1000);
+        abilityIntervalIds.push(id);
+    });
+    activeBarts.filter(function(b) { return b.name === "AlienBart" && !b.destroyed; }).forEach(function() {
+        const id = setInterval(function() { if (roundActive) fireAlienSaucer(); }, 5000);
+        abilityIntervalIds.push(id);
+    });
+
+    // Normal Bartling chance starts at 15%; Cracked Die overrides the roll centrally.
+    minibartlingSpawnChance = 15;
+}
+
+function stopCharacterAbilities() {
+    clearAbilityEffects();
+}
+
+/* =========================================================
+   3. BART AND MILHOUSE ABILITIES — SCORING
+   ========================================================= */
+
+function addScore(bart) {
+
+    if (!roundActive || !bart || bart.destroyed || bart._scoringNow) {
+        return;
+    }
+    bart._scoringNow = true;
+    scoreOneBart(bart);
+    bart._scoringNow = false;
+
+    // A spectral Bart also scores the closest lower overlapping Bart.
+    // The chain continues only while each scored Bart has the spectral attribute.
+    if (bart.attributes && bart.attributes.includes("spectral")) {
+        const below = findBartDirectlyBelow(bart);
+        if (below) addScore(below);
+    }
+}
+
+function findBartDirectlyBelow(topBart) {
+    if (!topBart || !topBart.element) return null;
+    const topRect = topBart.element.getBoundingClientRect();
+    const candidates = activeBarts.filter(function(candidate) {
+        if (!candidate || candidate === topBart || !candidate.element || candidate.destroyed) return false;
+        const r = candidate.element.getBoundingClientRect();
+        const overlaps = topRect.left < r.right && topRect.right > r.left && topRect.top < r.bottom && topRect.bottom > r.top;
+        // DOM-later elements paint above earlier elements when z-index is equal.
+        const candidateIsBelow = !!(candidate.element.compareDocumentPosition(topBart.element) & Node.DOCUMENT_POSITION_FOLLOWING);
+        return overlaps && candidateIsBelow;
+    });
+    candidates.sort(function(a, b) {
+        const ar = a.element.getBoundingClientRect(), br = b.element.getBoundingClientRect();
+        const areaA = Math.max(0, Math.min(topRect.right, ar.right) - Math.max(topRect.left, ar.left)) * Math.max(0, Math.min(topRect.bottom, ar.bottom) - Math.max(topRect.top, ar.top));
+        const areaB = Math.max(0, Math.min(topRect.right, br.right) - Math.max(topRect.left, br.left)) * Math.max(0, Math.min(topRect.bottom, br.bottom) - Math.max(topRect.top, br.top));
+        // Prefer the largest overlap. If overlap is tied, choose the closest
+        // lower element in DOM paint order so Spectral chains score each layer.
+        if (areaA !== areaB) return areaB - areaA;
+        if (a.element.compareDocumentPosition(b.element) & Node.DOCUMENT_POSITION_FOLLOWING) return 1;
+        if (b.element.compareDocumentPosition(a.element) & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+        return 0;
+    });
+    return candidates[0] || null;
+}
+
+function scoreOneBart(bart) {
+
+    let effectiveBaseClick = finiteNumber(bart.bartbaseclick) + finiteNumber(bart.roboRoundBaseBonus);
+    let effectiveMultiplier = finiteNumber(bart.bartmultiplier);
+
+    // Greedy Milhouse builds +2 base click per click this round. Its golden
+    // aura affects Barts within the shared 200px effect radius.
+    if (bart.name === "GreedyMilhouse") {
+    bart.greedyClicksThisRound = (bart.greedyClicksThisRound || 0) + 1;
+
+    if (Math.random() < getChancePercent(50) / 100) {
+        bartcoin = Math.max(0, bartcoin - 1);
+        updateBartcoinDisplay();
+    }
+}
+    if (!bart.isMilhouse) {
+        ownedMilhouses.filter(function(m) { return m.name === "GreedyMilhouse"; }).forEach(function(m) {
+            if (m.element && !m.destroyed && getBartDistance(bart, m) <= EFFECT_RADIUS) {
+                effectiveBaseClick += 2 * finiteNumber(m.greedyClicksThisRound);
+            }
+        });
+    }
+
+    // Alien Bart has an extra 1% click-triggered saucer chance.
+    if (bart.name === "AlienBart" && Math.random() < getChancePercent(1) / 100) {
+        fireAlienSaucer();
+    }
+
+    // Sad Bart is not affected by its own or any Sad Bart tear trails.
+    if (bart.name !== "SadBart" && isBartOnSadTear(bart)) {
+        effectiveBaseClick += 10;
+    }
+
+    // EvilBart: every other Bart within 75 pixels gets +1 multiplier.
+    if (bart.name !== "EvilBart") {
+        activeBarts.forEach(function(evilBart) {
+            if (
+                evilBart.name === "EvilBart" &&
+                !evilBart.destroyed &&
+                evilBart.element &&
+                getBartDistance(bart, evilBart) <= EVIL_BART_RANGE
+            ) {
+                effectiveMultiplier += 1;
+            }
+        });
+    }
+
+    let points = finiteNumber(effectiveBaseClick * effectiveMultiplier);
+    if (bart.ismaelsBlessingClicksLeft > 0) {
+        points *= 2;
+        bart.ismaelsBlessingClicksLeft--;
+    }
+
+    // Negative-click characters may reduce score, but invalid math and negative
+    // totals can never poison the score state.
+    score = Math.max(0, finiteNumber(score) + points);
+    roundScore = Math.max(0, finiteNumber(roundScore) + points);
+    sanitizeGameNumbers();
+    // Every clicked character counts toward the click total. Only Bart clicks
+    // count as accurate hits for the 100% accuracy reward.
+    roundClicks++;
+    if (!bart.isMilhouse) {
+        bartClicks++;
+        updateAccuracy();
+    }
+    updateScoreDisplay();
+
+    if (roundScore >= getRoundRequirement()) {
+        endRound();
+        return;
+    }
+
+    // Bartling can create temporary MiniBartlings.
+    if (bart.name === "Bartling") {
+        const chance = Math.max(0, getChancePercent(minibartlingSpawnChance) / 100);
+        if (Math.random() < chance) {
+            spawnMiniBartling();
+            minibartlingSpawnChance = Math.max(0, minibartlingSpawnChance - 3);
+        }
+    }
+}
+
+
+/* =========================================================
+   SET UP NORMAL BART
+   ========================================================= */
+
+function setupNormalBart() {
+
+    normalBart.element = normalBartElement;
+    normalBartElement.style.display = "block";
+
+    normalBartElement.style.position =
+        "fixed";
+
+    normalBartElement.style.left =
+        Math.random() *
+        Math.max(
+            1,
+            window.innerWidth -
+            normalBartElement.width
+        ) +
+        "px";
+
+    normalBartElement.style.top =
+        Math.random() *
+        Math.max(
+            1,
+            window.innerHeight -
+            normalBartElement.height
+        ) +
+        "px";
+
+    normalBartElement.onclick =
+        function(event) {
+            event.stopPropagation();
+            addScore(normalBart);
+        };
+
+    // Right-click opens the SELL button during the shop phase.
+    normalBartElement.oncontextmenu =
+        function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Barts can only be sold during the shop phase.
+            if (!shopActive) {
+                return;
+            }
+
+            showSellButton(normalBart);
+        };
+
+    moveBart(normalBart);
+
+}
+
+
+/* =========================================================
+   SPAWN PURCHASED BART
+   ========================================================= */
+
+function applyCharacterVisuals(bart, element) {
+    if (!bart || !element) return;
+
+    const isSpectral = Array.isArray(bart.attributes) && bart.attributes.includes("spectral");
+
+    // Spectral Barts sit above ordinary Barts and every Milhouse by default.
+    element.style.zIndex = isSpectral ? "1100" : "1000";
+
+    // Only characters with the Spectral attribute are slightly transparent.
+    // Non-Spectral Barts and Milhouses remain fully opaque.
+    element.style.opacity = isSpectral ? "0.78" : "1";
+}
+
+function spawnBart(bart) {
+
+    // Reuse an existing element between rounds instead of creating duplicates.
+    if (bart.element && document.body.contains(bart.element)) {
+        bart.element.style.display = "block";
+        applyCharacterVisuals(bart, bart.element);
+        const width = bart.element.width || 125;
+        bart.element.style.left = (2 + Math.random() * Math.max(0, window.innerWidth - width - 4)) + "px";
+        bart.element.style.top = (2 + Math.random() * Math.max(0, window.innerHeight - width - 4)) + "px";
+        return;
+    }
+
+    const img = document.createElement("img");
+    img.draggable = false;
+
+    // Each Milhouse template supplies its own image path. Milhouses use a
+    // separate CSS class, but share the same movement engine as Barts.
+    img.src = bart.image;
+    img.className = bart.isMilhouse ? "milhouse" : "bart";
+    img._characterData = bart;
+
+    // TinyBart and MiniBartling are half-size.
+    img.width =
+        (bart.name === "TinyBart" || bart.name === "MiniBartling")
+            ? 62
+            : 125;
+
+    img.style.position = "fixed";
+    applyCharacterVisuals(bart, img);
+    img.style.cursor = "pointer";
+    img.style.userSelect = "none";
+
+    const maxX = Math.max(2, window.innerWidth - img.width - 2);
+    const maxY = Math.max(2, window.innerHeight - img.height - 2);
+
+    let startX = 2 + Math.random() * Math.max(0, maxX - 2);
+    let startY = 2 + Math.random() * Math.max(0, maxY - 2);
+
+    img.style.left = startX + "px";
+    img.style.top = startY + "px";
+
+    img.onclick = function(event) {
+        event.stopPropagation();
+        addScore(bart);
+    };
+
+    // Right-click opens a SELL button instead of selling immediately.
+    img.oncontextmenu = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Selling is available during the shop phase for any owned Bart.
+        if (!shopActive) return;
+        showSellButton(bart);
+    };
+
+    // Append first so offsetWidth/offsetHeight are valid when movement starts.
+    document.getElementById("gameplayPage").appendChild(img);
+    bart.element = img;
+
+    moveBart(bart);
+}
+
+
+/* =========================================================
+   TEMPORARY MINIBARTLINGS
+   ========================================================= */
+
+function spawnMiniBartling() {
+
+    const mini = new Bart({
+        name: "MiniBartling",
+        image: MiniBartling.image,
+        price: MiniBartling.price,
+        bartbaseclick: MiniBartling.bartbaseclick / 2,
+        bartmultiplier: MiniBartling.bartmultiplier,
+        minSpeed: MiniBartling.minSpeed,
+        maxSpeed: MiniBartling.maxSpeed,
+        minDirectionTime: MiniBartling.minDirectionTime,
+        maxDirectionTime: MiniBartling.maxDirectionTime,
+        specialEffects: MiniBartling.specialEffects
+    });
+
+    mini.owned = true;
+    mini.attributes = ["spectral"];
+    activeBarts.push(mini);
+    spawnBart(mini);
+
+    // MiniBartlings are removed when the round ends, so they last
+    // for the entire round they were spawned in.
+
+}
+
+
+/* =========================================================
+   SAD BART TEAR TRAIL
+   ========================================================= */
+
+const sadTears = [];
+
+function spawnSadTear(bart) {
+    if (!bart || bart.name !== "SadBart" || !bart.element || bart.destroyed) return;
+
+    const tear = document.createElement("div");
+    tear.className = "sadTear";
+    tear.style.position = "fixed";
+    // Larger, round tears that stay still and then slowly shrink away.
+    tear.style.width = "80px";
+    tear.style.height = "80px";
+    tear.style.background = "#66d9ff";
+    tear.style.borderRadius = "50%";
+    tear.style.pointerEvents = "none";
+    tear.style.zIndex = "1";
+    tear.style.transform = "scale(1)";
+    tear.style.transformOrigin = "center center";
+
+    const x = finiteNumber(parseFloat(bart.element.style.left), 2) + finiteNumber(bart.element.offsetWidth) / 2 - 40;
+    const y = finiteNumber(parseFloat(bart.element.style.top), 2) + finiteNumber(bart.element.offsetHeight) / 2 - 40;
+    tear.style.left = x + "px";
+    tear.style.top = y + "px";
+
+    document.getElementById("gameplayPage").appendChild(tear);
+
+    const tearData = {
+        element: tear,
+        x: x,
+        y: y,
+        width: 80,
+        height: 80,
+        expires: Date.now() + 3500
+    };
+
+    sadTears.push(tearData);
+
+    // Keep the tear full-sized for 1.5 seconds, then slowly shrink it away.
+    setTimeout(function() {
+        tear.style.transition = "transform 500ms linear, opacity 500ms linear";
+        tear.style.transform = "scale(0)";
+        tear.style.opacity = "0";
+    }, 1500);
+
+    setTimeout(function() {
+        const index = sadTears.indexOf(tearData);
+        if (index !== -1) sadTears.splice(index, 1);
+        tear.remove();
+    }, 3500);
+}
+
+function isBartOnSadTear(bart) {
+    if (!bart || !bart.element) return false;
+
+    const bx = finiteNumber(parseFloat(bart.element.style.left), 2);
+    const by = finiteNumber(parseFloat(bart.element.style.top), 2);
+    const bw = bart.element.offsetWidth;
+    const bh = bart.element.offsetHeight;
+
+    return sadTears.some(function(tear) {
+        return (
+            bx < tear.x + tear.width &&
+            bx + bw > tear.x &&
+            by < tear.y + tear.height &&
+            by + bh > tear.y
+        );
+    });
+}
+
+// Leave a visible tear behind Sad Bart as it moves.
+setInterval(function() {
+    activeBarts.forEach(function(bart) {
+        if (bart.name === "SadBart") spawnSadTear(bart);
+    });
+}, 180);
+
+/* =========================================================
+   EVIL BART EFFECT — STACKING FIRE
+   ========================================================= */
+
+function positionFireOverlay(character) {
+    if (!character || !character.element || !character.fireOverlay) return;
+
+    const rect = character.element.getBoundingClientRect();
+    character.fireOverlay.style.left = rect.left + "px";
+    character.fireOverlay.style.top = (rect.top + rect.height / 2) + "px";
+    character.fireOverlay.style.width = rect.width + "px";
+    character.fireOverlay.style.height = (rect.height / 2) + "px";
+}
+
+// Track the character every animation frame so fire.png stays visually attached
+// even when the Bart or Milhouse moves between ability updates.
+function followFireOverlays() {
+    activeBarts.forEach(function(character) {
+        if (character && character.onfire >= 1 && character.element && !character.destroyed) {
+            positionFireOverlay(character);
+        }
+    });
+    requestAnimationFrame(followFireOverlays);
+}
+requestAnimationFrame(followFireOverlays);
+
+function updateFireOverlay(character) {
+    if (!character || !character.element) return;
+
+    // Keep one fire.png overlay attached to the bottom half of each character.
+    if (character.onfire >= 1) {
+        if (!character.fireOverlay || !character.fireOverlay.isConnected) {
+            const fire = document.createElement("img");
+            fire.src = "fire.png";
+            fire.alt = "";
+            fire.draggable = false;
+            fire.className = "evilBartFireOverlay";
+            fire.style.position = "fixed";
+            fire.style.pointerEvents = "none";
+            fire.style.objectFit = "fill";
+            fire.style.zIndex = "1001";
+            fire.style.userSelect = "none";
+            document.getElementById("gameplayPage").appendChild(fire);
+            character.fireOverlay = fire;
+        }
+
+        character.fireOverlay.style.display = "block";
+        positionFireOverlay(character);
+    } else if (character.fireOverlay) {
+        character.fireOverlay.remove();
+        character.fireOverlay = null;
+    }
+}
+
+setInterval(function() {
+    activeBarts.forEach(function(character) {
+        if (!character.element || character.destroyed) {
+            if (character.fireOverlay) {
+                character.fireOverlay.remove();
+                character.fireOverlay = null;
+            }
+            character.onfire = 0;
+            return;
+        }
+
+        // Every Evil Bart in range contributes +1. Multiple Evil Barts stack;
+        // the value updates as they move into or out of range.
+        let fireStacks = 0;
+        if (character.name !== "EvilBart") {
+            activeBarts.forEach(function(evil) {
+                if (
+                    evil.name === "EvilBart" &&
+                    !evil.destroyed &&
+                    evil.element &&
+                    getBartDistance(character, evil) <= EVIL_BART_RANGE
+                ) {
+                    fireStacks += 1;
+                }
+            });
+        }
+
+        character.onfire = fireStacks;
+        updateFireOverlay(character);
+    });
+}, 100);
+
+
+/* =========================================================
+   BART AND MILHOUSE ABILITIES — SHARED MOVEMENT
+   ========================================================= */
+
+function tryStickyWallStop(bart) {
+    if (!bart || !Array.isArray(bart.attributes) || !bart.attributes.includes("sticky")) return false;
+    const now = Date.now();
+    if (bart.stickyWallCooldownUntil && now < bart.stickyWallCooldownUntil) return false;
+    if (Math.random() >= getChancePercent(25) / 100) return false;
+    bart.frozenUntil = now + 2000;
+    bart.stickyWallCooldownUntil = now + 2200;
+    return true;
+}
+
+function moveBart(bart) {
+
+    if (bart._movementStarted) return;
+    bart._movementStarted = true;
+
+    let x =
+        parseFloat(
+            bart.element.style.left
+        ) || 2;
+
+    let y =
+        parseFloat(
+            bart.element.style.top
+        ) || 2;
+
+    let vx = 0;
+    let vy = 0;
+    let scaryClose = false;
+
+    const btn =
+        bart.element;
+
+
+    function move() {
+
+        if (!bart.element) {
+            return;
+        }
+
+        // All Barts freeze while the shop is open.
+        if (!shopActive) {
+            const now = Date.now();
+            const frozen = bart.frozenUntil && bart.frozenUntil > now;
+            let movementMultiplier = frozen ? 0 : 1;
+            if (!frozen && bart.name !== "ChillyMilhouse") {
+                const charRect = bart.element.getBoundingClientRect();
+                const charLeft = x;
+                const charTop = y;
+                const charRight = charLeft + btn.offsetWidth;
+                const charBottom = charTop + btn.offsetHeight;
+                if (chillyTrails.some(function(trail) {
+                    return charLeft < trail.x + trail.width && charRight > trail.x && charTop < trail.y + trail.height && charBottom > trail.y;
+                })) movementMultiplier = 0.4;
+            }
+            x += vx * movementMultiplier;
+            y += vy * movementMultiplier;
+
+            // Scary Bart makes nearby Barts immediately turn directly away.
+            // Trigger once when entering the 50px range, rather than every frame.
+            let nearScaryBart = false;
+            let nearestScary = null;
+            let nearestScaryDistance = Infinity;
+
+            for (const otherBart of activeBarts) {
+                if (
+                    otherBart === bart ||
+                    otherBart.name !== "ScaryBart" ||
+                    !otherBart.element
+                ) {
+                    continue;
+                }
+
+                const otherX = parseFloat(otherBart.element.style.left) || 0;
+                const otherY = parseFloat(otherBart.element.style.top) || 0;
+
+                const bartCenterX = x + btn.offsetWidth / 2;
+                const bartCenterY = y + btn.offsetHeight / 2;
+                const scaryCenterX = otherX + otherBart.element.offsetWidth / 2;
+                const scaryCenterY = otherY + otherBart.element.offsetHeight / 2;
+
+                const dx = bartCenterX - scaryCenterX;
+                const dy = bartCenterY - scaryCenterY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance <= 50 && distance < nearestScaryDistance) {
+                    nearScaryBart = true;
+                    nearestScary = {
+                        x: scaryCenterX,
+                        y: scaryCenterY
+                    };
+                    nearestScaryDistance = distance;
+                }
+            }
+
+            if (nearScaryBart && !scaryClose && nearestScary) {
+                changeDirectionAwayFrom(nearestScary.x, nearestScary.y);
+            }
+
+            scaryClose = nearScaryBart;
+        }
+
+
+        /* RIGHT */
+
+        if (
+            x + btn.offsetWidth >=
+            window.innerWidth - 2
+        ) {
+
+            x =
+                window.innerWidth -
+                btn.offsetWidth -
+                2;
+
+            vx =
+                -Math.abs(vx);
+            tryStickyWallStop(bart);
+
+        }
+
+
+        /* LEFT */
+
+        if (x <= 2) {
+
+            x = 2;
+
+            vx =
+                Math.abs(vx);
+            tryStickyWallStop(bart);
+
+        }
+
+
+        /* BOTTOM */
+
+        if (
+            y + btn.offsetHeight >=
+            window.innerHeight - 2
+        ) {
+
+            y =
+                window.innerHeight -
+                btn.offsetHeight -
+                2;
+
+            vy =
+                -Math.abs(vy);
+            tryStickyWallStop(bart);
+
+        }
+
+
+        /* TOP */
+
+        if (y <= 2) {
+
+            y = 2;
+
+            vy =
+                Math.abs(vy);
+            tryStickyWallStop(bart);
+
+        }
+
+
+        btn.style.left =
+            x + "px";
+
+        btn.style.top =
+            y + "px";
+
+        // Keep the SELL button physically attached to the Bart while it moves.
+        if (activeSellBart === bart && activeSellButton && !activeSellChip) {
+            const rect = btn.getBoundingClientRect();
+            activeSellButton.style.left = rect.left + "px";
+            activeSellButton.style.top = (rect.bottom + 5) + "px";
+        }
+
+        requestAnimationFrame(move);
+
+    }
+
+
+    function changeDirectionAwayFrom(scaryX, scaryY) {
+
+        if (!bart.element) {
+            return;
+        }
+
+        const bartCenterX = x + btn.offsetWidth / 2;
+        const bartCenterY = y + btn.offsetHeight / 2;
+
+        let dx = bartCenterX - scaryX;
+        let dy = bartCenterY - scaryY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        // If they are exactly on top of each other, pick a random direction
+        // so the Bart can escape instead of getting stuck.
+        if (distance < 0.001) {
+            const angle = Math.random() * Math.PI * 2;
+            dx = Math.cos(angle);
+            dy = Math.sin(angle);
+        } else {
+            dx /= distance;
+            dy /= distance;
+        }
+
+        const speed =
+            bart.minSpeed +
+            Math.random() *
+            (bart.maxSpeed - bart.minSpeed);
+
+        vx = dx * speed;
+        vy = dy * speed;
+
+        const directionTime =
+            bart.minDirectionTime +
+            Math.random() *
+            (bart.maxDirectionTime - bart.minDirectionTime);
+
+        setTimeout(
+            changeDirection,
+            directionTime
+        );
+    }
+
+
+    function changeDirection() {
+
+        if (!bart.element) {
+            return;
+        }
+
+
+        const angle =
+            Math.random() *
+            Math.PI *
+            2;
+
+
+        const speed =
+            bart.minSpeed +
+            Math.random() *
+            (
+                bart.maxSpeed -
+                bart.minSpeed
+            );
+
+
+        vx =
+            Math.cos(angle) *
+            speed;
+
+        vy =
+            Math.sin(angle) *
+            speed;
+
+
+        const directionTime =
+            bart.minDirectionTime +
+            Math.random() *
+            (
+                bart.maxDirectionTime -
+                bart.minDirectionTime
+            );
+
+
+        setTimeout(
+            changeDirection,
+            directionTime
+        );
+
+    }
+
+
+    changeDirection();
+
+    move();
+
+}
+
+
+/* =========================================================
+   ROUND REQUIREMENT
+   ========================================================= */
+
+function getSmallRoundRequirement() {
+    // Explicit values requested; bartround 3 is interpolated at 600.
+    const safeRound = Math.max(1, Math.floor(finiteNumber(bartround, 1)));
+    const requirements = { 1: 100, 2: 400, 3: 600, 4: 800, 5: 1300 };
+    if (requirements[safeRound] !== undefined) return requirements[safeRound];
+    return 1300 + ((safeRound - 5) * 500);
+}
+
+function getRoundRequirement() {
+    const smallRound = getSmallRoundRequirement();
+    let requirement;
+    if (phaseIndex === 0) requirement = smallRound;
+    else if (phaseIndex === 1) requirement = smallRound * 2;
+    else requirement = smallRound * 3;
+    return hardMode ? Math.ceil(requirement * 2.5) : requirement;
+}
+
+function getRoundName() {
+    return phaseIndex === 0 ? "SMALL ROUND" : phaseIndex === 1 ? "BIG ROUND" : "BOSS ROUND";
+}
+
+function updateRoundMenuButtons() {
+    const currentPhase = runStarted ? phaseIndex : 0;
+    document.querySelectorAll(".roundChoice").forEach(function(card, index) {
+        const isCurrent = index === currentPhase;
+        card.classList.toggle("currentRound", isCurrent);
+        card.classList.toggle("lockedRound", !isCurrent);
+        const startButton = card.querySelector(".startRoundButton");
+        if (startButton) {
+            startButton.hidden = !isCurrent || roundActive || shopActive;
+            startButton.disabled = !isCurrent || roundActive || shopActive;
+        }
+        card.setAttribute("aria-disabled", String(!isCurrent));
+    });
+}
+
+
+/* =========================================================
+   UPDATE DISPLAYS
+   ========================================================= */
+
+function updateScoreDisplay() {
+
+    sanitizeGameNumbers();
+    scoreBox.innerHTML =
+        "SCORE:" +
+        roundScore +
+        "/" +
+        getRoundRequirement();
+
+}
+
+
+function updateBartcoinDisplay() {
+
+    sanitizeGameNumbers();
+    bartcoinBox.innerHTML =
+        "BARTCOINS:" + bartcoin;
+    const shopBartcoinDisplay = document.getElementById("shopBartcoin");
+    if (shopBartcoinDisplay) shopBartcoinDisplay.textContent = "BARTCOINS:" + bartcoin;
+
+}
+
+
+function updateRoundDisplay() {
+    roundBox.innerHTML = getRoundName() + " | BART ROUND:" + bartround + (hardMode ? " | HARD MODE 2.5×" : "");
+}
+
+
+
+
+/* =========================================================
+   4. ROUND FLOW
+   ========================================================= */
+
+let roundTimerId = null;
+
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(function(page) {
+        page.classList.toggle("active", page.id === pageId);
+    });
+}
+
+const hardStarterBartTemplates = [TinyBart, EvilBart, SadBart, HolyBart, ScaryBart, GhostBart].filter(function(item) {
+    return ["common", "uncommon"].includes(String(item.rarity || "common").toLowerCase());
+});
+const hardStarterMilhouseTemplates = [
+    GreedyMilhouse,
+    RoboMilhouse,
+    ChillyMilhouse,
+];
+/**/
+function openHardModeSetup() {
+    if (hardModeSetupUsed || runStarted || roundActive || shopActive) return;
+    hardModeSetupUsed = true;
+    hardMode = true;
+    document.getElementById("hardModeButton").hidden = true;
+    selectedStarterBart = null;
+    selectedStarterMilhouse = null;
+    renderHardStarterOptions();
+    showPage("hardStarterPage");
+}
+
+function renderHardStarterOptions() {
+    const bartContainer = document.getElementById("starterBartOptions");
+    const milhouseContainer = document.getElementById("starterMilhouseOptions");
+    bartContainer.innerHTML = "";
+    milhouseContainer.innerHTML = "";
+    const shuffledBarts = hardStarterBartTemplates.slice().sort(() => Math.random() - 0.5).slice(0, 3);
+    shuffledBarts.forEach(function(template) {
+        const card = document.createElement("button");
+        card.type = "button"; card.className = "starterOption";
+        card.innerHTML = buildStarterOptionMarkup(template, "bart");
+        card.addEventListener("click", function() {
+            selectedStarterBart = template;
+            bartContainer.querySelectorAll(".starterOption").forEach(el => el.classList.remove("selected"));
+            card.classList.add("selected"); updateHardStarterButton();
+        });
+        bartContainer.appendChild(card);
+    });
+    hardStarterMilhouseTemplates.forEach(function(template) {
+        const card = document.createElement("button");
+        card.type = "button"; card.className = "starterOption";
+        card.innerHTML = buildStarterOptionMarkup(template, "milhouse");
+        card.addEventListener("click", function() {
+            selectedStarterMilhouse = template;
+            milhouseContainer.querySelectorAll(".starterOption").forEach(el => el.classList.remove("selected"));
+            card.classList.add("selected"); updateHardStarterButton();
+        });
+        milhouseContainer.appendChild(card);
+    });
+}
+
+
+function buildStarterOptionMarkup(template, type) {
+    const safe = escapeShopText;
+    const rarity = template.Rarity || template.rarity || "common";
+    const baseClick = template.bartbaseclick ?? 0;
+    const multiplier = template.bartmultiplier ?? 1;
+    const minSpeed = template.minSpeed ?? "Not set";
+    const maxSpeed = template.maxSpeed ?? "Not set";
+    const special = template.specialEffects || "None";
+    const image = template.image || (type === "milhouse" ? "milhouse.png" : "bart.png");
+    return `<img class="shopCharacterImage" src="${safe(image)}" alt=""><strong>${safe(template.name || (type === "milhouse" ? "Starter Milhouse" : "Starter Bart"))}</strong><div class="starterCharacterPrice">${safe(rarity)}<br>Click: ${safe(baseClick)} × ${safe(multiplier)}</div><div class="starterStatsOverlay"><h3>${safe(template.name || "Starter")}</h3><p><strong>Rarity:</strong> ${safe(rarity)}</p><p><strong>Base click:</strong> ${safe(baseClick)}</p><p><strong>Base multiplier:</strong> ${safe(multiplier)}</p><p><strong>Speed:</strong> ${safe(minSpeed)}–${safe(maxSpeed)}</p><p><strong>Special:</strong> ${safe(special)}</p></div>`;
+}
+
+function updateHardStarterButton() {
+    document.getElementById("goToRoundButton").disabled = !(selectedStarterBart && selectedStarterMilhouse);
+}
+
+function confirmHardModeStarters() {
+    if (!selectedStarterBart || !selectedStarterMilhouse || hardModeStartersAdded) return;
+    const bart = createBartInstance(selectedStarterBart);
+    bart.owned = true;
+    activeBarts.push(bart);
+    const milhouse = createBartInstance(selectedStarterMilhouse);
+    milhouse.owned = true; milhouse.isMilhouse = true;
+    ownedMilhouses.push(milhouse);
+    hardModeStartersAdded = true;
+    updateBartLimit();
+    updateRoundMenuButtons();
+    showPage("menuPage");
+}
+
+function startBartSymphonyOnce() {
+    if (bartSymphonyStarted) return;
+    bartSymphonyStarted = true;
+    const promise = bartSymphony.play();
+    if (promise && typeof promise.catch === "function") promise.catch(function(error) {
+        console.warn("Could not play bartsymphony.mp4; make sure the file is next to this HTML file.", error);
+    });
+}
+
+function selectRound(selectedPhase) {
+    // A fresh run can only start at Small Round. During a run, only the
+    // currently unlocked phase can be selected; future/past phases are blocked.
+    if (!runStarted) {
+        if (selectedPhase !== 0) {
+            alert("Start with the Small Round. Complete rounds to unlock the next phase.");
+            return;
+        }
+        runStarted = true;
+        phaseIndex = 0;
+        bartround = 1;
+        score = 0;
+        bartcoin = 0;
+        document.getElementById("hardModeButton").hidden = true;
+        startBartSymphonyOnce();
+        updateBartcoinDisplay();
+    } else if (selectedPhase !== phaseIndex || roundActive || shopActive) {
+        alert("You must complete the current round before choosing another.");
+        return;
+    }
+    updateRoundMenuButtons();
+    startBartSymphonyOnce();
+    showPage("gameplayPage");
+    startRound();
+}
+
+function startRound() {
+    if (roundTimerId !== null) clearInterval(roundTimerId);
+
+    const ownedBartCount = activeBarts.filter(function(bart) {
+        return bart.owned && bart.name !== "MiniBartling" && !bart.destroyed;
+    }).length;
+    if (ownedBartCount === 0) {
+        roundActive = false;
+        shopActive = false;
+        hideSellButton();
+        document.getElementById("deathText").textContent = "You started the round with no Barts left.";
+        document.getElementById("deathScreen").style.display = "flex";
+        return;
+    }
+
+    document.getElementById("deathScreen").style.display = "none";
+    roundActive = true;
+    shopActive = false;
+    // RoboMilhouse laser bonuses last only for the current round.
+    activeBarts.forEach(function(bart) { bart.roboRoundBaseBonus = 0; });
+    ownedMilhouses.forEach(function(milhouse) { milhouse.roboRoundBaseBonus = 0; });
+    const isBossRound = phaseIndex === 2;
+    roundTime = isBossRound ? 45 : 30;
+    roundScore = 0;
+    roundClicks = 0;
+    bartClicks = 0;
+    backgroundClicks = 0;
+    accuracy = 100;
+    updateRoundDisplay();
+    updateScoreDisplay();
+    timerBox.textContent = "TIME:" + roundTime;
+    showPage("gameplayPage");
+    startCharacterAbilities();
+
+    // Spawn every owned Bart at the beginning of each round. A fresh run
+    // starts with the single Normal Bart already in activeBarts.
+    if (activeBarts.includes(normalBart)) {
+        setupNormalBart();
+    } else {
+        normalBartElement.style.display = "none";
+        normalBart.element = null;
+    }
+    activeBarts.forEach(function(bart) {
+        if (bart === normalBart || bart.name === "MiniBartling" || bart.destroyed) return;
+        spawnBart(bart);
+    });
+
+    // Milhouses have their own collection and image paths, but use the same
+    // movement function as Barts. They do not count toward the Bart limit.
+    ownedMilhouses.forEach(function(milhouse) {
+        milhouse.isMilhouse = true;
+        spawnBart(milhouse);
+    });
+
+    roundTimerId = setInterval(function() {
+        if (!roundActive) {
+            clearInterval(roundTimerId);
+            roundTimerId = null;
+            return;
+        }
+        roundTime = Math.max(0, finiteNumber(roundTime) - 1);
+        timerBox.textContent = "TIME:" + roundTime;
+        if (roundTime <= 0) {
+            clearInterval(roundTimerId);
+            roundTimerId = null;
+            endRound();
+        }
+    }, 1000);
+}
+
+function endRound() {
+    if (!roundActive) return;
+    roundActive = false;
+    stopCharacterAbilities();
+    if (roundTimerId !== null) {
+        clearInterval(roundTimerId);
+        roundTimerId = null;
+    }
+
+    activeBarts.slice().forEach(function(bart) {
+        if (bart.name === "MiniBartling") {
+            if (bart.element) bart.element.remove();
+            bart.element = null;
+            const index = activeBarts.indexOf(bart);
+            if (index !== -1) activeBarts.splice(index, 1);
+        }
+    });
+
+    // Hide the owned Barts after the round; they are repositioned and shown
+    // again by startRound(). The Normal Bart's original HTML element is kept.
+    activeBarts.forEach(function(bart) {
+        if (bart.element) bart.element.style.display = "none";
+    });
+    ownedMilhouses.forEach(function(milhouse) {
+        if (milhouse.element) milhouse.element.style.display = "none";
+    });
+
+    const requirement = getRoundRequirement();
+    let holyBonus = 0;
+    if (roundScore < requirement) {
+        const holyBart = activeBarts.find(function(bart) {
+            return bart.name === "HolyBart" && !bart.destroyed;
+        });
+        if (holyBart) {
+            const missingScore = Math.max(0, finiteNumber(requirement) - finiteNumber(roundScore));
+            roundScore = Math.max(0, finiteNumber(requirement));
+            score = Math.max(0, finiteNumber(score) + missingScore);
+            holyBonus = 10;
+            bartcoin += holyBonus;
+            holyBart.destroyed = true;
+            if (holyBart.element) holyBart.element.remove();
+            holyBart.element = null;
+            activeBarts = activeBarts.filter(function(bart) { return bart !== holyBart; });
+            updateScoreDisplay();
+            updateBartcoinDisplay();
+        } else {
+            deathText.textContent = getRoundName() + " failed: " + roundScore + " / " + requirement;
+            deathScreen.style.display = "block";
+            return;
+        }
+    }
+
+    updateAccuracy();
+    const accuracyBartcoin = accuracy === 100 ? 3 : 0;
+    const timeBartcoin = Math.floor(Math.max(0, roundTime) / 2);
+    const clickBonus = roundClicks < (requirement / 2) ? 5 : 0;
+    const earnedBartcoin = accuracyBartcoin + timeBartcoin + clickBonus;
+    bartcoin += earnedBartcoin;
+    updateBartcoinDisplay();
+
+    const rewardLines = [];
+    rewardLines.push(["100% accuracy (" + accuracy + "%)", accuracyBartcoin]);
+    rewardLines.push(["Time remaining (" + Math.max(0, roundTime) + "s ÷ 2)", timeBartcoin]);
+    rewardLines.push(["Fewer than " + (requirement / 2) + " clicks (" + roundClicks + " clicks)", clickBonus]);
+    if (holyBonus > 0) rewardLines.push(["HolyBart round-save bonus", holyBonus]);
+
+    document.getElementById("roundSummaryTitle").textContent = getRoundName() + " CLEARED!";
+    document.getElementById("roundSummaryIntro").textContent = "You reached " + roundScore + " / " + requirement + " points. Here's your bartcoins breakdown:";
+    document.getElementById("roundRewardLines").innerHTML = rewardLines.map(function(item) {
+        return '<div class="rewardLine"><span>' + item[0] + '</span><strong>+' + item[1] + ' bartcoins</strong></div>';
+    }).join("");
+    document.getElementById("roundSummaryTotal").textContent = "+" + (earnedBartcoin + holyBonus) + " bartcoin";
+    document.getElementById("roundSummaryOverlay").style.display = "flex";
+}
+
+
+
+/* =========================================================
+   5. SHOP SYSTEM — STOCK, PURCHASES, SELLING, AND REROLLS
+   ========================================================= */
+
+function getOwnedBartCountByName(name) {
+    return activeBarts.filter(function(bart) {
+        return bart.name === name && bart.name !== "MiniBartling";
+    }).length;
+}
+
+function createBartInstance(template) {
+    const instance = new Bart({
+        name: template.name,
+        image: template.image,
+        price: template.price,
+        bartbaseclick: template.bartbaseclick,
+        bartmultiplier: template.bartmultiplier,
+        minSpeed: template.minSpeed,
+        maxSpeed: template.maxSpeed,
+        minDirectionTime: template.minDirectionTime,
+        maxDirectionTime: template.maxDirectionTime,
+        specialEffects: template.specialEffects,
+        rarity: template.Rarity || template.rarity || "common"
+    });
+    instance.attributes = Array.isArray(template.attributes) ? [...template.attributes] : [];
+    return instance;
+}
+
+// Shop rarity weights: these are the chances for each slot, not guaranteed
+// proportions across a small shop. If a rarity has no eligible items, the
+// available rarities are reweighted so every slot can still be filled.
+const SHOP_RARITY_CHANCES = { common: 45, uncommon: 35, rare: 20 };
+
+function pickByRarity(pool) {
+    if (!pool.length) return null;
+
+    const availableRarities = [...new Set(pool.map(function(item) {
+        return String(item.Rarity || item.rarity || "common").toLowerCase();
+    }))];
+    const totalWeight = availableRarities.reduce(function(total, rarity) {
+        return total + (SHOP_RARITY_CHANCES[rarity] || 0);
+    }, 0);
+
+    let pickedRarity;
+    if (totalWeight > 0) {
+        let roll = Math.random() * totalWeight;
+        for (const rarity of availableRarities) {
+            roll -= SHOP_RARITY_CHANCES[rarity] || 0;
+            if (roll < 0) { pickedRarity = rarity; break; }
+        }
+    }
+    if (!pickedRarity) pickedRarity = availableRarities[Math.floor(Math.random() * availableRarities.length)];
+
+    const rarityPool = pool.filter(function(item) {
+        return String(item.Rarity || item.rarity || "common").toLowerCase() === pickedRarity;
+    });
+    return rarityPool[Math.floor(Math.random() * rarityPool.length)];
+}
+
+function getCyclingOffers(pool, seenNames, ownedNames, count, allowOwned, useRarity) {
+    const offers = [];
+    const ownedSet = new Set(ownedNames);
+    function eligible() {
+        return pool.filter(function(item) {
+            return (allowOwned || !ownedSet.has(item.name)) &&
+                !offers.some(function(offer) { return offer.name === item.name; });
+        });
+    }
+    while (offers.length < count) {
+        let candidates = eligible().filter(function(item) { return !seenNames.includes(item.name); });
+        if (!candidates.length) {
+            // All currently eligible names have appeared this shop visit: refill the cycle.
+            seenNames.length = 0;
+            candidates = eligible();
+        }
+        if (!candidates.length) break;
+        let chosen;
+        // Polinospia Bart permits owned entries to return, but they are rare (5%).
+        if (allowOwned && ownedNames.length && Math.random() < getChancePercent(5) / 100) {
+            const ownedCandidates = candidates.filter(function(item) { return ownedSet.has(item.name); });
+            if (ownedCandidates.length) chosen = useRarity ? pickByRarity(ownedCandidates) : ownedCandidates[Math.floor(Math.random() * ownedCandidates.length)];
+        }
+        if (!chosen) {
+            const nonOwnedCandidates = candidates.filter(function(item) { return !ownedSet.has(item.name); });
+            const source = nonOwnedCandidates.length ? nonOwnedCandidates : candidates;
+            chosen = useRarity ? pickByRarity(source) : source[Math.floor(Math.random() * source.length)];
+        }
+        if (!chosen) break;
+        offers.push(chosen);
+        seenNames.push(chosen.name);
+    }
+    return offers;
+}
+
+function generateShop() {
+    shopStock = [];
+    milhouseStock = [];
+    trinketStock = [];
+    consumableStock = [];
+
+    const ownedBartNames = activeBarts.filter(function(b) { return b.name !== "MiniBartling"; }).map(function(b) { return b.name; });
+    const ownedMilhouseNames = ownedMilhouses.map(function(m) { return m.name; });
+    const ownedTrinketNames = ownedTrinkets.map(function(t) { return t.name; });
+
+    shopStock = getCyclingOffers(bartPool, seenBartNames, ownedBartNames, SHOP_BART_COUNT, polinospiabartowned, true);
+    milhouseStock = getCyclingOffers(milhousePool, seenMilhouseNames, ownedMilhouseNames, 2, polinospiabartowned, true);
+    trinketStock = getCyclingOffers(trinketPool, seenTrinketNames, ownedTrinketNames, 3, false, false);
+    consumableStock = [...consumablePackPool].sort(() => Math.random() - 0.5).slice(0, 2);
+
+    displayShop();
+    updateShopDisplays();
+    updateRerollButton();
+}
+
+function setShopCategory(category, button) {
+    shopCategory = category;
+    document.querySelectorAll("#shopCategoryTabs button").forEach(function(tab) { tab.classList.toggle("active", tab === button); });
+    displayShop();
+}
+
+function placeShopOverlay(overlay, anchor) {
+    if (!overlay || !anchor) return;
+    overlay.style.left = "calc(100% + 8px)";
+    overlay.style.right = "auto";
+    overlay.style.display = "block";
+    const rect = overlay.getBoundingClientRect();
+    if (rect.right > window.innerWidth - 8) {
+        overlay.style.left = "auto";
+        overlay.style.right = "calc(100% + 8px)";
+    }
+    if (rect.left < 8 && overlay.style.right !== "auto") {
+        overlay.style.right = "auto";
+        overlay.style.left = "8px";
+    }
+}
+
+document.addEventListener("pointerover", function(event) {
+    const anchor = event.target.closest(".shopCharacterCard, .shopGenericCard, .shopAttributeWrap");
+    if (!anchor) return;
+    const related = event.relatedTarget;
+    if (related && anchor.contains(related)) return;
+    const selector = anchor.matches(".shopAttributeWrap") ? ".shopAttributeOverlay" : ".shopStatsOverlay";
+    const overlay = anchor.querySelector(":scope > " + selector);
+    if (overlay) placeShopOverlay(overlay, anchor);
+});
+
+document.addEventListener("pointerout", function(event) {
+    const anchor = event.target.closest(".shopCharacterCard, .shopGenericCard, .shopAttributeWrap");
+    if (!anchor) return;
+    const related = event.relatedTarget;
+    const selector = anchor.matches(".shopAttributeWrap") ? ".shopAttributeOverlay" : ".shopStatsOverlay";
+    const overlay = anchor.querySelector(":scope > " + selector);
+    // The overlay is deliberately non-interactive: leaving the actual card/label
+    // closes it, even if the pointer visually passes over the popup.
+    if (related && anchor.contains(related)) return;
+    if (overlay) overlay.style.display = "none";
+});
+window.addEventListener("resize", function() {
+    document.querySelectorAll(".shopCharacterCard:hover > .shopStatsOverlay, .shopGenericCard:hover > .shopStatsOverlay, .shopAttributeWrap:hover > .shopAttributeOverlay").forEach(function(overlay) {
+        placeShopOverlay(overlay, overlay.parentElement);
+    });
+});
+
+function renderShopCard(item, category) {
+    const isCharacter = (category === "barts" || category === "milhouses") && !item.blindPack;
+    const card = document.createElement("div");
+
+    if (isCharacter) {
+        card.className = "shopItem shopCharacterCard";
+        card.tabIndex = 0;
+        const rarity = String(item.Rarity || item.rarity || "common");
+        const attributes = Array.isArray(item.attributes) ? item.attributes : [];
+        const inheritedSpectral = item.name === "Bartling";
+        const attributeMarkup = attributes.length || inheritedSpectral
+            ? `<div class="shopAttributeWrap"><div class="shopAttributeLabel" tabindex="0">${inheritedSpectral && !attributes.length ? "MiniBartling Attribute: spectral" : "Attributes: " + attributes.map(a => escapeShopText(a)).join(", ")}</div><div class="shopAttributeOverlay">${attributes.map(function(attribute) {
+                return `<p><strong>${escapeShopText(attribute)}:</strong> ${escapeShopText(attributeDescriptions[attribute] || "No description has been set for this attribute yet.")}</p>`;
+            }).join("")}${inheritedSpectral ? `<p><strong>Spectral (inherited by MiniBartlings):</strong> ${escapeShopText(spectraldescription)}</p>` : ""}</div></div>`
+            : `<div class="shopAttributeWrap"><span class="shopAttributeLabel">Attributes: None</span></div>`;
+
+        card.innerHTML = `
+            <img class="shopCharacterImage" src="${escapeShopAttribute(item.image || (category === "barts" ? "bart.png" : "milhouse.png"))}" alt="${escapeShopAttribute(item.name)}">
+            <div class="shopCharacterPrice currencyGreen">${Number(item.price) || 0}$</div>
+            <div class="shopStatsOverlay">
+                <h3>${escapeShopText(item.name)}</h3>
+                <p><strong>Rarity:</strong> ${escapeShopText(rarity)}</p>
+                <p><strong>Base click:</strong> ${escapeShopText(item.bartbaseclick)}</p>
+                <p><strong>Base mult:</strong> ${escapeShopText(item.bartmultiplier)}</p>
+                <p><strong>Speed:</strong> ${escapeShopText(item.minSpeed)}–${escapeShopText(item.maxSpeed)}</p>
+                <p><strong>Special abilities:</strong> ${escapeShopText(item.specialEffects || "None")}</p>
+            </div>
+            ${attributeMarkup}
+            <button class="shopCharacterBuy" type="button">BUY</button>
+        `;
+    } else {
+        card.className = "shopItem shopGenericCard";
+        const details = item.blindPack ? (item.description || "") : (item.description || "");
+        const itemAttributes = Array.from(new Set([
+            ...(Array.isArray(item.attributes) ? item.attributes : []),
+            ...(Array.isArray(item.grantsAttributes) ? item.grantsAttributes : [])
+        ]));
+        const attributeMarkup = itemAttributes.length
+            ? `<div class="shopAttributeWrap"><div class="shopAttributeLabel" tabindex="0">${Array.isArray(item.grantsAttributes) && item.grantsAttributes.length ? "Grants attributes: " : "Attributes: "}${itemAttributes.map(a => escapeShopText(a)).join(", ")}</div><div class="shopAttributeOverlay">${itemAttributes.map(function(attribute) {
+                return `<p><strong>${escapeShopText(attribute)}:</strong> ${escapeShopText(attributeDescriptions[attribute] || "No description has been set for this attribute yet.")}</p>`;
+            }).join("")}</div></div>`
+            : "";
+        card.innerHTML = `<strong>${escapeShopText(item.name)}</strong><p class="shopGenericPrice">${Number(item.price) || 0}$</p><div class="shopStatsOverlay"><h3>${escapeShopText(item.name)}</h3><p>Price: <span class="currencyGreen">${Number(item.price) || 0} bartcoins</span></p><p>${escapeShopText(details)}</p></div>${attributeMarkup}<button type="button">${item.name.includes("Blind Pack") ? "OPEN" : "BUY"}</button>`;
+    }
+
+    card.querySelector("button").onclick = function(event) {
+        event.stopPropagation();
+        if (item.name === "Bart Blind Pack") { openBlindPack("barts"); return; }
+        if (item.name === "Milhouse Blind Pack") { openBlindPack("milhouses"); return; }
+        if (category === "barts") buyBart(item);
+        else if (category === "milhouses") buyMilhouse(item);
+        else if (category === "trinkets") buyTrinket(item);
+        else if (category === "consumables") buyConsumable(item);
+    };
+    return card;
+}
+
+function escapeShopText(value) {
+    return String(value === undefined || value === null ? "" : value).replace(/[&<>"']/g, function(char) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char];
+    });
+}
+
+function escapeShopAttribute(value) {
+    return escapeShopText(value);
+}
+
+function displayShop() {
+    const bartHost = document.getElementById("shopItems");
+    const milhouseHost = document.getElementById("milhouseShopItems");
+    const consumableHost = document.getElementById("consumableShopItems");
+    const trinketHost = document.getElementById("trinketPlaceholder");
+    bartHost.innerHTML = ""; milhouseHost.innerHTML = ""; consumableHost.innerHTML = ""; trinketHost.innerHTML = "";
+    const bartItems = [...shopStock, { name: "Bart Blind Pack", price: 25, description: "50% chance to offer 2 choices or 3 choices", blindPack: true }];
+    const milhouseItems = [...milhouseStock, { name: "Milhouse Blind Pack", price: 15, description: "50% chance to offer 2 choices or 3 choices", blindPack: true }];
+    bartItems.forEach(item => bartHost.appendChild(renderShopCard(item, "barts")));
+    milhouseItems.forEach(item => milhouseHost.appendChild(renderShopCard(item, "milhouses")));
+    consumableStock.slice(0, 2).forEach(item => consumableHost.appendChild(renderShopCard(item, "consumables")));
+    trinketStock.forEach(item => trinketHost.appendChild(renderShopCard(item, "trinkets")));
+}
+
+function sampleShopOptions(pool, count) {
+    const copy = pool.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy.slice(0, Math.min(count, copy.length));
+}
+
+function openChoiceOverlay(config) {
+    const overlay = document.getElementById("choiceOverlay");
+    const title = document.getElementById("choiceOverlayTitle");
+    const instructions = document.getElementById("choiceOverlayInstructions");
+    const optionsHost = document.getElementById("choiceOverlayOptions");
+    const done = document.getElementById("choiceDoneButton");
+    const skip = document.getElementById("choiceSkipButton");
+    const state = {
+        selected: [],
+        maxPicks: Math.max(1, config.maxPicks || 1),
+        options: config.options || [],
+        allowMultiple: config.allowMultiple !== false,
+        onPick: config.onPick || function() {},
+        onFinish: config.onFinish || function() {},
+        finishing: false
+    };
+    activeChoiceState = state;
+    title.textContent = config.title || "CHOOSE";
+    instructions.textContent = config.instructions || "Choose an option.";
+    optionsHost.innerHTML = "";
+    done.textContent = config.doneText || "DONE";
+    done.disabled = false;
+
+    function finish(skipped) {
+        if (state.finishing) return;
+        state.finishing = true;
+        if (activeChoiceState === state) activeChoiceState = null;
+        overlay.style.display = "none";
+        state.onFinish(state.selected.slice(), !!skipped);
+    }
+
+    state.options.forEach(function(item) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "choiceOption";
+        const image = item.image ? '<img src="' + escapeShopAttribute(item.image) + '" alt="">' : "";
+        const price = item.price !== undefined ? '<div>' + (Number(item.price) || 0) + ' Bartcoins</div>' : "";
+        const desc = item.description ? '<small>' + escapeShopText(item.description) + '</small>' : "";
+        button.innerHTML = image + '<strong>' + escapeShopText(item.name || "Unknown") + '</strong>' + price + desc;
+        button.addEventListener("click", function() {
+            if (state.finishing || state.selected.includes(item) || state.selected.length >= state.maxPicks) return;
+            if (!state.allowMultiple) {
+                state.selected = [item];
+                state.onPick(item);
+                finish(false);
+                return;
+            }
+            state.selected.push(item);
+            button.classList.add("selected");
+            button.disabled = true;
+            state.onPick(item);
+            instructions.textContent = 'Selected ' + state.selected.length + ' / ' + state.maxPicks + '. Choose another, or press DONE to finish.';
+            if (state.selected.length >= state.maxPicks) finish(false);
+        });
+        optionsHost.appendChild(button);
+    });
+    done.onclick = function() { finish(false); };
+    skip.onclick = function() { finish(true); };
+    overlay.style.display = "flex";
+}
+
+function grantPackedCharacter(template, category) {
+    if (category === "barts") {
+        const count = activeBarts.filter(function(b) { return b.owned && b.name !== "MiniBartling" && !b.destroyed; }).length;
+        if (count >= bartlimit) { alert("Your Bart limit is " + bartlimit + ". There is no room for another Bart."); return false; }
+        const bart = createBartInstance(template);
+        bart.owned = true;
+        activeBarts.push(bart);
+        if (bart.name === "Polinospia Bart") polinospiabartowned = true;
+        // A character gained from a pack also removes a matching current-shop
+        // offer. The type may be eligible to return in a later shop if Polinospia
+        // Bart is owned; it must not linger in this shop visit.
+        shopStock = shopStock.filter(function(offer) { return offer.name !== template.name; });
+        milhouseStock = milhouseStock.filter(function(offer) { return offer.name !== template.name; });
+    } else {
+        if (ownedMilhouses.filter(function(m) { return !m.destroyed; }).length >= MAX_MILHOUSES) { alert("You can only own 5 Milhouses at once."); return false; }
+        const milhouse = createBartInstance(template);
+        milhouse.owned = true;
+        milhouse.isMilhouse = true;
+        ownedMilhouses.push(milhouse);
+        shopStock = shopStock.filter(function(offer) { return offer.name !== template.name; });
+        milhouseStock = milhouseStock.filter(function(offer) { return offer.name !== template.name; });
+        updateBartLimit();
+    }
+    return true;
+}
+
+function openBlindPack(category) {
+    const price = 15;
+    if (bartcoin < price) { alert("You don't have enough bartcoins!"); return; }
+    const isBartPack = category === "barts";
+    const pool = isBartPack ? bartPool : milhousePool;
+    if (!pool.length) { alert("There are no characters in this pack yet."); return; }
+    bartcoin -= price;
+    updateBartcoinDisplay();
+    const pickCount = Math.random() < getChancePercent(50) / 100 ? 3 : 2;
+    const options = sampleShopOptions(pool, Math.min(pool.length, pickCount + 2));
+    openChoiceOverlay({
+        title: isBartPack ? "BART BLIND PACK" : "MILHOUSE BLIND PACK",
+        instructions: 'Choose up to ' + Math.min(pickCount, options.length) + ' character(s) for free. You can press SKIP / CLOSE whenever you are done.',
+        options: options,
+        maxPicks: Math.min(pickCount, options.length),
+        onPick: function(template) { grantPackedCharacter(template, category); },
+        onFinish: function() { updateBartcoinDisplay(); updateShopDisplays(); displayShop(); }
+    });
+}
+
+function buyMilhouse(item, alreadyPaid = false) {
+    if (ownedMilhouses.filter(function(m) { return !m.destroyed; }).length >= MAX_MILHOUSES) {
+        alert("You can only own 5 Milhouses at once!"); return;
+    }
+    if (!alreadyPaid && bartcoin < item.price) { alert("You don't have enough bartcoins!"); return; }
+    if (!alreadyPaid) bartcoin -= item.price;
+    const milhouse = createBartInstance(item);
+    milhouse.owned = true;
+    milhouse.isMilhouse = true;
+    ownedMilhouses.push(milhouse);
+    // Remove the purchased offer from this shop visit; it can return on a later shop visit.
+    milhouseStock = milhouseStock.filter(function(offer) { return offer !== item; });
+    shopStock = shopStock.filter(function(offer) { return offer !== item; });
+    updateBartLimit();
+    updateBartcoinDisplay(); updateShopDisplays(); displayShop();
+}
+
+function buyTrinket(item) {
+    if (bartcoin < item.price) { alert("You don't have enough bartcoins!"); return; }
+    bartcoin -= item.price;
+    ownedTrinkets.push(item);
+    trinketStock = trinketStock.filter(function(offer) { return offer !== item; });
+    updateBartcoinDisplay(); updateShopDisplays(); displayShop();
+}
+
+function getCharacterTargets(targetType) {
+    const barts = activeBarts.filter(function(b) { return b && b.owned && b.name !== "MiniBartling" && !b.destroyed; });
+    const milhouses = ownedMilhouses.filter(function(m) { return m && m.owned && !m.destroyed; });
+    return targetType === "bart" ? barts : barts.concat(milhouses);
+}
+
+function destroyOwnedCharacter(character) {
+    if (!character) return;
+    if (character.element) character.element.remove();
+    character.element = null;
+    character.destroyed = true;
+    if (ownedMilhouses.includes(character)) {
+        ownedMilhouses = ownedMilhouses.filter(function(m) { return m !== character; });
+        updateBartLimit();
+    } else {
+        activeBarts = activeBarts.filter(function(b) { return b !== character; });
+    }
+    if (activeSellBart === character) hideSellButton();
+    polinospiabartowned = activeBarts.some(function(b) { return b.name === "Polinospia Bart" && !b.destroyed; });
+}
+
+function processConsumableQueue(queue) {
+    if (!queue.length) { updateBartcoinDisplay(); updateShopDisplays(); displayShop(); return; }
+    const item = queue.shift();
+    const name = String(item.name || "").toLowerCase();
+    if (name === "sacrificial alter" || name === "sacrificial altar" || name === "goldenbartticket" || name === "golden bart ticket") {
+        useConsumableEffect(item, null);
+        processConsumableQueue(queue);
+        return;
+    }
+    const targetType = name === "hammer" ? "bart" : "any";
+    const targets = getCharacterTargets(targetType);
+    if (!targets.length) {
+        alert("There are no eligible characters for " + item.name + ".");
+        processConsumableQueue(queue);
+        return;
+    }
+    openChoiceOverlay({
+        title: "USE " + item.name.toUpperCase(),
+        instructions: "Choose which character this consumable should affect.",
+        options: targets.map(function(character) {
+            return {
+                name: character.name,
+                image: character.image,
+                description: "Base click: " + character.bartbaseclick + " | Multiplier: " + character.bartmultiplier,
+                _character: character
+            };
+        }),
+        maxPicks: 1,
+        allowMultiple: false,
+        onPick: function(option) { useConsumableEffect(item, option._character); },
+        onFinish: function() { processConsumableQueue(queue); }
+    });
+}
+
+function buyConsumable(pack) {
+    if (bartcoin < pack.price) { alert("You don't have enough bartcoins!"); return; }
+    const contents = Array.isArray(pack.contents) && pack.contents.length ? pack.contents : [pack];
+    bartcoin -= pack.price;
+    consumableStock = consumableStock.filter(function(offer) { return offer !== pack; });
+    updateBartcoinDisplay(); updateShopDisplays(); displayShop();
+    const isSmall = String(pack.name).toLowerCase().includes("small");
+    const maxPicks = isSmall ? (Math.random() < getChancePercent(50) / 100 ? 2 : 1) : 2;
+    const optionCount = isSmall ? Math.min(2, contents.length) : Math.min(5, contents.length);
+    const options = sampleShopOptions(contents, optionCount);
+    openChoiceOverlay({
+        title: pack.name.toUpperCase(),
+        instructions: 'Choose ' + Math.min(maxPicks, options.length) + ' consumable(s). Any selected consumable is used immediately; targeted items will ask you to select a character.',
+        options: options,
+        maxPicks: Math.min(maxPicks, options.length),
+        onPick: function() {},
+        onFinish: function(selected) { processConsumableQueue(selected.slice()); }
+    });
+}
+
+function useConsumableEffect(item, target) {
+    if (!item) return;
+    const name = String(item.name || "").toLowerCase();
+    if (name === "goldenbartticket" || name === "golden bart ticket") {
+        const count = activeBarts.filter(function(b) { return b.owned && b.name !== "MiniBartling" && !b.destroyed; }).length + ownedMilhouses.filter(function(m) { return m.owned && !m.destroyed; }).length;
+        bartcoin += count * 3;
+        updateBartcoinDisplay();
+        return;
+    }
+    if (name === "sacrificial alter" || name === "sacrificial altar") {
+        const candidates = getCharacterTargets("any");
+        const destroyCount = Math.min(candidates.length, Math.random() < getChancePercent(50) / 100 ? 2 : 1);
+        sampleShopOptions(candidates, destroyCount).forEach(destroyOwnedCharacter);
+        const rewardCount = 2 + Math.floor(Math.random() * 3);
+        const rewards = ["coins", "bart", "milhouse", "trinket", "fly"];
+        for (let i = 0; i < rewardCount; i++) {
+            const reward = rewards[Math.floor(Math.random() * rewards.length)];
+            if (reward === "coins") bartcoin += 7;
+            else if (reward === "bart") {
+                const available = bartPool.filter(function(b) { return polinospiabartowned || !activeBarts.some(function(owned) { return owned.name === b.name; }); });
+                if (available.length) grantPackedCharacter(available[Math.floor(Math.random() * available.length)], "barts");
+            } else if (reward === "milhouse") {
+                if (ownedMilhouses.length < MAX_MILHOUSES && milhousePool.length) grantPackedCharacter(milhousePool[Math.floor(Math.random() * milhousePool.length)], "milhouses");
+            } else if (reward === "trinket") {
+                const available = trinketPool.filter(function(t) { return !ownedTrinkets.some(function(owned) { return owned.name === t.name; }); });
+                if (available.length) ownedTrinkets.push(available[Math.floor(Math.random() * available.length)]);
+            }
+            // The angry fly reward intentionally does nothing.
+        }
+        updateBartcoinDisplay();
+        return;
+    }
+    if (!target) return;
+    if (name === "gluestick") {
+        if (!Array.isArray(target.attributes)) target.attributes = [];
+        if (!target.attributes.includes("sticky")) target.attributes.push("sticky");
+        if (target.element) applyCharacterVisuals(target, target.element);
+    } else if (name === "bart ticket") {
+        target.bartbaseclick = finiteNumber(target.bartbaseclick) + 2;
+    } else if (name === "hammer") {
+        if (ownedMilhouses.includes(target) || !activeBarts.includes(target)) return;
+        const originalBase = finiteNumber(target.bartbaseclick);
+        const originalMult = finiteNumber(target.bartmultiplier);
+        const others = activeBarts.filter(function(b) { return b !== target && b.owned && b.name !== "MiniBartling" && !b.destroyed; });
+        destroyOwnedCharacter(target);
+        if (others.length) {
+            const recipient = others[Math.floor(Math.random() * others.length)];
+            recipient.bartbaseclick += Math.floor(originalBase / 2);
+            recipient.bartmultiplier += Math.floor(originalMult / 2);
+        }
+    } else if (name === "ismael's blessing") {
+        target.bartbaseclick = finiteNumber(target.bartbaseclick) + 1;
+        target.bartmultiplier = finiteNumber(target.bartmultiplier) + 1;
+        target.ismaelsBlessingClicksLeft = 5;
+    }
+}
+
+// Compatibility only; consumables are no longer stored in inventory.
+function useConsumable(index) {
+    const item = ownedConsumables[index];
+    if (!item) return;
+    ownedConsumables.splice(index, 1);
+    processConsumableQueue([item]);
+}
+
+
+/* =========================================================
+   BUY BART
+   ========================================================= */
+
+function buyBart(bart, alreadyPaid = false) {
+
+    if (activeBarts.filter(function(b) { return b.name !== "MiniBartling"; }).length >= bartlimit) {
+        alert("Your current Bart limit is " + bartlimit + ". Buy a Milhouse to increase it!");
+        return;
+    }
+
+    if (!alreadyPaid && bartcoin < bart.price) { alert("You don't have enough bartcoins!"); return; }
+
+    if (!alreadyPaid) bartcoin -= bart.price;
+
+    updateBartcoinDisplay();
+
+
+    // Make a brand-new Bart instance so the same Bart type can be owned
+    // multiple times without sharing its element or movement state.
+    const purchasedBart = createBartInstance(bart);
+    purchasedBart.owned = true;
+    if (purchasedBart.name === "Polinospia Bart") polinospiabartowned = true;
+
+    activeBarts.push(purchasedBart);
+
+    // Purchased Barts join your owned roster now, but only appear when the next round starts.
+
+
+    // The bought offer leaves this shop immediately. Owned types may return
+    // in the next shop only when Polinospia Bart permits owned offers.
+    shopStock = shopStock.filter(function(offer) { return offer !== bart; });
+    milhouseStock = milhouseStock.filter(function(offer) { return offer !== bart; });
+
+    displayShop();
+    updateShopDisplays();
+
+}
+
+
+
+
+/* =========================================================
+   SELL BUTTON
+   ========================================================= */
+
+let activeSellButton = null;
+let activeSellBart = null;
+let activeSellChip = null;
+
+function hideSellButton() {
+    if (activeSellButton) activeSellButton.remove();
+    activeSellButton = null;
+    activeSellBart = null;
+    activeSellChip = null;
+}
+
+// Clicking away from the selected Bart/chip or SELL button closes the button.
+document.addEventListener("click", function(event) {
+    if (!activeSellButton || !activeSellBart) return;
+    if (event.target === activeSellButton || activeSellButton.contains(event.target)) return;
+    if (activeSellBart.element && event.target === activeSellBart.element) return;
+    if (activeSellChip && activeSellChip.contains(event.target)) return;
+    hideSellButton();
+});
+
+function showSellButton(bart, chip = null) {
+    const isOwnedBart = !!bart && activeBarts.includes(bart);
+    const isOwnedMilhouse = !!bart && ownedMilhouses.includes(bart);
+    if (!bart || !bart.owned || (!isOwnedBart && !isOwnedMilhouse)) return;
+    if (!shopActive) return;
+    hideSellButton();
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = "SELL";
+    button.className = "sellButton";
+    button.style.zIndex = "10000";
+    button.style.position = chip ? "absolute" : "fixed";
+    button.style.padding = "5px 10px";
+    button.style.cursor = "pointer";
+    button.style.pointerEvents = "auto";
+
+    if (chip) {
+        // In the shop, owned Barts are represented by roster chips.
+        button.style.display = "block";
+        button.style.left = "8px";
+        button.style.right = "8px";
+        button.style.bottom = "7px";
+        button.style.width = "calc(100% - 16px)";
+        button.style.margin = "0";
+        chip.appendChild(button);
+    } else if (bart.element && document.body.contains(bart.element)) {
+        button.style.position = "fixed";
+        const rect = bart.element.getBoundingClientRect();
+        button.style.left = rect.left + "px";
+        button.style.top = (rect.bottom + 5) + "px";
+        document.body.appendChild(button);
+    } else {
+        return;
+    }
+
+    button.onclick = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (ownedMilhouses.includes(bart)) {
+            sellMilhouse(bart);
+        } else if (activeBarts.includes(bart)) {
+            sellBart(bart);
+        }
+    };
+    activeSellButton = button;
+    activeSellBart = bart;
+    activeSellChip = chip;
+}
+
+
+/* =========================================================
+   SELL BART
+   ========================================================= */
+
+function sellBart(bart) {
+    // No special selling restrictions: any currently owned Bart can be sold.
+    if (!bart || !bart.owned || !activeBarts.includes(bart)) return;
+
+    const sellValue = Math.floor((Number(bart.price) || 0) * 0.5);
+    bartcoin += sellValue;
+
+    if (activeSellBart === bart) hideSellButton();
+    if (bart.element) bart.element.remove();
+    bart.element = null;
+    bart.owned = false;
+    const index = activeBarts.indexOf(bart);
+    if (index !== -1) activeBarts.splice(index, 1);
+    polinospiabartowned = activeBarts.some(function(b) { return b.name === "Polinospia Bart" && !b.destroyed; });
+
+    updateBartcoinDisplay();
+    updateShopDisplays();
+    if (shopActive) {
+        displayShop();
+        updateShopDisplays();
+    }
+}
+
+
+
+function sellMilhouse(milhouse) {
+    if (!milhouse || !ownedMilhouses.includes(milhouse)) return;
+    const sellValue = Math.floor((Number(milhouse.price) || 0) * 0.5);
+    bartcoin += sellValue;
+    if (activeSellBart === milhouse) hideSellButton();
+    if (milhouse.element) milhouse.element.remove();
+    milhouse.element = null;
+    milhouse.owned = false;
+    const index = ownedMilhouses.indexOf(milhouse);
+    if (index !== -1) ownedMilhouses.splice(index, 1);
+    updateBartLimit();
+    updateBartcoinDisplay();
+    updateShopDisplays();
+    if (shopActive) displayShop();
+}
+
+function continueToShop() {
+    document.getElementById("roundSummaryOverlay").style.display = "none";
+    startShop();
+}
+
+function startShop() {
+    hideSellButton();
+    seenBartNames = [];
+    seenMilhouseNames = [];
+    seenTrinketNames = [];
+    paidRerollsUsed = 0;
+    shopActive = true;
+    showPage("shopPage");
+    generateShop();
+    updateShopDisplays();
+}
+
+function renderOwnedCharacterCard(item, category) {
+    const card = document.createElement("div");
+    card.className = "shopItem shopCharacterCard ownedCharacterCard";
+    card._characterData = item;
+    card.tabIndex = 0;
+    const rarity = String(item.Rarity || item.rarity || "common");
+    const attributes = Array.isArray(item.attributes) ? item.attributes : [];
+    const attributeMarkup = attributes.length
+        ? `<div class="shopAttributeWrap"><div class="shopAttributeLabel">Attributes: ${attributes.map(a => escapeShopText(a)).join(", ")}</div><div class="shopAttributeOverlay">${attributes.map(function(attribute) { return `<p><strong>${escapeShopText(attribute)}:</strong> ${escapeShopText(attributeDescriptions[attribute] || "No description has been set for this attribute yet.")}</p>`; }).join("")}</div></div>`
+        : `<div class="shopAttributeWrap"><span class="shopAttributeLabel">Attributes: None</span></div>`;
+    card.innerHTML = `<img class="shopCharacterImage" src="${escapeShopAttribute(item.image || (category === "barts" ? "bart.png" : "milhouse.png"))}" alt="${escapeShopAttribute(item.name)}"><div class="shopCharacterPrice ownedCharacterLabel">${escapeShopText(item.name)}</div><div class="shopStatsOverlay"><h3>${escapeShopText(item.name)}</h3><p><strong>Rarity:</strong> ${escapeShopText(rarity)}</p><p><strong>Base click:</strong> ${escapeShopText(item.bartbaseclick)}</p><p><strong>Base mult:</strong> ${escapeShopText(item.bartmultiplier)}</p><p><strong>Speed:</strong> ${escapeShopText(item.minSpeed)}–${escapeShopText(item.maxSpeed)}</p><p><strong>Special abilities:</strong> ${escapeShopText(item.specialEffects || "None")}</p></div>${attributeMarkup}`;
+    return card;
+}
+
+function updateShopDisplays() {
+    // The owned roster is rebuilt below. Close a SELL button attached to an old
+    // chip first so its reference cannot point at a detached card.
+    if (activeSellChip) hideSellButton();
+    document.getElementById("shopBartcoin").textContent = "BARTCOINS:" + bartcoin;
+    updateBartLimit();
+    document.getElementById("ownedList").innerHTML = "";
+    activeBarts.filter(function(bart) { return bart.name !== "MiniBartling"; }).forEach(function(bart) {
+        const chip = renderOwnedCharacterCard(bart, "barts");
+        chip.style.cursor = "context-menu";
+        chip.title = "Right-click to sell";
+        chip.addEventListener("contextmenu", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            showSellButton(bart, chip);
+        });
+        document.getElementById("ownedList").appendChild(chip);
+    });
+    ownedMilhouses.forEach(function(item) {
+        const chip = renderOwnedCharacterCard(item, "milhouses");
+        chip.style.cursor = "context-menu";
+        chip.title = "Right-click to sell";
+        chip.addEventListener("contextmenu", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            showSellButton(item, chip);
+        });
+        document.getElementById("ownedList").appendChild(chip);
+    });
+    ownedTrinkets.forEach(function(item) { const chip = document.createElement("div"); chip.className = "ownedChip"; chip.textContent = "Trinket: " + item.name; document.getElementById("ownedList").appendChild(chip); });
+    // Consumables are used immediately from the pack overlay; there is no inventory.
+}
+
+function getRerollCost() { return 5 + paidRerollsUsed * 2; }
+
+function canRerollForBartcoin() { return shopActive && phaseIndex === 1; }
+
+function updateRerollButton() {
+    const button = document.getElementById("rerollButton");
+    if (!button) return;
+    const freeAvailable = freereroll >= 1;
+    const paidAllowed = canRerollForBartcoin();
+    const cost = getRerollCost();
+    button.disabled = !freeAvailable && (!paidAllowed || bartcoin < cost);
+    const priceLabel = button.querySelector("small");
+    if (priceLabel) priceLabel.textContent = freeAvailable ? "FREE REROLL: " + freereroll : (paidAllowed ? cost + " BARTCOINS" : "UNLOCKED AFTER BIG ROUND");
+}
+
+function rerollShop() {
+    if (!shopActive) return;
+    if (freereroll >= 1) {
+        freereroll -= 1; // Free rerolls never cost bartcoin or increase the paid price.
+    } else {
+        if (!canRerollForBartcoin()) return;
+        const cost = getRerollCost();
+        if (bartcoin < cost) return;
+        bartcoin -= cost;
+        paidRerollsUsed += 1;
+    }
+    updateBartcoinDisplay();
+    generateShop();
+    updateRerollButton();
+}
+
+function goToNextRound() {
+    if (!shopActive || roundActive) {
+        alert("You can only advance after clearing the current round.");
+        return;
+    }
+
+    shopActive = false;
+    // Interest is paid once when leaving the shop: 1 bartcoin per 5 bartcoin held,
+    // with a maximum of 5 interest bartcoin.
+    const interestBartcoin = Math.min(5, Math.floor(bartcoin / 5));
+    bartcoin += interestBartcoin;
+    updateBartcoinDisplay();
+
+    if (phaseIndex === 2) {
+        // Only clearing the Boss Round advances the long-term Bart Round.
+        bartround++;
+        phaseIndex = 0;
+    } else {
+        phaseIndex++;
+    }
+
+    updateRoundMenuButtons();
+    showPage("menuPage");
+}
+
+// Count misses only when the click lands on the gameplay background, not a Bart or HUD.
+document.getElementById("gameplayPage").addEventListener("click", function(event) {
+    if (event.target === this && roundActive) { backgroundClicks++; updateAccuracy(); }
+});
+
+/* =========================================================
+   CHARACTER DESCRIPTIONS OUTSIDE ACTIVE ROUNDS
+   ========================================================= */
+const characterHoverTooltip = document.createElement("div");
+characterHoverTooltip.id = "characterHoverTooltip";
+characterHoverTooltip.style.cssText = "display:none;position:fixed;z-index:9000;max-width:280px;padding:10px 12px;background:#202020;color:#fff;border:1px solid #eebc27;border-radius:8px;box-shadow:0 6px 20px #000b;font-size:13px;line-height:1.4;pointer-events:none;white-space:normal;";
+document.body.appendChild(characterHoverTooltip);
+
+function getCharacterDescription(character) {
+    if (!character) return "";
+    const parts = [character.name || "Character"];
+    if (character.bartbaseclick !== undefined) parts.push("Base click: " + character.bartbaseclick);
+    if (character.bartmultiplier !== undefined) parts.push("Base mult: " + character.bartmultiplier);
+    if (character.specialEffects) parts.push("Special abilities: " + character.specialEffects);
+    // Bartling's spawned MiniBartlings inherit Spectral, so explain that attribute
+    // on Bartling's own hover card as well, without giving Bartling the attribute.
+    if (character.name === "Bartling") {
+        parts.push("MiniBartling attribute — spectral: " + spectraldescription);
+    }
+    const attrs = Array.isArray(character.attributes) ? character.attributes : [];
+    if (attrs.length) {
+        parts.push("Attributes: " + attrs.map(function(attribute) {
+            return attribute + " — " + (attributeDescriptions[attribute] || "No description has been set yet.");
+        }).join("; "));
+    } else {
+        parts.push("Attributes: None");
+    }
+    return parts.join("\n");
+}
+
+function showCharacterDescription(target, character, x, y) {
+    if (roundActive || !character) return;
+    characterHoverTooltip.textContent = getCharacterDescription(character);
+    characterHoverTooltip.style.whiteSpace = "pre-line";
+    characterHoverTooltip.style.display = "block";
+    const left = Math.min(x + 14, window.innerWidth - 300);
+    const top = Math.min(y + 14, window.innerHeight - 180);
+    characterHoverTooltip.style.left = Math.max(6, left) + "px";
+    characterHoverTooltip.style.top = Math.max(6, top) + "px";
+}
+
+function hideCharacterDescription() {
+    characterHoverTooltip.style.display = "none";
+}
+
+// Gameplay sprites and the owned-character roster get descriptions whenever
+// the game is not actively running a round. Shop cards keep their own overlays.
+document.addEventListener("mouseover", function(event) {
+    if (roundActive) { hideCharacterDescription(); return; }
+    const target = event.target.closest(".bart, .milhouse, .ownedChip");
+    if (!target || target.closest(".shopCharacterCard")) return;
+    const character = target._characterData || activeBarts.find(function(item) { return item.element === target; }) || ownedMilhouses.find(function(item) { return item.element === target; });
+    if (!character) return;
+    showCharacterDescription(target, character, event.clientX, event.clientY);
+});
+document.addEventListener("mousemove", function(event) {
+    if (roundActive || characterHoverTooltip.style.display === "none") return;
+    const left = Math.min(event.clientX + 14, window.innerWidth - 300);
+    const top = Math.min(event.clientY + 14, window.innerHeight - 180);
+    characterHoverTooltip.style.left = Math.max(6, left) + "px";
+    characterHoverTooltip.style.top = Math.max(6, top) + "px";
+});
+document.addEventListener("mouseout", function(event) {
+    const from = event.target.closest && event.target.closest(".bart, .milhouse, .ownedChip");
+    const to = event.relatedTarget && event.relatedTarget.closest && event.relatedTarget.closest(".bart, .milhouse, .ownedChip");
+    if (from && from !== to) hideCharacterDescription();
+});
+
+/* =========================================================
+   WINDOW RESIZE
+   ========================================================= */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        activeBarts.forEach(
+            function(bart) {
+
+                if (!bart.element) {
+                    return;
+                }
+
+
+                let x =
+                    parseFloat(
+                        bart.element.style.left
+                    ) || 2;
+
+                let y =
+                    parseFloat(
+                        bart.element.style.top
+                    ) || 2;
+
+
+                if (
+                    x +
+                    bart.element.offsetWidth >
+                    window.innerWidth
+                ) {
+
+                    x =
+                        window.innerWidth -
+                        bart.element.offsetWidth -
+                        2;
+
+                }
+
+
+                if (
+                    y +
+                    bart.element.offsetHeight >
+                    window.innerHeight
+                ) {
+
+                    y =
+                        window.innerHeight -
+                        bart.element.offsetHeight -
+                        2;
+
+                }
+
+
+                bart.element.style.left =
+                    Math.max(
+                        2,
+                        x
+                    ) + "px";
+
+
+                bart.element.style.top =
+                    Math.max(
+                        2,
+                        y
+                    ) + "px";
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   START GAME
+   ========================================================= */
+
+normalBartElement.style.display = "none";
+
+// Every fresh game starts with a Normal Milhouse in the owned roster.
+// It uses the same baseline stats as the Placeholder Milhouse but is free
+// and is not part of the shop pool.
+if (!ownedMilhouses.some(function(item) { return item.name === "Normal Milhouse"; })) {
+    const normalMilhouse = createBartInstance({
+        name: "Normal Milhouse",
+        price: 0,
+        image: "milhouse.jpg",
+        bartbaseclick: -5,
+        bartmultiplier: 2,
+        minSpeed: 4,
+        maxSpeed: 7,
+        minDirectionTime: 1000,
+        maxDirectionTime: 2500,
+        specialEffects: "None",
+        rarity: "common",
+        attributes: []
+    });
+    normalMilhouse.owned = true;
+    normalMilhouse.isMilhouse = true;
+    ownedMilhouses.push(normalMilhouse);
+    updateBartLimit();
+}
+
+updateBartcoinDisplay();
+updateRoundDisplay();
+updateScoreDisplay();
+updateRoundMenuButtons();
+showPage("menuPage");
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE BARTCADE</title>
+    <style>
+        /* Only structure layouts remain to place items at the top and bottom */
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: url("download.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+
+        /* Centers the 3 links horizontally at the top */
+        nav {
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        nav a {
+            margin: 0 30px;
+        }
+
+        /* Pushes the main text content to the absolute bottom */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 50px;
+        }
+
+        /* Enlarged text size only - no fonts, colors, or glows */
+        .bartcade-title {
+            font-size: 5rem;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 3 Centered Links at the Top Middle -->
+    <nav>
+        <a href="GAMES.html">GAMES</a>
+        <a href="#link2">Link 2</a>
+        <a href="#link3">Link 3</a>
+    </nav>
+
+    <!-- Enlarged text at the bottom -->
+    <main>
+        <h1 class="bartcade-title">THIS IS MY BARTCADE (games are mostly ai)</h1>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,852 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bart Tetris</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+}
+
+#game {
+    display: block;
+    width: min(90vw, 300px);
+    height: auto;
+    background: #080b12;
+    border: 3px solid #444;
+    border-radius: 8px;
+    touch-action: none;
+}
+
+#ui { width: 190px; }
+
+h1 { color: #ffd900; font-size: 24px; }
+.stat { margin: 8px 0; font-size: 17px; }
+
+.preview {
+    display: block;
+    width: 120px;
+    height: 120px;
+    background: #080b12;
+    border: 2px solid #444;
+    border-radius: 8px;
+    margin: 8px 0 14px;
+}
+
+button {
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 8px;
+    background: #ffd900;
+    color: #111;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+button:active {
+    background: #fff5a0;
+    transform: scale(.97);
+}
+
+.wide { width: 100%; margin: 4px 0; }
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.controls button {
+    min-height: 48px;
+    font-size: 20px;
+}
+
+.controls .label {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 13px;
+    color: #aaa;
+    padding: 5px;
+}
+
+#status {
+    color: #aaa;
+    font-size: 12px;
+    min-height: 18px;
+    margin: 5px 0;
+}
+
+#hardModeBtn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 10000;
+    background: #e32636;
+    color: white;
+    border: 2px solid white;
+    padding: 12px 16px;
+    white-space: nowrap;
+}
+
+/* Hard Mode layout */
+body.hard-mode {
+    display: block;
+    padding: 0;
+    overflow: hidden;
+}
+
+body.hard-mode #game {
+    position: fixed;
+    left: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(44vw, 300px);
+    max-height: 94vh;
+}
+
+body.hard-mode #ui {
+    position: fixed;
+    left: 5%;
+    top: 12px;
+    width: min(44vw, 300px);
+    max-height: 30vh;
+    overflow: hidden;
+}
+
+body.hard-mode #ui h1 {
+    font-size: 19px;
+    margin: 0 0 5px;
+}
+
+body.hard-mode .stat {
+    display: inline-block;
+    margin: 3px 8px 3px 0;
+    font-size: 12px;
+}
+
+body.hard-mode .preview-wrap {
+    display: inline-block;
+    vertical-align: top;
+    width: 80px;
+    font-size: 12px;
+}
+
+body.hard-mode .preview {
+    width: 65px;
+    height: 65px;
+    margin: 3px 0 5px;
+}
+
+body.hard-mode #status,
+body.hard-mode #ui .wide,
+body.hard-mode #ui .controls 
+    /* Buttons are detached and animated by the Hard Mode script. */
+
+
+body.hard-mode button:not(#hardModeBtn) {
+    z-index: 9998;
+}
+
+/* HOLD and RESTART use compact sizes in Hard Mode. */
+body.hard-mode #holdBtn,
+body.hard-mode #restartBtn {
+    width: 64px;
+    min-width: 64px;
+    height: 48px;
+    min-height: 48px;
+    padding: 6px 4px;
+    margin: 0;
+    font-size: 12px;
+}
+
+@media (max-height: 700px) {
+    body.hard-mode #game { width: min(38vw, 240px); }
+    body.hard-mode #ui { width: 44vw; max-height: 28vh; }
+    body.hard-mode .preview { width: 48px; height: 48px; }
+}
+
+@media (max-width: 600px) {
+    body {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    #ui { width: min(90vw, 300px); }
+    #game { width: min(90vw, 300px); }
+
+    .preview {
+        display: inline-block;
+        margin-right: 20px;
+    }
+
+    .preview-wrap {
+        display: inline-block;
+        vertical-align: top;
+        width: 48%;
+    }
+}
+</style>
+</head>
+
+<body>
+<button id="hardModeBtn" type="button">HARD MODE</button>
+
+<canvas id="game" width="300" height="600"></canvas>
+
+<div id="ui">
+    <h1>BART TETRIS</h1>
+
+    <div class="stat">Score: <span id="score">0</span></div>
+    <div class="stat">Lines: <span id="lines">0</span></div>
+    <div class="stat">Level: <span id="level">1</span></div>
+
+    <div class="preview-wrap">
+        <div>HOLD</div>
+        <canvas id="holdPreview" class="preview" width="120" height="120"></canvas>
+    </div>
+
+    <div class="preview-wrap">
+        <div>NEXT</div>
+        <canvas id="nextPreview" class="preview" width="120" height="120"></canvas>
+    </div>
+
+    <div id="status">Hold is ready</div>
+
+    <button class="wide" id="holdBtn">HOLD</button>
+
+    <div class="controls">
+        <div class="label">MOVE &amp; ROTATE</div>
+        <button id="leftBtn" aria-label="Move left">Left</button>
+        <button id="rotateBtn" aria-label="Rotate">Rotate</button>
+        <button id="rightBtn" aria-label="Move right">Right</button>
+        <button id="downBtn" aria-label="Soft drop">Soft drop</button>
+        <button id="hardBtn" aria-label="Hard drop">Hard drop</button>
+        <button id="pauseBtn" aria-label="Pause">Pause</button>
+    </div>
+
+    <button class="wide" id="restartBtn">RESTART</button>
+</div>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const nextCanvas = document.getElementById("nextPreview");
+const nextCtx = nextCanvas.getContext("2d");
+
+const holdCanvas = document.getElementById("holdPreview");
+const holdCtx = holdCanvas.getContext("2d");
+
+const COLS = 10, ROWS = 20, BLOCK = 30;
+
+const bart = new Image();
+bart.src = "bart.png";
+let bartLoaded = false;
+
+bart.onload = () => {
+    bartLoaded = true;
+    draw();
+};
+
+const PIECES = [
+    { color: "#00d9ff", shape: [[1,1,1,1]] },
+    { color: "#ffe000", shape: [[1,1],[1,1]] },
+    { color: "#b94cff", shape: [[0,1,0],[1,1,1]] },
+    { color: "#45df4b", shape: [[0,1,1],[1,1,0]] },
+    { color: "#ff4050", shape: [[1,1,0],[0,1,1]] },
+    { color: "#438cff", shape: [[1,0,0],[1,1,1]] },
+    { color: "#ff8c32", shape: [[0,0,1],[1,1,1]] }
+];
+
+let board, player, nextPiece, heldPiece;
+let canHold = true;
+let score = 0, lines = 0, level = 1;
+let dropInterval = 800, dropTimer = 0, lastTime = 0;
+let paused = false, gameOver = false;
+let moveDirection = 0;
+let moveTimer = 0;
+let softDropping = false;
+let softTimer = 0;
+
+function createBoard() {
+    return Array.from({length: ROWS}, () => Array(COLS).fill(null));
+}
+
+function randomPiece() {
+    const p = PIECES[Math.floor(Math.random() * PIECES.length)];
+    return {
+        shape: p.shape.map(row => row.slice()),
+        color: p.color,
+        x: Math.floor((COLS - p.shape[0].length) / 2),
+        y: 0
+    };
+}
+
+function copyPiece(p) {
+    return p && {
+        shape: p.shape.map(row => row.slice()),
+        color: p.color,
+        x: p.x,
+        y: p.y
+    };
+}
+
+function collision(p) {
+    for (let y = 0; y < p.shape.length; y++) {
+        for (let x = 0; x < p.shape[y].length; x++) {
+            if (!p.shape[y][x]) continue;
+
+            const bx = p.x + x, by = p.y + y;
+
+            if (bx < 0 || bx >= COLS || by >= ROWS) return true;
+            if (by >= 0 && board[by][bx]) return true;
+        }
+    }
+    return false;
+}
+
+function move(dx) {
+    if (paused || gameOver) return;
+    player.x += dx;
+    if (collision(player)) player.x -= dx;
+}
+
+function rotate() {
+    if (paused || gameOver) return;
+
+    const oldShape = player.shape.map(row => row.slice());
+    const oldX = player.x;
+    const h = player.shape.length;
+    const w = player.shape[0].length;
+
+    player.shape = Array.from({length: w}, (_, x) =>
+        Array.from({length: h}, (_, y) => player.shape[h - 1 - y][x])
+    );
+
+    for (const offset of [0, -1, 1, -2, 2]) {
+        player.x = oldX + offset;
+        if (!collision(player)) return;
+    }
+
+    player.x = oldX;
+    player.shape = oldShape;
+}
+
+function drop() {
+    if (paused || gameOver) return;
+
+    player.y++;
+    if (collision(player)) {
+        player.y--;
+        lockPiece();
+    }
+    dropTimer = 0;
+}
+
+function hardDrop() {
+    if (paused || gameOver) return;
+
+    let distance = 0;
+    while (!collision(player)) {
+        player.y++;
+        distance++;
+    }
+
+    player.y--;
+    score += Math.max(0, distance - 1) * 2;
+    lockPiece();
+    updateUI();
+}
+
+function lockPiece() {
+    player.shape.forEach((row, y) => {
+        row.forEach((v, x) => {
+            if (!v) return;
+            const bx = player.x + x, by = player.y + y;
+
+            if (by >= 0 && by < ROWS) {
+                board[by][bx] = {color: player.color};
+            }
+        });
+    });
+
+    clearLines();
+
+    player = nextPiece;
+    nextPiece = randomPiece();
+    canHold = true;
+    updateStatus();
+
+    if (collision(player)) gameOver = true;
+    updateUI();
+}
+
+function clearLines() {
+    let cleared = 0;
+
+    for (let y = ROWS - 1; y >= 0; y--) {
+        if (board[y].every(cell => cell !== null)) {
+            board.splice(y, 1);
+            board.unshift(Array(COLS).fill(null));
+            cleared++;
+            y++;
+        }
+    }
+
+    if (cleared) {
+        score += [0, 100, 300, 500, 800][cleared] * level;
+        lines += cleared;
+        level = Math.floor(lines / 10) + 1;
+        dropInterval = Math.max(100, 800 - (level - 1) * 65);
+    }
+}
+
+function hold() {
+    if (paused || gameOver || !canHold) return;
+
+    if (!heldPiece) {
+        heldPiece = copyPiece(player);
+        player = nextPiece;
+        nextPiece = randomPiece();
+    } else {
+        const temp = copyPiece(player);
+        player = copyPiece(heldPiece);
+        heldPiece = temp;
+    }
+
+    player.x = Math.floor((COLS - player.shape[0].length) / 2);
+    player.y = 0;
+
+    canHold = false;
+    dropTimer = 0;
+
+    if (collision(player)) gameOver = true;
+
+    updateStatus();
+    updateUI();
+}
+
+function updateStatus() {
+    document.getElementById("status").textContent =
+        canHold ? "Hold is ready" : "Hold used — lock a piece first";
+}
+
+function drawBartBlock(context, x, y, size, color, alpha = 1) {
+    const px = x * size, py = y * size;
+
+    context.save();
+    context.globalAlpha = alpha;
+    context.fillStyle = color;
+    context.fillRect(px, py, size, size);
+
+    if (bartLoaded) {
+        context.save();
+        context.beginPath();
+        context.rect(px + 2, py + 2, size - 4, size - 4);
+        context.clip();
+
+        context.drawImage(
+            bart,
+            px - size * 0.25,
+            py - size * 0.45,
+            size * 1.5,
+            size * 1.9
+        );
+
+        context.globalCompositeOperation = "source-atop";
+        context.globalAlpha = alpha * 0.35;
+        context.fillStyle = color;
+        context.fillRect(px, py, size, size);
+        context.restore();
+    }
+
+    context.globalAlpha = alpha;
+    context.strokeStyle = "#ffffff66";
+    context.strokeRect(px + 0.5, py + 0.5, size - 1, size - 1);
+    context.restore();
+}
+
+function drawBackgroundBart() {
+    if (!bartLoaded) return;
+
+    ctx.save();
+    ctx.globalAlpha = 0.13;
+
+    const scale = Math.min(300 / bart.width, 600 / bart.height) * 1.2;
+    const w = bart.width * scale;
+    const h = bart.height * scale;
+
+    ctx.drawImage(bart, (300 - w) / 2, (600 - h) / 2, w, h);
+    ctx.restore();
+}
+
+function getGhost() {
+    const ghost = copyPiece(player);
+    while (!collision(ghost)) ghost.y++;
+    ghost.y--;
+    return ghost;
+}
+
+function draw() {
+    ctx.clearRect(0, 0, 300, 600);
+    ctx.fillStyle = "#080b12";
+    ctx.fillRect(0, 0, 300, 600);
+
+    drawBackgroundBart();
+
+    ctx.strokeStyle = "#ffffff12";
+    for (let x = 0; x <= COLS; x++) {
+        ctx.beginPath();
+        ctx.moveTo(x * BLOCK, 0);
+        ctx.lineTo(x * BLOCK, 600);
+        ctx.stroke();
+    }
+
+    for (let y = 0; y <= ROWS; y++) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * BLOCK);
+        ctx.lineTo(300, y * BLOCK);
+        ctx.stroke();
+    }
+
+    for (let y = 0; y < ROWS; y++) {
+        for (let x = 0; x < COLS; x++) {
+            if (board[y][x]) {
+                drawBartBlock(ctx, x, y, BLOCK, board[y][x].color);
+            }
+        }
+    }
+
+    if (player && !gameOver) {
+        const ghost = getGhost();
+
+        ghost.shape.forEach((row, y) => row.forEach((v, x) => {
+            if (v && ghost.y + y >= 0) {
+                drawBartBlock(ctx, ghost.x + x, ghost.y + y, BLOCK, ghost.color, 0.22);
+            }
+        }));
+    }
+
+    if (player) {
+        player.shape.forEach((row, y) => row.forEach((v, x) => {
+            if (v && player.y + y >= 0) {
+                drawBartBlock(ctx, player.x + x, player.y + y, BLOCK, player.color);
+            }
+        }));
+    }
+
+    if (gameOver || paused) {
+        ctx.fillStyle = "#000c";
+        ctx.fillRect(0, 0, 300, 600);
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.font = "bold 28px Arial";
+        ctx.fillText(gameOver ? "GAME OVER" : "PAUSED", 150, 285);
+        ctx.font = "15px Arial";
+        ctx.fillText(gameOver ? "Press RESTART" : "Press RESUME", 150, 315);
+    }
+}
+
+function drawPreview(context, piece) {
+    context.clearRect(0, 0, 120, 120);
+    context.fillStyle = "#080b12";
+    context.fillRect(0, 0, 120, 120);
+
+    if (!piece) {
+        context.fillStyle = "#777";
+        context.font = "14px Arial";
+        context.textAlign = "center";
+        context.fillText("EMPTY", 60, 63);
+        return;
+    }
+
+    const size = 25;
+    const startX = (120 - piece.shape[0].length * size) / 2;
+    const startY = (120 - piece.shape.length * size) / 2;
+
+    piece.shape.forEach((row, y) => row.forEach((v, x) => {
+        if (v) {
+            drawBartBlock(
+                context,
+                (startX + x * size) / size,
+                (startY + y * size) / size,
+                size,
+                piece.color
+            );
+        }
+    }));
+}
+
+function updateUI() {
+    document.getElementById("score").textContent = score;
+    document.getElementById("lines").textContent = lines;
+    document.getElementById("level").textContent = level;
+    drawPreview(nextCtx, nextPiece);
+    drawPreview(holdCtx, heldPiece);
+}
+
+/* Hold-to-move buttons */
+function bindRepeatButton(id, callback, direction = 0) {
+    const button = document.getElementById(id);
+    let delay = null;
+    let repeat = null;
+
+    function stop() {
+        clearTimeout(delay);
+        clearInterval(repeat);
+        delay = null;
+        repeat = null;
+        if (direction && moveDirection === direction) moveDirection = 0;
+        if (id === "downBtn") softDropping = false;
+    }
+
+    button.addEventListener("pointerdown", event => {
+        event.preventDefault();
+        if (paused || gameOver) return;
+
+        if (direction) {
+            moveDirection = direction;
+            callback();
+            delay = setTimeout(() => {
+                repeat = setInterval(callback, 85);
+            }, 150);
+        } else if (id === "downBtn") {
+            softDropping = true;
+            callback();
+            delay = setTimeout(() => {
+                repeat = setInterval(callback, 55);
+            }, 100);
+        } else {
+            callback();
+        }
+
+        try { button.setPointerCapture(event.pointerId); } catch {}
+    });
+
+    button.addEventListener("pointerup", stop);
+    button.addEventListener("pointercancel", stop);
+    button.addEventListener("lostpointercapture", stop);
+    button.addEventListener("contextmenu", event => event.preventDefault());
+}
+
+bindRepeatButton("leftBtn", () => move(-1), -1);
+bindRepeatButton("rightBtn", () => move(1), 1);
+bindRepeatButton("downBtn", drop);
+
+document.getElementById("rotateBtn").addEventListener("click", rotate);
+document.getElementById("hardBtn").addEventListener("click", hardDrop);
+document.getElementById("holdBtn").addEventListener("click", hold);
+
+document.getElementById("pauseBtn").addEventListener("click", () => {
+    if (gameOver) return;
+    paused = !paused;
+    document.getElementById("pauseBtn").textContent = paused ? "RESUME" : "Ⅱ";
+});
+
+document.getElementById("restartBtn").addEventListener("click", restart);
+
+let hardMode = false;
+let flyingButtons = [];
+let hardModeFrame = null;
+
+/* Barrier is 12px beyond the right edge of the board or UI, whichever is farther right. */
+function getButtonBoundary() {
+    const gameRect = document.getElementById("game").getBoundingClientRect();
+    const uiRect = document.getElementById("ui").getBoundingClientRect();
+    return Math.ceil(Math.max(gameRect.right, uiRect.right) + 12);
+}
+
+function activateHardMode() {
+    if (hardMode) return;
+
+    restart();
+    hardMode = true;
+    document.body.classList.add("hard-mode");
+    document.getElementById("hardModeBtn").textContent = "HARD MODE: ON";
+
+    requestAnimationFrame(() => {
+        const buttons = Array.from(document.querySelectorAll("button:not(#hardModeBtn)"));
+
+        for (const id of ["holdBtn", "restartBtn"]) {
+            const button = document.getElementById(id);
+            button.style.width = "64px";
+            button.style.minWidth = "64px";
+            button.style.height = "48px";
+            button.style.minHeight = "48px";
+            button.style.padding = "6px 4px";
+            button.style.margin = "0";
+            button.style.fontSize = "12px";
+        }
+
+        flyingButtons = buttons.map(button => {
+            const rect = button.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            const minX = getButtonBoundary();
+            const maxX = Math.max(minX, window.innerWidth - width);
+            const x = Math.max(minX, Math.min(maxX, rect.left));
+            const minY = window.innerHeight / 2;
+            const maxY = Math.max(minY, window.innerHeight - height);
+            const y = Math.max(minY, Math.min(maxY, rect.top));
+
+            button.style.position = "fixed";
+            button.style.left = x + "px";
+            button.style.top = y + "px";
+            button.style.width = width + "px";
+            button.style.margin = "0";
+            button.style.zIndex = "9998";
+
+            return {
+                element: button,
+                x,
+                y,
+                vx: (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 3),
+                vy: (Math.random() < 0.5 ? -1 : 1) * (2 + Math.random() * 3),
+                nextChange: performance.now() + 4000 + Math.random() * 2000
+            };
+        });
+
+        if (hardModeFrame !== null) cancelAnimationFrame(hardModeFrame);
+        moveFlyingButtons();
+    });
+}
+
+function moveFlyingButtons() {
+    if (!hardMode) return;
+
+    const boundary = getButtonBoundary();
+    const now = performance.now();
+
+    for (const button of flyingButtons) {
+        const el = button.element;
+        const width = el.offsetWidth;
+        const height = el.offsetHeight;
+
+        if (now >= button.nextChange) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 2 + Math.random() * 4.5;
+            button.vx = Math.cos(angle) * speed;
+            button.vy = Math.sin(angle) * speed;
+            button.nextChange = now + 4000 + Math.random() * 2000;
+        }
+
+        button.x += button.vx;
+        button.y += button.vy;
+
+        const minX = boundary;
+        const maxX = Math.max(minX, window.innerWidth - width);
+
+        if (button.x < minX) {
+            button.x = minX;
+            button.vx = Math.abs(button.vx);
+        }
+
+        if (button.x > maxX) {
+            button.x = maxX;
+            button.vx = -Math.abs(button.vx);
+        }
+
+        const boardRect = document.getElementById("game").getBoundingClientRect();
+        const minY = Math.max(0, boardRect.top);
+        const maxButtonY = Math.max(minY, window.innerHeight - height);
+
+        if (button.y < minY) {
+            button.y = minY;
+            button.vy = Math.abs(button.vy);
+        }
+
+        if (button.y > maxButtonY) {
+            button.y = maxButtonY;
+            button.vy = -Math.abs(button.vy);
+        }
+
+        el.style.left = button.x + "px";
+        el.style.top = button.y + "px";
+    }
+
+    hardModeFrame = requestAnimationFrame(moveFlyingButtons);
+}
+
+window.addEventListener("resize", () => {
+    if (!hardMode) return;
+
+    const boundary = getButtonBoundary();
+
+    for (const button of flyingButtons) {
+        const width = button.element.offsetWidth;
+        const height = button.element.offsetHeight;
+        const maxX = Math.max(boundary, window.innerWidth - width);
+
+        button.x = Math.max(boundary, Math.min(maxX, button.x));
+
+        const boardTop = Math.max(0, document.getElementById("game").getBoundingClientRect().top);
+        button.y = Math.max(boardTop, Math.min(window.innerHeight - height, button.y));
+
+        button.element.style.left = button.x + "px";
+        button.element.style.top = button.y + "px";
+    }
+});
+
+document.getElementById("hardModeBtn").addEventListener("click", activateHardMode);
+
+function restart() {
+    board = createBoard();
+    score = 0;
+    lines = 0;
+    level = 1;
+    dropInterval = 800;
+    dropTimer = 0;
+    paused = false;
+    gameOver = false;
+    heldPiece = null;
+    canHold = true;
+    moveDirection = 0;
+    softDropping = false;
+
+    player = randomPiece();
+    nextPiece = randomPiece();
+
+    document.getElementById("pauseBtn").textContent = "Ⅱ";
+
+    updateStatus();
+    updateUI();
+    draw();
+}
+
+function gameLoop(time) {
+    const delta = Math.min(time - lastTime, 100);
+    lastTime = time;
+
+    if (!paused && !gameOver) {
+        dropTimer += delta;
+        if (dropTimer >= dropInterval) drop();
+    }
+
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+restart();
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>
