@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    .cookie {
+        transition: width 4ms ease-in-out;
+
+    }
+
+    .cookie:hover {
+        width: 15%;
+        border: rgba(240, 136, 18, 0.925) solid 2px;
+
+    }
+</style>
+
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript testing</title>
+</head>
+
+
+
+
+<body>
+    <h2>CLICK THE BART</h2>
+    <img src="OIP.webp" class="cookie" onclick="addScore()" width="200"> 
+    <div id="scoreBox">0</div>
+    <button onclick="buyMulti()">Buy Apu's multiplier<div id ="upgradeButton">0</div></button>  
+    <button onclick="buyAutoClick()">Buy Milhouse worker<div id ="helperButton">0</div></button>
+</body>
+<script>
+    var name = prompt("What is your name?");
+    name = name.toLowerCase()
+    if (name == "Vadim") {
+        document.write("You owe me 20$!")
+    } else {
+        document.write("Hello, " + name + "!");
+    }
+
+    function buyMulti() {
+        
+        if (score >= (multiplier * 20)) {
+            score = score - (multiplier * 20)
+            multiplier = multiplier + 0.1;
+            scoreBox.innerHTML = score;
+            upgradeButton.innerHTML = multiplier * 20;
+           
+        }
+    }
+
+    var score = 0;
+    var multiplier = 1.0
+    var autoclickamount= 0;
+    var scoreBox = document.getElementById("scoreBox")
+    var upgradeButton = document.getElementById("upgradeButton")
+    var helperButton = document.getElementById("helperButton")
+
+    upgradeButton.innerHTML = multiplier * 20;
+    helperButton.innerHTML = autoclickamount * 10;
+
+    function addScore() {
+        score = score + multiplier;
+        scoreBox.innerHTML = score;
+
+    }
+
+    function buyAutoClick() {
+        
+        
+        if (autoclickamount == 0) {
+            autoclickamount = 1;
+            setInterval(
+                 () => {
+                    score = score + autoclickamount + multiplier - 1;
+                    scoreBox.innerHTML = score;
+                    helperButton.innerHTML = autoclickamount * 10;
+                 },
+                 1000
+            )
+        }
+        if (score >= (autoclickamount * 10)) {
+            score = score - (autoclickamount * 10)
+            autoclickamount = autoclickamount + 1;
+            scoreBox.innerHTML = score;
+            helperButton.innerHTML = autoclickamount * 10;
+    }
+    }
+
+</script>
+
+</html>
