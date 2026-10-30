@@ -1228,10 +1228,74 @@ document.addEventListener("dragstart", function(event) {
 }
 </style>
 </head>
+<script>
+/* ==========================================
+   F KEY = CLICK UNDER THE LAST KNOWN CURSOR
+   ========================================== */
 
+// Start at the center of the visible browser window.
+// This allows F to work even before the mouse moves.
+let lastMouseX = Math.floor(window.innerWidth / 2);
+let lastMouseY = Math.floor(window.innerHeight / 2);
+
+// Remember the cursor position whenever it moves.
+document.addEventListener("mousemove", function(event) {
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+});
+
+// Also remember the position from mouse clicks.
+document.addEventListener("mousedown", function(event) {
+    lastMouseX = event.clientX;
+    lastMouseY = event.clientY;
+});
+
+// Press F to trigger a click.
+document.addEventListener("keydown", function(event) {
+
+    // Only respond to F.
+    if (event.key.toLowerCase() !== "f") {
+        return;
+    }
+
+    // Prevent repeated clicks from holding F down.
+    if (event.repeat) {
+        return;
+    }
+
+    // Don't interfere with typing in text fields.
+    const target = event.target;
+
+    if (
+        target instanceof HTMLElement &&
+        (
+            target.matches(
+                "input, textarea, select, button"
+            ) ||
+            target.isContentEditable
+        )
+    ) {
+        return;
+    }
+
+    // Prevent F from activating other keyboard shortcuts.
+    event.preventDefault();
+
+    // Find the topmost element at the remembered position.
+    const element = document.elementFromPoint(
+        lastMouseX,
+        lastMouseY
+    );
+
+    // Trigger its click behavior.
+    if (element instanceof HTMLElement) {
+        element.click();
+    }
+});
+</script>
 <body>
 
-    <main id="menuPage" class="page active">
+    <main id="menuPage" class="page">
         <h1>CLICK THE BART</h1>
         <p>Complete each round in order. Beat the boss to advance to the next Bart Round.</p>
         <div class="roundChoices">
@@ -1246,7 +1310,7 @@ document.addEventListener("dragstart", function(event) {
         <h1>HARD MODE</h1>
         <p>Choose one Bart and one Milhouse from Ismael's six hands.</p>
         <div id="ismaelStage">
-            <img id="ismaelImage" src="Ismael.png" alt="Ismael holding six starter characters">
+            <img id="ismaelImage" src="ismael.png" alt="Ismael holding six starter characters">
             <div id="starterBartOptions" class="starterOptions" aria-label="Choose one starter Bart"></div>
             <div id="starterMilhouseOptions" class="starterOptions" aria-label="Choose one starter Milhouse"></div>
         </div>
@@ -1432,7 +1496,7 @@ const TinyBart = new Bart({
 
     image: "tinybart.png" ,
 
-    price: 8,
+    price: 7,
 
     bartbaseclick: 5,
 
@@ -1458,7 +1522,7 @@ const EvilBart = new Bart({
 
     image: "EvilBart.png",
 
-    price: 12,
+    price: 10,
 
     bartbaseclick: 3,
 
@@ -1509,7 +1573,7 @@ const HolyBart = new Bart({
 
     image: "HolyBart.png",
 
-    price: 12,
+    price: 10,
 
     bartbaseclick: 1,
 
@@ -1534,7 +1598,7 @@ const ScaryBart = new Bart({
 
     image: "ScaryBart.png",
 
-    price: 12,
+    price: 10,
 
     bartbaseclick: 1,
 
@@ -1560,7 +1624,7 @@ const Bartling = new Bart({
 
     image: "Bartling.png",
 
-    price: 20,
+    price: 15,
 
     bartbaseclick: 4,
 
@@ -1616,7 +1680,7 @@ const AlienBart = new Bart({
 
     image: "alienbart.png",
 
-    price: 18,
+    price: 17,
 
     bartbaseclick: 5,
 
@@ -1644,7 +1708,7 @@ const PolinospiaBart = new Bart({
 
     image: "bart.png",
 
-    price: 18,
+    price: 20,
 
     bartbaseclick: 4,
 
@@ -1728,7 +1792,7 @@ const LuckyMilhouse = new Bart({
 
     image: "luckymilhouse.jpg",
 
-    price: 15,
+    price: 13,
 
     bartbaseclick: 5,
 
@@ -2138,6 +2202,7 @@ let phaseIndex = 0; // 0 = Small, 1 = Big, 2 = Boss
 let runStarted = false;
 let hardMode = false;
 let hardModeSetupUsed = false;
+let RoundSetupUsed = false;
 let selectedStarterBart = null;
 let selectedStarterMilhouse = null;
 let hardModeStartersAdded = false;
@@ -3239,7 +3304,7 @@ function moveBart(bart) {
 function getSmallRoundRequirement() {
     // Explicit values requested; bartround 3 is interpolated at 600.
     const safeRound = Math.max(1, Math.floor(finiteNumber(bartround, 1)));
-    const requirements = { 1: 100, 2: 400, 3: 600, 4: 800, 5: 1300 };
+    const requirements = { 1: 80, 2: 400, 3: 600, 4: 800, 5: 1300 };
     if (requirements[safeRound] !== undefined) return requirements[safeRound];
     return 1300 + ((safeRound - 5) * 500);
 }
@@ -3328,6 +3393,20 @@ const hardStarterMilhouseTemplates = [
     ChillyMilhouse,
 ];
 /**/
+
+function openRoundSetup() {
+    if (RoundSetupUsed || runStarted || roundActive || shopActive) return;
+    RoundSetupUsed = true;
+    document.getElementById("Roundpagebutton").hidden = true;
+    showPage("Menupage");
+}
+function opentutorial() {
+    if (tutorialpageUsed || runStarted || roundActive || shopActive) return;
+    tutorialpageUsed = true;
+    document.getElementById("tutorialpagebutton").hidden = true;
+    showPage("tutorialpage");
+}
+
 function openHardModeSetup() {
     if (hardModeSetupUsed || runStarted || roundActive || shopActive) return;
     hardModeSetupUsed = true;
@@ -3338,6 +3417,7 @@ function openHardModeSetup() {
     renderHardStarterOptions();
     showPage("hardStarterPage");
 }
+
 
 function renderHardStarterOptions() {
     const bartContainer = document.getElementById("starterBartOptions");
@@ -3613,7 +3693,7 @@ function createBartInstance(template) {
 // Shop rarity weights: these are the chances for each slot, not guaranteed
 // proportions across a small shop. If a rarity has no eligible items, the
 // available rarities are reweighted so every slot can still be filled.
-const SHOP_RARITY_CHANCES = { common: 45, uncommon: 35, rare: 20 };
+const SHOP_RARITY_CHANCES = { common: 55, uncommon: 36, rare: 9 };
 
 function pickByRarity(pool) {
     if (!pool.length) return null;
