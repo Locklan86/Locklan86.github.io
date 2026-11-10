@@ -253,7 +253,11 @@ if (holdingCart()) {
         { h: 58 }
 
   
-    );
+    );} 
+else if (game.classKey === "basket") {
+    const reach = 18 + (g.swing && g.swing.id === "basket" ? 26 * swinging : 0);
+    drawSprite(c, g.items.length ? "tools/basket_full" : "tools/basket_empty", g.x + cos * reach, g.y - 8 + sin * reach * 0.6, { h: 32, ay: 0.5, rot: swinging * 0.5 * (cos < 0 ? -1 : 1) });
+  
 
 }
   if (g.weapon) {

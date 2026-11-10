@@ -6,7 +6,7 @@ export const WORLD_H = 1400;
 // numbers to tweak while playtesting
 export const DAY_LENGTH = 120;
 export const START_MONEY = 60;
-export const MAX_HP = 70;
+export const MAX_HP = 75;
 export const POISON_AMOUNT = 50;
 export const POISON_PERCENT = 0.05;
 export const BURN_AMOUNT = 20;
@@ -14,15 +14,15 @@ export const BURN_PERCENT = 0.2;
 
 export const classes = {
   basket: {
-    name: "Basket", icon: "tools/basket_empty", maxSpeed: 230, accel: 2400, capacity: 4,
+    name: "Basket", icon: "tools/basket_empty", maxSpeed: 275, accel: 2400, capacity: 4,
     blurb: "One handed. Swing the basket for big damage (it smashes fragiles inside) or use your free hand for a weapon.",
   },
   cart: {
-    name: "Cart", icon: "tools/cart_left", maxSpeed: 350, accel: 650, capacity: 8,
+    name: "Cart", icon: "tools/cart_left", maxSpeed: 400, accel: 650, capacity: 8,
     blurb: "Two handed. Carries the most and rams enemies, faster hits harder. Park it with E to use weapons, but thieves will take it.",
   },
   bare: {
-    name: "Bare Hands", icon: "chars/george_attack", maxSpeed: 250, accel: 2800, capacity: 1,
+    name: "Bare Hands", icon: "chars/george_attack", maxSpeed: 300, accel: 2800, capacity: 1,
     blurb: "Quick and always armed, but you can only carry one thing at a time.",
   },
 };

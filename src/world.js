@@ -134,3 +134,27 @@ export function stockStore(world) {
   }
   return floor;
 }
+// 1. Create the audio object and set it to loop infinitely
+const audio = new Audio("ANDante_con_Boole.wav"); // Replace with your actual audio file path
+audio.loop = true; 
+
+// 2. Function that attempts to play the music automatically
+function playLoopingMusic() {
+    audio.play()
+        .then(() => {
+            console.log("Music is playing and looping successfully!");
+            // Remove the backup click listeners once it plays successfully
+            document.removeEventListener("click", playLoopingMusic);
+            document.removeEventListener("keydown", playLoopingMusic);
+        })
+        .catch(error => {
+            console.log("Autoplay paused by browser. Waiting for user interaction...", error);
+        });
+}
+
+// 3. Try running it immediately on page load
+playLoopingMusic();
+
+// 4. Backup plan: If the browser blocks it, play it the millisecond they click or press a key
+document.addEventListener("click", playLoopingMusic);
+document.addEventListener("keydown", playLoopingMusic);
