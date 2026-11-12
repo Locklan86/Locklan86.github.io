@@ -1,4 +1,4 @@
-import { VIEW_W, VIEW_H, MAX_HP, required, weapons } from "./config.js";
+import { VIEW_W, VIEW_H, MAX_HP, weapons } from "./config.js";
 import { game } from "./state.js";
 import { drawSprite, spriteAspect } from "./sprites.js";
 import { haveItem, carrier } from "./carry.js";
@@ -25,10 +25,10 @@ function drawList(ctx) {
   const left = 55 + w * 0.14;
   const innerW = w * 0.72;
   const size = Math.min(13, innerW / (23 * 0.6));
-  const step = (h * 0.55) / required.length;
+  const step = (h * 0.55) / game.required.length;
   ctx.textAlign = "left";
   ctx.font = "bold " + size + "px Consolas, 'Courier New', monospace";
-  required.forEach((item, i) => {
+  game.required.forEach((item, i) => {
     const y = 10 + h * 0.2 + step * (i + 0.75);
     const text = item.name + " = ";
     const have = haveItem(item.id);
@@ -43,18 +43,18 @@ function drawList(ctx) {
 function drawTv(ctx) {
   const tv = game.tv;
   const pop = 1 + tv.bounce * 0.12;
-  drawSprite(ctx, "ui/tv_" + tv.mood, VIEW_W - 76, 130, { h: 135 * pop });
+  drawSprite(ctx, "ui/tv_" + tv.mood, VIEW_W - 80, 120, { h: 135 * pop });
   const hp = game.george.hp;
   for (let i = 0; i < 5; i++) {
     const x = VIEW_W - 76 - 56 + i * 28;
-    drawSprite(ctx, "ui/heart_empty", x, 154, { h: 24 });
+    drawSprite(ctx, "ui/heart_empty", x, 145, { h: 30 });
     const frac = Math.max(0, Math.min(1, (hp - i * (MAX_HP / 5)) / (MAX_HP / 5)));
     if (frac <= 0) continue;
     ctx.save();
     ctx.beginPath();
     ctx.rect(x - 14, 120, 28 * frac, 50);
     ctx.clip();
-    drawSprite(ctx, "ui/heart", x, 154, { h: 24 });
+    drawSprite(ctx, "ui/heart", x, 145, { h: 30 });
     ctx.restore();
   }
 }

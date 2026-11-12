@@ -15,15 +15,15 @@ export const BURN_PERCENT = 0.2;
 export const classes = {
   basket: {
     name: "Basket", icon: "tools/basket_empty", maxSpeed: 275, accel: 2400, capacity: 4,
-    blurb: "One handed. Swing the basket for big damage (it smashes fragiles inside) or use your free hand for a weapon.",
+    blurb: "One handed. Swing the basket for big damage (it smashes fragiles inside) or use your free hand for a weapon. Uses mouse/touchpad to aim.",
   },
   cart: {
     name: "Cart", icon: "tools/cart_left", maxSpeed: 400, accel: 650, capacity: 8,
-    blurb: "Two handed. Carries the most and rams enemies, faster hits harder. Park it with E to use weapons, but thieves will take it.",
+    blurb: "Two handed. Carries the most and rams enemies, faster hits harder. Park it with E to use weapons, but thieves will take it. No aiming required, just move around.",
   },
   bare: {
     name: "Bare Hands", icon: "chars/george_attack", maxSpeed: 300, accel: 2800, capacity: 1,
-    blurb: "Quick and always armed, but you can only carry one thing at a time.",
+    blurb: "Quick and always armed, but you can only carry one thing at a time.Uses mouse to aim",
   },
 };
 
@@ -43,12 +43,12 @@ export const weapons = {
 export const weaponAreas = { hammer: "cleaning", pan: "bakery", rollingpin: null, frozenpizza: "frozen" };
 
 export const groceries = [
-  { id: "beans", name: "Beans", price: 3, dept: "aisle", required: true },
-  { id: "eggs", name: "Eggs", price: 5, dept: "fridge", fragile: true, required: true },
-  { id: "hotdogs", name: "Hotdogs", price: 4, dept: "freezer", required: true },
-  { id: "butter", name: "Unsalted_Butter", price: 4, dept: "fridge", required: true },
-  { id: "milk", name: "2%_Milk", price: 4, dept: "fridge", required: true },
-  { id: "pizza", name: "Frozen_Pizza", price: 7, dept: "freezer", required: true },
+  { id: "beans", name: "Beans", price: 3, dept: "aisle",},
+  { id: "eggs", name: "Eggs", price: 5, dept: "fridge", fragile: true,},
+  { id: "hotdogs", name: "Hotdogs", price: 4, dept: "freezer",},
+  { id: "butter", name: "Unsalted_Butter", price: 4, dept: "fridge",},
+  { id: "milk", name: "2%_Milk", price: 4, dept: "fridge",},
+  { id: "pizza", name: "Frozen_Pizza", price: 7, dept: "freezer",},
   { id: "apple", name: "Apple", price: 2, dept: "aisle" },
   { id: "bananas", name: "Bananas", price: 2, dept: "aisle" },
   { id: "grapes", name: "Grapes", price: 4, dept: "aisle" },
@@ -58,7 +58,12 @@ export const groceries = [
   { id: "chocolate", name: "Chocolate", price: 2, dept: "snacks", fragile: true },
   { id: "candy", name: "Candy", price: 2, dept: "snacks", fragile: true },
 ];
-export const required = groceries.filter(i => i.required);
+//L- makes a shuffled list ofitems, takes top five and it makes them required
+export function makeRequiredList() {
+    const shuffled = [...groceries].sort(() => Math.random() - 0.6);
+    return shuffled;
+}
+
 
 export const enemyKinds = {
   regular: { hp: 30, speed: 100, damage: 12, range: 40, windup: 0.5, recover: 0.5, cooldown: 1.2 },

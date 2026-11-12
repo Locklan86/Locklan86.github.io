@@ -31,9 +31,9 @@ export function showMenu() {
   overlay.style.display = "flex";
   overlay.innerHTML =
     "<h1>George Boole Simulator</h1>" +
-    "<p>You are instacarting. Collect everything on the list that the customer wants and bag it all at the checkout counter before the store closes. Evil george Booles will stop you.</p>" +
+    "<p>You are instacarting. Collect everything on the list that the customer wants and bag it all at the checkout counter before the store closes. There are clones of george booles that caught rabies though, so watch out. </p>" +
     "<p><b>Pick how you carry things:</b></p>" + classCards() +
-    "<p class='keys'>WASD move &nbsp;|&nbsp; mouse aim &nbsp;|&nbsp; click or space attack &nbsp;|&nbsp; right click or F free hand &nbsp;|&nbsp; E pick up / use &nbsp;|&nbsp; Q drop &nbsp;|&nbsp; P pause</p>";
+    "<p class='keys'>WASD move &nbsp;|&nbsp; mouse to aim &nbsp;|&nbsp; click or space attack  &nbsp;|&nbsp; right click or F uses alternate weapon &nbsp;|&nbsp; E pick up / use (E ALSO DROPS CART FOR SOME REASON, WILL FIX SOON) &nbsp;|&nbsp; Q drop &nbsp;|&nbsp; P pause</p>";
 }
 
 export function showPause(on) {
