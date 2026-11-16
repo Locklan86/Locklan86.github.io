@@ -1,5 +1,4 @@
-import { WORLD_W, WORLD_H, propTypes, zones, groceries, weaponAreas } from "./config.js";
-import { game } from "./state.js";
+import { WORLD_W, WORLD_H, propTypes, zones, groceries, required, weaponAreas } from "./config.js";
 import { rand, clamp, shuffle } from "./helpers.js";
 
 export function zoneAt(x, y) {
@@ -109,9 +108,10 @@ function frontSpot(world, prop, floor) {
   return null;
 }
 
-export function stockStore(world, requiredList)  {
+export function stockStore(world) {
   const floor = [];
-  for (const base of requiredList) {
+  const decoys = shuffle(groceries.filter(i => !i.required)).slice(0, 5);
+  for (const base of [...required, ...decoys]) {
     let spot = null;
     for (const p of shuffle(world.props.filter(p => deptProps[base.dept].includes(p.type)))) {
       spot = frontSpot(world, p, floor);

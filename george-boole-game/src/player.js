@@ -1,3 +1,4 @@
+import { playSound, sounds } from "./sounds.js";
 import { game, say, setTv, addStyle } from "./state.js";
 import { classes, MAX_HP, POISON_AMOUNT, POISON_PERCENT, BURN_AMOUNT, BURN_PERCENT, weapons } from "./config.js";
 import { keys, mouse, buffer } from "./input.js";
@@ -57,6 +58,7 @@ export function updatePlayer(dt) {
   if (bumped && holdingCart() && before > 220) {
     shake(4);
     burst("ui/fx_impact", g.x + g.vx * 0.05, g.y - 20, 44, 0.14);
+   // playSound("impact", .5);
   }
   g.speed = Math.hypot(g.vx, g.vy);
   g.walk += g.speed * dt * 0.02;
@@ -143,7 +145,7 @@ function buyItem(f) {
   c.list.push(f.item);
   game.floor.splice(game.floor.indexOf(f), 1);
   if (f.paid) return;
-  if (!f.item.required) {
+  if (!game.required.some(item => item.id === f.item.id)) {
     game.stats.wrong++;
     addStyle(-30, "wrong item", g.x, g.y - 74);
     setTv("angry", 1.3);
@@ -210,21 +212,82 @@ function useCart() {
 // bagging empties your hands, so a small carrier just makes more trips
 function checkout(counter) {
   const g = game.george;
-  let moved = 0;
+  const movedItems = [];
+
   const bag = list => {
     while (list.length) {
-      game.bagged.push(list.pop());
-      moved++;
+      const item = list.pop();
+      game.bagged.push(item);
+      movedItems.push(item);
     }
   };
+
   bag(g.items);
-  if (game.cart && !game.cart.stolen && (holdingCart() || dist(game.cart, counter) < 170)) bag(game.cart.items);
+
+  if (game.cart && !game.cart.stolen &&
+      (holdingCart() || dist(game.cart, counter) < 170)) {
+    bag(game.cart.items);
+  }
+
+  // Check the quality of each newly bagged item.
+  for (const item of movedItems) {
+    const required = game.required.find(r => r.id === item.id);
+    if (!required) continue;
+
+    const correctTemperature =
+      item.temperature === item.originalTemperature;
+
+    const correctVariant =
+      Object.keys(required.attributes || {}).every(
+        key => item.attributes?.[key] === required.attributes[key]
+      );
+
+    if (correctTemperature) {
+      addStyle(30, "original temperature", g.x, g.y - 74);
+    }
+
+    if (correctVariant) {
+      addStyle(25, "correct variant", g.x, g.y - 94);
+    } else {
+      // Future tip system: 35% chance of being ineligible for a tip.
+    }
+  }
+
   if (listDone()) {
-    game.endRequest = { won: true, reason: "everything on the list is bagged" };
+    const allOriginalTemperature = game.required.every(required => {
+      const item = game.bagged.find(i => i.id === required.id);
+      return item && item.temperature === item.originalTemperature;
+    });
+
+    const allCorrectVariants = game.required.every(required => {
+      const item = game.bagged.find(i => i.id === required.id);
+
+      return item && Object.keys(required.attributes || {}).every(
+        key => item.attributes?.[key] === required.attributes[key]
+      );
+    });
+
+    if (allOriginalTemperature) {
+      addStyle(30, "perfect temperatures", g.x, g.y - 74);
+    }
+
+    if (allOriginalTemperature && allCorrectVariants) {
+      addStyle(100, "complete accuracy", g.x, g.y - 94);
+      game.resultCompleteAccuracy = true;
+    }
+
+    game.endRequest = {
+      won: true,
+      reason: "everything on the list is bagged"
+    };
     return;
   }
-  say(moved > 0 ? "bagged " + moved + ", list " + baggedCount() + "/6" : "nothing to bag, list " + baggedCount() + "/6");
-  if (moved > 0) setTv("happy", 0.9);
+
+  say(movedItems.length > 0
+    ? "bagged " + movedItems.length + ", list " + baggedCount() + "/6"
+    : "nothing to bag, list " + baggedCount() + "/6");
+
+  if (movedItems.length > 0) setTv("happy", 0.9);
 }
 
 function dropLast() {

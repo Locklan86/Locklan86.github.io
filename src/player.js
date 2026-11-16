@@ -1,4 +1,3 @@
-import { playSound, sounds } from "./sounds.js";
 import { game, say, setTv, addStyle } from "./state.js";
 import { classes, MAX_HP, POISON_AMOUNT, POISON_PERCENT, BURN_AMOUNT, BURN_PERCENT, weapons } from "./config.js";
 import { keys, mouse, buffer } from "./input.js";
@@ -58,7 +57,6 @@ export function updatePlayer(dt) {
   if (bumped && holdingCart() && before > 220) {
     shake(4);
     burst("ui/fx_impact", g.x + g.vx * 0.05, g.y - 20, 44, 0.14);
-   // playSound("impact", .5);
   }
   g.speed = Math.hypot(g.vx, g.vy);
   g.walk += g.speed * dt * 0.02;
@@ -145,7 +143,7 @@ function buyItem(f) {
   c.list.push(f.item);
   game.floor.splice(game.floor.indexOf(f), 1);
   if (f.paid) return;
-  if (!game.required.some(item => item.id === f.item.id)) {
+  if (!f.item.required) {
     game.stats.wrong++;
     addStyle(-30, "wrong item", g.x, g.y - 74);
     setTv("angry", 1.3);

@@ -1,7 +1,8 @@
-import { VIEW_W, VIEW_H, MAX_HP, required, weapons } from "./config.js";
+import { VIEW_W, VIEW_H, MAX_HP, weapons } from "./config.js";
 import { game } from "./state.js";
 import { drawSprite, spriteAspect } from "./sprites.js";
 import { haveItem, carrier } from "./carry.js";
+import { keys, scrollVisible } from "./input.js";
 
 const FONT = "'Trebuchet MS', 'Comic Sans MS', sans-serif";
 
@@ -19,42 +20,54 @@ function label(ctx, text, x, y, size, fill, align = "center") {
 // the shopping list is a scroll, each item reads like a boolean
 function drawList(ctx) {
   // the scroll is squashed a little so the list stays wide and short
-  const w = 280;
-  const h = 260;
+  const w = 320;
+  const h = 290;
+  ctx.globalAlpha = keys["tab"] ? 1 : (scrollVisible.value ? 0.45 : 0);
   drawSprite(ctx, "ui/scroll", 10 + w / 2, 10 + h, { w, sy: h / (w / spriteAspect("ui/scroll")) });
   const left = 55 + w * 0.14;
   const innerW = w * 0.72;
   const size = Math.min(13, innerW / (23 * 0.6));
-  const step = (h * 0.55) / required.length;
+  const step = (h * 0.55) / game.required.length;
   ctx.textAlign = "left";
   ctx.font = "bold " + size + "px Consolas, 'Courier New', monospace";
-  required.forEach((item, i) => {
-    const y = 10 + h * 0.2 + step * (i + 0.75);
-    const text = item.name + " = ";
-    const have = haveItem(item.id);
-    ctx.fillStyle = "#3a2a14";
-    ctx.fillText(text, left, y);
-    ctx.fillStyle = have ? "#17801a" : "#d11b1b";
-    ctx.fillText(have ? "True" : "False", left + ctx.measureText(text).width, y);
-  });
+  
+game.required.forEach((item, i) => {
+  const y = 35 + h * 0.2 + step * (i + 0.75);
+
+  const details = [
+    ...Object.values(item.attributes || {}),
+    ...(item.weight ? [item.weight + "g"] : [])
+  ].join(", ");
+
+  const text = (item.displayName || item.name).replace(/_/g, " ") +
+    (details ? " (" + details + ")" : "") + " = ";
+
+  const have = haveItem(item.id);
+
+  ctx.fillStyle = "#3a2a14";
+  ctx.fillText(text, left, y);
+  ctx.fillStyle = have ? "#17801a" : "#d11b1b";
+  ctx.fillText(have ? "True" : "False", left + ctx.measureText(text).width, y);
+});
+ ctx.globalAlpha = 1;
 }
 
 // the tv reacts to what just happened, health sits under it
 function drawTv(ctx) {
   const tv = game.tv;
   const pop = 1 + tv.bounce * 0.12;
-  drawSprite(ctx, "ui/tv_" + tv.mood, VIEW_W - 76, 130, { h: 135 * pop });
+  drawSprite(ctx, "ui/tv_" + tv.mood, VIEW_W - 80, 120, { h: 135 * pop });
   const hp = game.george.hp;
   for (let i = 0; i < 5; i++) {
     const x = VIEW_W - 76 - 56 + i * 28;
-    drawSprite(ctx, "ui/heart_empty", x, 154, { h: 24 });
+    drawSprite(ctx, "ui/heart_empty", x, 145, { h: 30 });
     const frac = Math.max(0, Math.min(1, (hp - i * (MAX_HP / 5)) / (MAX_HP / 5)));
     if (frac <= 0) continue;
     ctx.save();
     ctx.beginPath();
     ctx.rect(x - 14, 120, 28 * frac, 50);
     ctx.clip();
-    drawSprite(ctx, "ui/heart", x, 154, { h: 24 });
+    drawSprite(ctx, "ui/heart", x, 145, { h: 30 });
     ctx.restore();
   }
 }

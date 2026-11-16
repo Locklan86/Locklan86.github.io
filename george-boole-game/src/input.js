@@ -2,10 +2,13 @@ export const keys = {};
 export const mouse = { x: 480, y: 270, down: false, right: false };
 // a press stays "live" for a moment so a slightly early press still counts
 export const buffer = { attack: 0, alt: 0, interact: 0, drop: 0, pause: false };
+export const scrollVisible = { value: true };
 
 export function bindInput(canvas) {
   window.addEventListener("keydown", event => {
     const key = event.key.toLowerCase();
+    if (key === "tab" && !keys[key]) scrollVisible.value = !scrollVisible.value;
+    if (key === "tab") event.preventDefault();
     if (!keys[key]) {
       if (key === "e") buffer.interact = 0.15;
       if (key === "q") buffer.drop = 0.15;

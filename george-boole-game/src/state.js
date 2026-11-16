@@ -1,4 +1,4 @@
-import { DAY_LENGTH, START_MONEY, MAX_HP, VIEW_W, VIEW_H } from "./config.js";
+import { DAY_LENGTH, START_MONEY, MAX_HP, VIEW_W, VIEW_H, makeRequiredList } from "./config.js";
 import { buildWorld, stockStore } from "./world.js";
 import { floatText, resetFx } from "./fx.js";
 
@@ -24,18 +24,19 @@ export function addStyle(points, label, x, y) {
 }
 
 export function newRun(classKey) {
+  const requiredList = makeRequiredList();
   const world = buildWorld();
   resetFx();
   Object.assign(game, {
     classKey, world, running: true, paused: false, endRequest: null, result: null,
     time: DAY_LENGTH, elapsed: 0, money: START_MONEY, spent: 0,
     style: 0, stylePulse: 0, combo: 0, comboT: 0, hitstop: 0, nearMissCd: 0,
-    spawnT: 6, surges: [false, false], recent: [],
+    spawnT: 6, surges: [false, false], recent: [], required: requiredList.slice(0, 6),
     stats: { kills: 0, wrong: 0, deals: 0 },
     enemies: [], bagged: [], target: null, msg: { text: "", t: 0 },
     tv: { mood: "neutral", t: 0, bounce: 0 },
     cam: { x: 0, y: 0 },
-    floor: stockStore(world),
+    floor: stockStore(world, requiredList),
     cart: classKey === "cart" ? { kind: "cart", x: 0, y: 0, items: [], dropped: false, stolen: false } : null,
     george: {
       x: world.start.x, y: world.start.y, r: 14, vx: 0, vy: 0, speed: 0, walk: 0,

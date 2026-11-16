@@ -1,5 +1,7 @@
-import { WORLD_W, WORLD_H, propTypes, zones, groceries, required, weaponAreas } from "./config.js";
+import { WORLD_W, WORLD_H, propTypes, zones, groceries, weaponAreas, foodRules } from "./config.js";
+import { game } from "./state.js";
 import { rand, clamp, shuffle } from "./helpers.js";
+import { createFoodInstance } from "./food.js";
 
 export function zoneAt(x, y) {
   for (const name in zones) {
@@ -108,34 +110,160 @@ function frontSpot(world, prop, floor) {
   return null;
 }
 
-export function stockStore(world) {
-  const floor = [];
-  const decoys = shuffle(groceries.filter(i => !i.required)).slice(0, 5);
-  for (const base of [...required, ...decoys]) {
-    let spot = null;
-    for (const p of shuffle(world.props.filter(p => deptProps[base.dept].includes(p.type)))) {
-      spot = frontSpot(world, p, floor);
-      if (spot) break;
+function makeStoreVariant(base, variant) {
+  const rules = foodRules[base.id] || {};
+
+  const item = {
+    ...base,
+    attributes: { ...(base.attributes || {}) },
+  };
+
+  if (variant === "exact") return item;
+
+  // Change weight for close and wrong versions.
+  if (rules.weight && item.weight !== null) {
+    const [min, max] = rules.weight;
+
+    if (variant === "close") {
+      item.weight += item.weight + 5 <= max ? 5 : -5;
+    } else {
+      item.weight = item.weight - min > max - item.weight ? min : max;
     }
-    if (!spot) spot = openSpot(world, null);
+  }
+
+  // Change attributes when possible.
+  for (const key of Object.keys(item.attributes)) {
+    const value = item.attributes[key];
+
+    if (typeof value === "number") {
+      if (variant === "close") {
+        item.attributes[key] = value === 6 ? value - 1 : value + 1;
+      } else {
+        item.attributes[key] = value <= 3 ? 6 : 1;
+      }
+    } else if (variant === "wrong") {
+      const alternatives = rules.random ? rules.random() : {};
+      if (alternatives[key] !== undefined && alternatives[key] !== value) {
+        item.attributes[key] = alternatives[key];
+      }
+    }
+  }
+
+  return item;
+}
+
+export function stockStore(world, requiredList) {
+  const floor = [];
+  const occupiedProps = new Set();
+
+  // Place each required grocery exactly once.
+  for (const base of requiredList) {
+    let spot = null;
+    let chosenProp = null;
+
+    for (const p of shuffle(world.props.filter(p =>
+      deptProps[base.dept].includes(p.type) &&
+      !occupiedProps.has(p)
+    ))) {
+      spot = frontSpot(world, p, floor);
+
+      if (spot) {
+        chosenProp = p;
+        break;
+      }
+    }
+
+    if (!spot) continue;
+
+    occupiedProps.add(chosenProp);
+
     const discounted = Math.random() < 0.25;
+
     floor.push({
-      kind: "item", x: spot.x, y: spot.y, item: base, discounted, paid: false, dropped: false,
-      price: discounted ? Math.ceil(base.price / 2) : base.price, phase: Math.random() * 6,
+      kind: "item",
+      x: spot.x,
+      y: spot.y,
+      item: createFoodInstance(base),
+      discounted,
+      paid: false,
+      dropped: false,
+      price: discounted ? Math.ceil(base.price / 2) : base.price,
+      phase: Math.random() * 6,
     });
   }
+
+  // Stock other groceries on unoccupied props
+  // belonging to departments used by required groceries.
+  const requiredDepts = new Set(requiredList.map(item => item.dept));
+
+  for (const p of shuffle(world.props)) {
+    const dept = Object.keys(deptProps).find(d =>
+      deptProps[d].includes(p.type)
+    );
+
+    if (!dept || !requiredDepts.has(dept)) continue;
+    if (occupiedProps.has(p)) continue;
+
+    if (Math.random() < 0.60) {
+      const sectionFoods = groceries.filter(item => item.dept === dept);
+
+      if (!sectionFoods.length) continue;
+
+      const base = sectionFoods[
+        Math.floor(Math.random() * sectionFoods.length)
+      ];
+
+      const spot = frontSpot(world, p, floor);
+      if (!spot) continue;
+
+      occupiedProps.add(p);
+
+      const discounted = Math.random() < 0.25;
+
+      floor.push({
+        kind: "item",
+        x: spot.x,
+        y: spot.y,
+        item: createFoodInstance(base),
+        discounted,
+        paid: false,
+        dropped: false,
+        price: discounted ? Math.ceil(base.price / 2) : base.price,
+        phase: Math.random() * 6,
+      });
+    }
+  }
+
+  // Weapons
   for (const id in weaponAreas) {
     const spot = openSpot(world, weaponAreas[id] ? zones[weaponAreas[id]] : null);
-    floor.push({ kind: "weapon", x: spot.x, y: spot.y, id, uses: 0, dropped: false, phase: Math.random() * 6 });
+    floor.push({
+      kind: "weapon",
+      x: spot.x,
+      y: spot.y,
+      id,
+      uses: 0,
+      dropped: false,
+      phase: Math.random() * 6
+    });
   }
+
+  // Potions
   for (let i = 0; i < 2; i++) {
     const spot = openSpot(world, null);
-    floor.push({ kind: "potion", x: spot.x, y: spot.y, dropped: false, phase: Math.random() * 6 });
+    floor.push({
+      kind: "potion",
+      x: spot.x,
+      y: spot.y,
+      dropped: false,
+      phase: Math.random() * 6
+    });
   }
+
   return floor;
 }
 // 1. Create the audio object and set it to loop infinitely
-const audio = new Audio("ANDante_con_Boole.wav"); // Replace with your actual audio file path
+const audio = new Audio("ANDante_con_Boole.wav"); 
 audio.loop = true; 
 
 // 2. Function that attempts to play the music automatically

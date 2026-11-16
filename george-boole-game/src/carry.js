@@ -1,5 +1,5 @@
 import { game } from "./state.js";
-import { classes, required } from "./config.js";
+import { classes } from "./config.js";
 
 export function holdingCart() {
   return game.classKey === "cart" && !game.cart.dropped;
@@ -25,9 +25,9 @@ export function haveItem(id) {
 
 // the day is only won when everything on the list has been bagged at the counter
 export function listDone() {
-  return required.every(r => game.bagged.some(i => i.id === r.id));
+  return game.required.every(r => game.bagged.some(i => i.id === r.id));
 }
 
 export function baggedCount() {
-  return required.filter(r => game.bagged.some(i => i.id === r.id)).length;
+  return game.required.filter(r => game.bagged.some(i => i.id === r.id)).length;
 }
