@@ -310,28 +310,94 @@ function drawFx() {
 function drawPrompt() {
   const t = game.target;
   if (!t) return;
+
   const f = t.ref;
   let text = "";
   let color = "#ffffff";
   let y = f.y - 62;
+  let extraLines = [];
+
   if (t.kind === "item") {
-    text = "E  " + f.item.name.replace("_", " ") + (f.paid ? "" : "  $" + f.price);
-    if (!f.paid && f.price > game.money) color = "#ff7b7b";
-  } else if (t.kind === "weapon") text = "E  " + weapons[f.id].name;
-  else if (t.kind === "potion") text = "E  drink";
-  else if (t.kind === "cart") text = game.george.items.length ? "E  put in cart" : "E  take cart";
-  else {
-    const carrying = game.george.items.length + (holdingCart() ? game.cart.items.length : 0);
-    text = carrying > 0 ? "E  bag " + carrying + (carrying > 1 ? " items" : " item") : "bring your items here";
+    const item = f.item;
+
+      text = "E  " + (item.displayName || item.name).replace(/_/g, " ") +
+  (item.id === "apple" || item.id === "bananas" || item.id === "grapes"
+    ? " " + item.weight + "g"
+    : "") +
+  (item.id === "eggs" && item.attributes?.color
+    ? " (" + item.attributes.color + ")"
+    : "") +
+  (item.id === "butter" && item.attributes?.type
+    ? " (" + item.attributes.type + ")"
+    : "") +
+  (f.paid ? "" : "  $" + f.price);
+
+    const temperature = item.temperature || "unknown";
+
+    extraLines.push("Temperature: " + temperature);
+
+    if (item.spoiled) {
+      extraLines.push("Condition: Spoiled");
+    } else if (item.melted) {
+      extraLines.push("Condition: Melted");
+    } else if (item.softened) {
+      extraLines.push("Condition: Softened");
+    } else {
+      extraLines.push("Condition: Fresh");
+    }
+
+    if (item.wet) extraLines.push("Wet");
+    if (item.toxic) extraLines.push("TOXIC");
+
+    if (item.toxic) color = "#baff65";
+    else if (item.spoiled) color = "#ff7777";
+    else if (!f.paid && f.price > game.money) color = "#ff7b7b";
+
+  } else if (t.kind === "weapon") {
+    text = "E  " + weapons[f.id].name;
+  } else if (t.kind === "potion") {
+    text = "E  heal";
+  } else if (t.kind === "cart") {
+    text = game.george.items.length ? "E  put in cart" : "E  take cart";
+  } else {
+    const carrying = game.george.items.length +
+      (holdingCart() ? game.cart.items.length : 0);
+
+    text = carrying > 0
+      ? "E  bag " + carrying + (carrying > 1 ? " items" : " item")
+      : "bring your items here";
+
     color = carrying > 0 ? "#7dff7d" : "#bbbbbb";
     y = f.y - 120;
   }
+
+  const lineHeight = 18;
+  const totalHeight = 24 + extraLines.length * lineHeight;
+
   c.font = "bold 14px " + FONT;
-  const w = c.measureText(text).width + 16;
-  c.fillStyle = "rgba(20,16,30,0.85)";
+  let w = c.measureText(text).width + 16;
+
+  for (const line of extraLines) {
+    c.font = "12px " + FONT;
+    w = Math.max(w, c.measureText(line).width + 16);
+  }
+
+  c.fillStyle = "rgba(20,16,30,0.9)";
   c.strokeStyle = "#000";
   c.lineWidth = 2;
-  c.fillRect(f.x - w / 2, y - 16, w, 24);
-  c.strokeRect(f.x - w / 2, y - 16, w, 24);
+
+  c.fillRect(f.x - w / 2, y - 16, w, totalHeight);
+  c.strokeRect(f.x - w / 2, y - 16, w, totalHeight);
+
   label(text, f.x, y + 2, 14, color);
+
+  for (let i = 0; i < extraLines.length; i++) {
+    label(
+      extraLines[i],
+      f.x,
+      y + 21 + i * lineHeight,
+      12,
+      "#ffffff"
+    );
+  }
 }

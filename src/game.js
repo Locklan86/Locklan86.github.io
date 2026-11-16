@@ -4,18 +4,30 @@ import { tickBuffers } from "./input.js";
 import { updateFx } from "./fx.js";
 import { updatePlayer } from "./player.js";
 import { updateEnemies, updateSpawner } from "./enemies.js";
+import { updateFood } from "./food.js";
+import { zoneAt } from "./world.js";
 
 export function finish(won, reason) {
   game.running = false;
   const timeBonus = won ? Math.round(game.time * 3) : 0;
   const spentPenalty = won ? game.spent * 4 : 0;
+  const total = Math.round(game.style) + timeBonus - spentPenalty;
+
+  let rank = "D";
+  if (total >= 200) rank = "C";
+  if (total >= 400) rank = "B";
+  if (total >= 650) rank = "A";
+  if (total >= 900) rank = "S";
+  if (game.resultCompleteAccuracy && total >= 1100) rank = "S+";
+
   game.result = {
     won, reason, classKey: game.classKey, style: Math.round(game.style), timeBonus, spentPenalty,
     wrong: game.stats.wrong, deals: game.stats.deals, kills: game.stats.kills,
-    total: Math.round(game.style) + timeBonus - spentPenalty,
+    total, rank,
   };
   if (game.onEnd) game.onEnd(game.result);
 }
+
 
 function updateCamera(dt) {
   const g = game.george;
@@ -25,7 +37,31 @@ function updateCamera(dt) {
   game.cam.x += (goalX - game.cam.x) * follow;
   game.cam.y += (goalY - game.cam.y) * follow;
 }
+function updateAllFood(dt) {
+  // Food lying on the floor.
+  for (const f of game.floor) {
+    if (f.kind !== "item") continue;
 
+    updateFood(
+      f.item,
+      dt,
+      zoneAt(f.x, f.y),
+      "floor"
+    );
+  }
+
+  // Food George is carrying.
+  for (const item of game.george.items) {
+    updateFood(item, dt, null, "inventory");
+  }
+
+  // Food inside the cart.
+  if (game.cart && !game.cart.stolen) {
+    for (const item of game.cart.items) {
+      updateFood(item, dt, null, "inventory");
+    }
+  }
+}
 export function update(dt) {
   updateFx(dt);
   if (!game.running || game.paused) return;
@@ -49,6 +85,7 @@ export function update(dt) {
   if (game.tv.t <= 0) game.tv.mood = "neutral";
 
   updatePlayer(dt);
+  updateAllFood(dt);
   updateEnemies(dt);
   updateSpawner(dt);
   updateCamera(dt);

@@ -31,9 +31,9 @@ export function showMenu() {
   overlay.style.display = "flex";
   overlay.innerHTML =
     "<h1>George Boole Simulator</h1>" +
-    "<p>You are instacarting. Collect everything on the list that the customer wants and bag it all at the checkout counter before the store closes. Evil george Booles will stop you.</p>" +
+    "<p>You are instacarting. Collect everything on the list that the customer wants and bag it all at the checkout counter before the store closes. There are clones of george booles that caught rabies though, so watch out. </p>" +
     "<p><b>Pick how you carry things:</b></p>" + classCards() +
-    "<p class='keys'>WASD move &nbsp;|&nbsp; mouse aim &nbsp;|&nbsp; click or space attack &nbsp;|&nbsp; right click or F free hand &nbsp;|&nbsp; E pick up / use &nbsp;|&nbsp; Q drop &nbsp;|&nbsp; P pause</p>";
+    "<p class='keys'>WASD move &nbsp;|&nbsp; mouse to aim &nbsp;|&nbsp; click or space attack  &nbsp;|&nbsp; right click or F uses alternate weapon &nbsp;|&nbsp; E pick up / use (E ALSO DROPS CART FOR SOME REASON, WILL FIX SOON) &nbsp;|&nbsp; Q drop &nbsp;|&nbsp; P pause tapping tab will toggle scroll, holding tab will make scroll fully visible</p>";
 }
 
 export function showPause(on) {
@@ -65,12 +65,13 @@ export function showResult(r) {
   overlay.style.display = "flex";
   overlay.innerHTML =
     "<h2>" + (r.won ? "Day complete" : "Day failed") + "</h2><p>" + r.reason + "</p>" +
+    "<div class='rank-display'><span>YOUR RANK  </span><b>" + r.rank + "</b></div>" +
     "<div class='sheet'>" +
     "<div><span>style</span><span>" + r.style + "</span></div>" +
     (r.won ? "<div><span>time bonus</span><span>+" + r.timeBonus + "</span></div><div><span>money spent</span><span>-" + r.spentPenalty + "</span></div>" : "") +
     "<div><span>wrong items</span><span>" + r.wrong + "</span></div>" +
     "<div><span>deals found</span><span>" + r.deals + "</span></div>" +
-    "<div><span>shoppers beaten</span><span>" + r.kills + "</span></div>" +
+    "<div><span>Booles beaten</span><span>" + r.kills + "</span></div>" +
     "<div><b>score</b><b>" + r.total + "</b></div>" +
     "<div><span>best with " + classes[r.classKey].name + "</span><span>" + best + (newBest ? " (new!)" : "") + "</span></div></div>" +
     "<div class='cards'><button class='btn' data-class='" + r.classKey + "'>Try again</button><button class='btn' data-action='menu'>Change loadout</button></div>";
