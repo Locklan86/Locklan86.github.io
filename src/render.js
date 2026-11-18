@@ -320,16 +320,7 @@ function drawPrompt() {
   if (t.kind === "item") {
     const item = f.item;
 
-      text = "E  " + (item.displayName || item.name).replace(/_/g, " ") +
-  (item.id === "apple" || item.id === "bananas" || item.id === "grapes"
-    ? " " + item.weight + "g"
-    : "") +
-  (item.id === "eggs" && item.attributes?.color
-    ? " (" + item.attributes.color + ")"
-    : "") +
-  (item.id === "butter" && item.attributes?.type
-    ? " (" + item.attributes.type + ")"
-    : "") +
+      text = "E  " + (item.displayName || item.name.replace(/ /g, "_")) +
   (f.paid ? "" : "  $" + f.price);
 
     const temperature = item.temperature || "unknown";

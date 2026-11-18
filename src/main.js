@@ -5,8 +5,16 @@ import { loadSprites } from "./sprites.js";
 import { update } from "./game.js";
 import { render } from "./render.js";
 import { drawHud } from "./hud.js";
-import { setupUi, showMenu, showResult, showPause } from "./ui.js";
-
+import {
+  setupUi,
+  setupTitleActions,
+  showTitle,
+  showMenu,
+  showButton2Page,
+  showButton3Page,
+  showResult,
+  showPause
+} from "./ui.js";
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
@@ -19,6 +27,14 @@ function togglePause() {
 bindInput(canvas);
 game.onEnd = result => showResult(result);
 setupUi(newRun, togglePause);
+setupTitleActions({
+  start: () => showMenu(),
+  button2: () => showButton2Page(),
+  button3: () => showButton3Page(),
+  button4: () => showButton4Page()
+});
+
+showTitle();
 
 let lastFrame = 0;
 function loop(now) {
@@ -40,6 +56,13 @@ function loop(now) {
 }
 
 loadSprites().then(() => {
-  showMenu();
+  setupTitleActions({
+    start: () => showMenu(),
+    button2: () => showButton2Page(),
+    button3: () => showButton3Page(),
+    button4: () => showButton4Page()
+  });
+
+  showTitle();
   requestAnimationFrame(loop);
 });

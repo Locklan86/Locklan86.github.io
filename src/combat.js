@@ -1,5 +1,6 @@
 import { game, setTv, say, addStyle } from "./state.js";
 import { baseAttacks, weapons, groceries } from "./config.js";
+import { createFoodInstance } from "./food.js";
 import { pick, angleDiff, rand } from "./helpers.js";
 import { carrier, holdingCart } from "./carry.js";
 import { burst, floatText, shake, fx } from "./fx.js";
@@ -132,18 +133,36 @@ export function killEnemy(e) {
     say("got it back");
   }
 
-  // shoppers pushing baskets and carts drop groceries, usually on sale
-  if (e.kind === "basket" || e.kind === "cart") {
-    for (let i = 0; i < (e.kind === "cart" ? 2 : 1); i++) {
-      const base = pick(groceries);
-      const discounted = Math.random() < 0.6;
-      game.floor.push({
-        kind: "item", x: e.x + rand(-26, 26), y: e.y + rand(-10, 22), item: base, discounted, paid: false, dropped: false,
-        price: discounted ? Math.ceil(base.price / 2) : base.price, phase: Math.random() * 6,
-      });
-    }
-    if (Math.random() < 0.15) game.floor.push({ kind: "potion", x: e.x, y: e.y + 20, dropped: false, phase: 0 });
+// shoppers pushing baskets and carts drop randomized groceries
+if (e.kind === "basket" || e.kind === "cart") {
+  for (let i = 0; i < (e.kind === "cart" ? 2 : 1); i++) {
+    const base = pick(groceries);
+    const item = createFoodInstance(base);
+    const discounted = Math.random() < 0.6;
+
+    game.floor.push({
+      kind: "item",
+      x: e.x + rand(-26, 26),
+      y: e.y + rand(-10, 22),
+      item,
+      discounted,
+      paid: false,
+      dropped: false,
+      price: discounted ? Math.ceil(base.price / 2) : base.price,
+      phase: Math.random() * 6,
+    });
   }
+
+  if (Math.random() < 0.15) {
+    game.floor.push({
+      kind: "potion",
+      x: e.x,
+      y: e.y + 20,
+      dropped: false,
+      phase: 0
+    });
+  }
+}
 
   game.combo++;
   game.comboT = 2.5;

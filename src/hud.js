@@ -33,16 +33,9 @@ function drawList(ctx) {
   
 game.required.forEach((item, i) => {
   const y = 35 + h * 0.2 + step * (i + 0.75);
+const text = (item.displayName || item.name).replace(/ /g, "_") + " = ";
 
-  const details = [
-    ...Object.values(item.attributes || {}),
-    ...(item.weight ? [item.weight + "g"] : [])
-  ].join(", ");
-
-  const text = (item.displayName || item.name).replace(/_/g, " ") +
-    (details ? " (" + details + ")" : "") + " = ";
-
-  const have = haveItem(item.id);
+const have = haveItem(item.id);
 
   ctx.fillStyle = "#3a2a14";
   ctx.fillText(text, left, y);

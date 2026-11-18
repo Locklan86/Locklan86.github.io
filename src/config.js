@@ -44,14 +44,14 @@ export const weaponAreas = { hammer: "cleaning", pan: "bakery", rollingpin: null
 
 export const groceries = [
   { id: "beans", name: "Beans", price: 3, dept: "aisle",},
-  { id: "eggs", name: "Eggs", price: 5, dept: "fridge", fragile: true,},
+  { id: "eggs", name: "_Eggs", price: 5, dept: "fridge", fragile: true,},
   { id: "hotdogs", name: "Hotdogs", price: 4, dept: "freezer",},
-  { id: "butter", name: "Butter", price: 4, dept: "fridge",},
-  { id: "milk", name: "Milk", price: 4, dept: "fridge",},
+  { id: "butter", name: "_Butter", price: 4, dept: "fridge",},
+  { id: "milk", name: "_Milk", price: 4, dept: "fridge",},
   { id: "pizza", name: "Frozen_Pizza", price: 7, dept: "freezer",},
-  { id: "apple", name: "Apple", price: 2, dept: "aisle" },
-  { id: "bananas", name: "Bananas", price: 2, dept: "aisle" },
-  { id: "grapes", name: "Grapes", price: 4, dept: "aisle" },
+  { id: "apple", name: "_Apple_", price: 2, dept: "aisle" },
+  { id: "bananas", name: "Bananas_", price: 2, dept: "aisle" },
+  { id: "grapes", name: "Grapes_", price: 4, dept: "aisle" },
   { id: "steak", name: "Steak", price: 8, dept: "freezer" },
   { id: "bread", name: "Bread", price: 3, dept: "bakery" },
   { id: "chicken", name: "Chicken", price: 7, dept: "bakery" },
@@ -59,63 +59,79 @@ export const groceries = [
   { id: "candy", name: "Candy", price: 2, dept: "snacks", fragile: true },
 ];
 export const foodRules = {
+  beans: {
+    requiredTemperature: "lukewarm",
+  },
   eggs: {
+    requiredTemperature: "cold",
     random: () => ({
       color: ["brown", "white"][Math.floor(Math.random() * 2)]
     }),
     spoilAt: "hot",
   },
-
+  hotdogs: {
+    requiredTemperature: "cold",
+    becomesWet: true,
+    slowMelting: true,
+  },
+  butter: {
+    requiredTemperature: "cold",
+    random: () => ({
+      type: ["salted", "unsalted"][Math.floor(Math.random() * 2)]
+    }),
+    meltsInBakery: true,
+  },
   milk: {
+    requiredTemperature: "cold",
     random: () => {
       const fat = Math.floor(Math.random() * 6) + 1;
       return { fat };
     },
     spoilAt: "hot",
   },
-
-  butter: {
-    random: () => ({
-      type: ["salted", "unsalted"][Math.floor(Math.random() * 2)]
-    }),
-    meltsInBakery: true,
+  pizza: {
+    requiredTemperature: "cold",
+    becomesWet: true,
+    slowMelting: true,
   },
-
   apple: {
+    requiredTemperature: "lukewarm",
     random: () => ({
       color: ["red", "green", "yellow"][Math.floor(Math.random() * 3)]
     }),
     weight: [120, 220],
   },
-
-  bananas: { weight: [100, 200] },
-  grapes: { weight: [150, 500] },
-
+  bananas: {
+    requiredTemperature: "lukewarm",
+    weight: [100, 200],
+  },
+  grapes: {
+    requiredTemperature: "lukewarm",
+    weight: [150, 500],
+  },
   steak: {
+    requiredTemperature: "cold",
     spoilAt: "hot",
     becomesWet: true,
     slowMelting: true,
   },
-
-  hotdogs: {
-    becomesWet: true,
-    slowMelting: true,
+  bread: {
+    requiredTemperature: "warm",
   },
-
-  pizza: {
-    becomesWet: true,
-    slowMelting: true,
+  chicken: {
+    requiredTemperature: "hot",
   },
-
   chocolate: {
+    requiredTemperature: "lukewarm",
     meltsInBakery: true,
   },
-
   candy: {
+    requiredTemperature: "any",
     immune: true,
   },
 };
 //L- makes a shuffled list ofitems, takes top five and it makes them required
+// Makes a shuffled list of items, takes the top five and makes them required.
 export function makeRequiredList() {
   const shuffled = [...groceries].sort(() => Math.random() - 0.5);
 
@@ -123,26 +139,35 @@ export function makeRequiredList() {
     const rules = foodRules[item.id] || {};
     const attributes = rules.random ? rules.random() : {};
 
-    const displayName = item.id === "milk"
-      ? `${attributes.fat}% Milk`
-      : item.name.replace(/_/g, " ");
+    let displayName = item.name.replace(/ /g, "_");
+
+    if (item.id === "eggs" && attributes.color) {
+      displayName = attributes.color.charAt(0).toUpperCase() + attributes.color.slice(1) + "_Eggs";
+    } else if (item.id === "butter" && attributes.type) {
+      displayName = attributes.type.charAt(0).toUpperCase() + attributes.type.slice(1) + "_Butter";
+    } else if (item.id === "milk" && attributes.fat !== undefined) {
+      displayName = attributes.fat + "%_Milk";
+    } else if (item.id === "apple" && attributes.color) {
+      displayName = attributes.color.charAt(0).toUpperCase() + attributes.color.slice(1) + "_Apple";
+    }
 
     let weight = null;
 
     if (rules.weight) {
       const [min, max] = rules.weight;
       weight = Math.round(min + Math.random() * (max - min));
+      displayName += " " + weight + "g";
     }
 
     return {
-      ...item,
-      attributes,
-      displayName,
-      weight,
-    };
+  ...item,
+  attributes,
+  displayName,
+  weight,
+  requiredTemperature: rules.requiredTemperature,
+};
   });
 }
-
 
 export const enemyKinds = {
   regular: { hp: 30, speed: 100, damage: 12, range: 40, windup: 0.5, recover: 0.5, cooldown: 1.2 },

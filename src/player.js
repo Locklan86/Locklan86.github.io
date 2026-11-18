@@ -229,63 +229,17 @@ function checkout(counter) {
     bag(game.cart.items);
   }
 
-  // Check the quality of each newly bagged item.
-  for (const item of movedItems) {
-    const required = game.required.find(r => r.id === item.id);
-    if (!required) continue;
 
-    const correctTemperature =
-      item.temperature === item.originalTemperature;
-
-    const correctVariant =
-      Object.keys(required.attributes || {}).every(
-        key => item.attributes?.[key] === required.attributes[key]
-      );
-
-    if (correctTemperature) {
-      addStyle(30, "original temperature", g.x, g.y - 74);
-    }
-
-    if (correctVariant) {
-      addStyle(25, "correct variant", g.x, g.y - 94);
-    } else {
-      // Future tip system: 35% chance of being ineligible for a tip.
-    }
-  }
-
-  if (listDone()) {
-    const allOriginalTemperature = game.required.every(required => {
-      const item = game.bagged.find(i => i.id === required.id);
-      return item && item.temperature === item.originalTemperature;
-    });
-
-    const allCorrectVariants = game.required.every(required => {
-      const item = game.bagged.find(i => i.id === required.id);
-
-      return item && Object.keys(required.attributes || {}).every(
-        key => item.attributes?.[key] === required.attributes[key]
-      );
-    });
-
-    if (allOriginalTemperature) {
-      addStyle(30, "perfect temperatures", g.x, g.y - 74);
-    }
-
-    if (allOriginalTemperature && allCorrectVariants) {
-      addStyle(100, "complete accuracy", g.x, g.y - 94);
-      game.resultCompleteAccuracy = true;
-    }
-
-    game.endRequest = {
-      won: true,
-      reason: "everything on the list is bagged"
-    };
-    return;
-  }
-
+if (listDone()) {
+  game.endRequest = {
+    won: true,
+    reason: "everything on the list is bagged"
+  };
+  return;
+}
   say(movedItems.length > 0
-    ? "bagged " + movedItems.length + ", list " + baggedCount() + "/6"
-    : "nothing to bag, list " + baggedCount() + "/6");
+    ? "bagged " + movedItems.length + ", list " + baggedCount() + "/5"
+    : "nothing to bag, list " + baggedCount() + "/5");
 
   if (movedItems.length > 0) setTv("happy", 0.9);
 }

@@ -152,44 +152,50 @@ function makeStoreVariant(base, variant) {
   return item;
 }
 
+// Place each required grocery twice.
 export function stockStore(world, requiredList) {
   const floor = [];
   const occupiedProps = new Set();
 
-  // Place each required grocery exactly once.
+  // Place each required grocery twice.
   for (const base of requiredList) {
-    let spot = null;
-    let chosenProp = null;
+    for (let copy = 0; copy < 2; copy++) {
+      let spot = null;
+      let chosenProp = null;
 
-    for (const p of shuffle(world.props.filter(p =>
-      deptProps[base.dept].includes(p.type) &&
-      !occupiedProps.has(p)
-    ))) {
-      spot = frontSpot(world, p, floor);
+      for (const p of shuffle(world.props.filter(p =>
+        deptProps[base.dept].includes(p.type) &&
+        !occupiedProps.has(p)
+      ))) {
+        spot = frontSpot(world, p, floor);
 
-      if (spot) {
-        chosenProp = p;
-        break;
+        if (spot) {
+          chosenProp = p;
+          break;
+        }
       }
+
+      if (!spot) continue;
+
+      occupiedProps.add(chosenProp);
+
+      const discounted = Math.random() < 0.25;
+  floor.push({
+    kind: "item",
+    x: spot.x,
+    y: spot.y,
+    item: createFoodInstance(
+      copy === 0
+        ? base
+        : groceries.find(item => item.id === base.id) || base
+    ),
+    discounted,
+    paid: false,
+    dropped: false,
+    price: discounted ? Math.ceil(base.price / 2) : base.price,
+    phase: Math.random() * 6,
+      });
     }
-
-    if (!spot) continue;
-
-    occupiedProps.add(chosenProp);
-
-    const discounted = Math.random() < 0.25;
-
-    floor.push({
-      kind: "item",
-      x: spot.x,
-      y: spot.y,
-      item: createFoodInstance(base),
-      discounted,
-      paid: false,
-      dropped: false,
-      price: discounted ? Math.ceil(base.price / 2) : base.price,
-      phase: Math.random() * 6,
-    });
   }
 
   // Stock other groceries on unoccupied props

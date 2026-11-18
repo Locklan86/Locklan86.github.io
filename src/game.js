@@ -7,27 +7,154 @@ import { updateEnemies, updateSpawner } from "./enemies.js";
 import { updateFood } from "./food.js";
 import { zoneAt } from "./world.js";
 
+function calculateGroceryBonuses() {
+  const results = game.required.map(required => {
+    const item = game.bagged.find(i => i.id === required.id);
+
+    const hasTemperatureRequirement =
+      required.requiredTemperature !== "any";
+
+    const hasVariant =
+      Object.keys(required.attributes || {}).length > 0;
+
+    const hasWeight =
+      required.weight !== null &&
+      required.weight !== undefined;
+
+    return {
+      correctTemperature:
+        !!item &&
+        hasTemperatureRequirement &&
+        item.temperature === required.requiredTemperature,
+
+      correctVariant:
+        !!item &&
+        hasVariant &&
+        Object.keys(required.attributes || {}).every(
+          key => item.attributes?.[key] === required.attributes[key]
+        ),
+
+      correctWeight:
+        !!item &&
+        hasWeight &&
+        item.weight === required.weight,
+
+      hasTemperatureRequirement,
+      hasVariant,
+      hasWeight,
+    };
+  });
+
+  const temperaturePoints =
+    results.filter(r => r.correctTemperature).length * 30;
+
+  const variantPoints =
+    results.filter(r => r.correctVariant).length * 25;
+
+  const weightPoints =
+    results.filter(r => r.correctWeight).length * 25;
+
+  const temperatureItems = results.filter(
+    r => r.hasTemperatureRequirement
+  );
+
+  const allCorrectTemperatures =
+    temperatureItems.length > 0 &&
+    temperatureItems.every(r => r.correctTemperature);
+
+  const allCorrectVariants = results.every(
+    r => !r.hasVariant || r.correctVariant
+  );
+
+  const allCorrectWeights = results.every(
+    r => !r.hasWeight || r.correctWeight
+  );
+
+  const perfectTemperatureBonus =
+    allCorrectTemperatures ? 30 : 0;
+
+  const completeAccuracyBonus =
+    allCorrectTemperatures &&
+    allCorrectVariants &&
+    allCorrectWeights
+      ? 100
+      : 0;
+
+  const total =
+    temperaturePoints +
+    variantPoints +
+    weightPoints +
+    perfectTemperatureBonus +
+    completeAccuracyBonus;
+
+  return {
+    temperaturePoints,
+    variantPoints,
+    weightPoints,
+    perfectTemperatureBonus,
+    completeAccuracyBonus,
+    total,
+    allCorrectTemperatures,
+    allCorrectVariants,
+    allCorrectWeights,
+    completeAccuracy: completeAccuracyBonus > 0,
+  };
+}
 export function finish(won, reason) {
   game.running = false;
+
+  const groceryBonuses = won
+    ? calculateGroceryBonuses()
+    : {
+        temperaturePoints: 0,
+        variantPoints: 0,
+        weightPoints: 0,
+        perfectTemperatureBonus: 0,
+        completeAccuracyBonus: 0,
+        total: 0,
+        allCorrectTemperatures: false,
+        allCorrectVariants: false,
+        allCorrectWeights: false,
+        completeAccuracy: false,
+      };
+
   const timeBonus = won ? Math.round(game.time * 3) : 0;
   const spentPenalty = won ? game.spent * 4 : 0;
-  const total = Math.round(game.style) + timeBonus - spentPenalty;
+
+  const total =
+    Math.round(game.style) +
+    timeBonus +
+    groceryBonuses.total -
+    spentPenalty;
 
   let rank = "D";
   if (total >= 200) rank = "C";
   if (total >= 400) rank = "B";
   if (total >= 650) rank = "A";
   if (total >= 900) rank = "S";
-  if (game.resultCompleteAccuracy && total >= 1100) rank = "S+";
+
+  if (groceryBonuses.completeAccuracy && total >= 1100) {
+    rank = "S+";
+  }
 
   game.result = {
-    won, reason, classKey: game.classKey, style: Math.round(game.style), timeBonus, spentPenalty,
-    wrong: game.stats.wrong, deals: game.stats.deals, kills: game.stats.kills,
-    total, rank,
+    won,
+    reason,
+    classKey: game.classKey,
+    style: Math.round(game.style),
+    timeBonus,
+    spentPenalty,
+    groceryBonuses,
+    groceryBonusTotal: groceryBonuses.total,
+    wrong: game.stats.wrong,
+    deals: game.stats.deals,
+    kills: game.stats.kills,
+    total,
+    rank,
   };
+
   if (game.onEnd) game.onEnd(game.result);
 }
-
 
 function updateCamera(dt) {
   const g = game.george;

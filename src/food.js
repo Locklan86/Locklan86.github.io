@@ -2,51 +2,58 @@ import { foodRules } from "./config.js";
 
 export function createFoodInstance(base) {
   const rules = foodRules[base.id] || {};
-
   const attributes = base.attributes || (rules.random ? rules.random() : {});
 
-  const displayName = base.id === "milk"
-    ? `${attributes.fat}% Milk`
-    : base.name;
+  let displayName = base.name.replace(/_/g, " ");
+
+  if (base.id === "eggs" && attributes.color) {
+    displayName = attributes.color.charAt(0).toUpperCase() + attributes.color.slice(1) + "_Eggs";
+  } else if (base.id === "butter" && attributes.type) {
+    displayName = attributes.type.charAt(0).toUpperCase() + attributes.type.slice(1) + "_Butter";
+  } else if (base.id === "milk" && attributes.fat !== undefined) {
+    displayName = attributes.fat + "%_Milk";
+  } else if (base.id === "apple" && attributes.color) {
+    displayName = attributes.color.charAt(0).toUpperCase() + attributes.color.slice(1) + "_Apple";
+  }
 
   let weight = base.weight ?? null;
 
-if (weight === null && rules.weight) {
-  const [min, max] = rules.weight;
-  weight = Math.round(min + Math.random() * (max - min));
-}
+  if (weight === null && rules.weight) {
+    const [min, max] = rules.weight;
+    weight = Math.round(min + Math.random() * (max - min));
+  }
 
-const startingTemperature =
-  base.dept === "freezer" ? 0 :
-  base.dept === "fridge" ? 10 :
-  25;
+  if (weight !== null) {
+    displayName += " " + weight + "g";
+  }
 
-const originalTemperature = startingTemperature <= 10
-  ? "cold"
-  : "lukewarm";
+  const startingTemperature =
+    base.dept === "freezer" ? 0 :
+    base.dept === "fridge" ? 10 :
+    25;
 
-  return {
-    ...base,
-
-    attributes,
-    displayName,
-    weight,
-
-    temperature: originalTemperature,
-    originalTemperature,
-    temperatureLevel: startingTemperature,
-
-    temperatureTimer: 0,
-    spoilTimer: 0,
-    meltTimer: 0,
-    toxicTimer: 0,
-
-    spoiled: false,
-    softened: false,
-    melted: false,
-    wet: false,
-    toxic: false,
-  };
+  const originalTemperature = startingTemperature <= 10
+    ? "cold"
+    : "lukewarm";
+return {
+  ...base,
+  attributes,
+  displayName,
+  weight,
+  requiredTemperature: rules.requiredTemperature,
+  temperature: originalTemperature,
+  originalTemperature,
+  temperatureLevel: startingTemperature,
+  temperatureTimer: 0,
+  spoilTimer: 0,
+  meltTimer: 0,
+  toxicTimer: 0,
+  spoiled: false,
+  softened: false,
+  melted: false,
+  wet: false,
+  toxic: false,
+};
 }
 
 const FOOD_TEMPERATURE = {
