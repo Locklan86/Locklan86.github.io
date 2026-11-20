@@ -96,7 +96,7 @@ function showPlaceholderPage1(name) {
 
   overlay.innerHTML =
     "<h1>" + name + "</h1>" +
-    "<h2>Q to drop items | E to drop Cart | WASD to move | Mouse/touchpad to aim | Holding tab makes scrol visible | Tab toggles Scroll | Space/left click and F/Right click to attack</h2>" +
+    "<h2>Q to drop items | E to drop Cart | WASD to move | Mouse/touchpad to aim | Holding tab makes scroll visible | Tab toggles Scroll | Space/left click and F/Right click to attack</h2>" +
     "<h2>Buy and checkout all of the items on the list to win. Items have temperature, they cool in the freezer section, warm in the bakery section, in the candy aisles and checkout they do not change, anywhere else they go down to lukewarm</h2>" +
     "<h2>You can be lazy and not meet the correct type of item, or their weight. But it does count against accuracy.</p>" +
     "<button class='btn' data-action='title'>Back to Title</button>";
